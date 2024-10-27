@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% set title = "Devices" %}
+
+{% block section %}
+<!-- Content -->
+<section>
+  <header class="major">
+    <h2>Devices</h2>
+  </header>
+
+  <div class="posts">
+    {% for device in devices %}
+    <article>
+      <a href="/devices/{{ device.hash }}" class="image">
+        <img src="{{ device.image }}" alt="" />
+      </a>
+      {% if device.online %}
+      <h3><a class="icon solid fa-server" style="color: green;"></a> {{ device.project }}</h3>
+      {% else %}
+      <h3><a class="icon solid fa-server" style="color: red;"></a> {{ device.project }}</h3>
+      {% endif %}
+
+      <p>
+        {{ device.model }}<br>
+        {{ device.username }}@{{ device.hostname }}<br>
+        {{ device.ping }}
+      </p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
