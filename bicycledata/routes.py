@@ -1,7 +1,7 @@
 import json
 import os
 import secrets
-from datetime import datetime
+from datetime import UTC, datetime
 
 import flask_login
 import slack
@@ -10,8 +10,11 @@ from flask import (Response, abort, flash, jsonify, make_response, redirect,
                    render_template, request, send_from_directory, url_for)
 
 from bicycledata import app, config, dir, login_manager
-from bicycledata.devices import (load_devices, read_config_file,
-                                 read_device_info, write_config_file)
+from bicycledata.devices import (check_v2_device_path, load_devices,
+                                 load_v2_devices, read_config_file,
+                                 read_device_info, read_v2_config_file,
+                                 read_v2_device_info, read_v2_sessions,
+                                 write_config_file, write_v2_config_file)
 from bicycledata.user import User, add_new_user, load_users
 
 
@@ -50,6 +53,260 @@ def after_request(response):
 @app.route('/')
 def index():
   return render_template('index.html')
+
+###
+###
+### NEW API endpoints (v2)
+### START
+###
+###
+
+@app.route('/api/v2/time', methods=['GET', 'POST'])
+def api_v2_time():
+  try:
+    if request.method == 'GET':
+      return jsonify({"server_time": datetime.now(UTC).isoformat()})
+
+    server_time = datetime.now(UTC).isoformat()
+    client_time = datetime.fromisoformat(request.json.get('client_time'))
+    diff = datetime.fromisoformat(server_time) - client_time
+    return jsonify({"server_time": server_time, "diff": diff.total_seconds()})
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+@app.route('/api/v2/register', methods=['POST'])
+def api_v2_register():
+  # Generate a unique hash
+  ident = secrets.token_hex()
+  device_path = os.path.join('data', 'v2', 'devices', ident)
+  sessions_path = os.path.join(device_path, 'sessions')
+
+  # Make sure that the device doesn't already exist
+  if check_v2_device_path(ident):
+    return jsonify({"error": "Please try again."}), 404
+
+  try:
+    data = request.get_json()
+
+    if not isinstance(data, dict):
+      return jsonify({"error": "Invalid data format, expected a JSON object"}), 400
+
+    # Add the registration timestamp
+    data['registration'] = datetime.now(UTC).isoformat()
+
+    # Add device ident
+    data['ident'] = ident
+
+    # Add a default sensor
+    data['sensors'] = [ {'name': 'sensor_template', 'git_url': 'https://github.com/bicycledata/sensor_template.git', 'git_branch': 'api-v2', 'entry_point': 'sensor:main', 'restart': False, 'args': {'upload_interval': 5}} ]
+
+    os.makedirs(device_path, exist_ok=True)
+    os.makedirs(sessions_path, exist_ok=True)
+
+    file_path = os.path.join(device_path, 'bicycleinit.json')
+    with open(file_path, 'w') as file:
+      json.dump(data, file, indent=2)
+
+    SendDiscordMessage(f'[v2] *register* {data["username"]}@{data["hostname"]} ({ident})')
+    with open(os.path.join(device_path, 'ping.log'), 'a') as f:
+      f.write(datetime.now(UTC).isoformat() + ", /api/v2/register\n")
+
+    return jsonify(data), 201  # 201 Created status
+
+  except json.JSONDecodeError:
+    return jsonify({"error": "Invalid JSON format"}), 400
+
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+@app.route('/api/v2/config', methods=['POST'])
+def api_v2_config():
+  payload = request.get_json()
+
+  # Make sure that payload is dictionary and contains required fields: ident
+  if not isinstance(payload, dict) or 'ident' not in payload:
+    return jsonify({"error": "Invalid data format, expected a JSON object with valid 'ident'"}), 400
+
+  ident = payload['ident']
+  device_path = os.path.join('data', 'v2', 'devices', ident)
+
+  # Make sure that the device doesn't already exist
+  if not check_v2_device_path(ident):
+    return jsonify({"error": "Device not found"}), 404
+
+  file_path = os.path.join(device_path, 'bicycleinit.json')
+
+  try:
+    with open(file_path, 'r') as file:
+      data = json.load(file)
+
+    SendDiscordMessage(f'[v2] *config* {data["username"]}@{data["hostname"]} ({ident})')
+    with open(os.path.join(device_path, 'ping.log'), 'a') as f:
+      f.write(datetime.now(UTC).isoformat() + ", /api/config\n")
+
+    return jsonify(data)
+
+  except json.JSONDecodeError:
+    return jsonify({"error": "Invalid JSON format"}), 400
+
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+@app.route('/api/v2/session/upload', methods=['POST'])
+def api_v2_session_upload_chunk():
+  try:
+    payload = request.get_json()
+
+    # Make sure that payload is dictionary and contains required fields: ident, session, log
+    if not isinstance(payload, dict) or 'ident' not in payload or 'session' not in payload or 'filename' not in payload or 'data' not in payload:
+      return jsonify({"error": "Invalid data format, expected a JSON object with 'ident', 'session', 'filename' and 'data' fields"}), 400
+
+    ident = payload['ident']
+    session = payload['session']
+    filename = payload['filename']
+    data = payload['data']
+
+    # Check ident
+    if check_v2_device_path(ident) is False:
+      return jsonify({"error": "Device not found"}), 400
+
+    # Check session format
+    try:
+      datetime.strptime(session, '%Y%m%d-%H%M%S')
+    except ValueError:
+      return jsonify({"error": "Invalid session format"}), 400
+
+    # Create data/devices/<ident>/sessions/<session> directory if it does not exist
+    file_path = os.path.join('data', 'v2', 'devices', ident, 'sessions', session)
+    os.makedirs(file_path, exist_ok=True)
+
+    # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
+    log_path = os.path.join(file_path, filename)
+    with open(log_path, 'a') as file:
+      file.write(data)
+    return jsonify({"status": "ok"}), 200
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+
+@app.route('/v2/devices')
+@flask_login.login_required
+def v2_devices():
+  devices = load_v2_devices()
+  return render_template('devices_v2.html', devices=devices)
+
+
+@app.route('/v2/devices/<ident>', methods=['GET', 'POST'])
+@flask_login.login_required
+def v2_devices_ident(ident):
+  if request.method == 'GET':
+    all_sessions = request.args.get('all', '0') == '1'
+    device = read_v2_device_info(ident)
+    config = read_v2_config_file(ident)
+    sessions = read_v2_sessions(ident, all_sessions)
+    if device:
+      return render_template('devices_v2_ident.html', device=device, config=config, sessions=sessions)
+    return render_template('404.html'), 404
+
+  # POST
+  config = request.form['config']
+  try:
+    config = json.loads(config)
+    write_v2_config_file(ident, config)
+    SendDiscordMessage(f'[v2] *config updated* {ident}')
+  except (FileNotFoundError, json.JSONDecodeError) as e:
+    flash("Failed to update config.json. Please verify that the file has correct JSON syntax and try again.")
+  except ValueError as e:
+    flash(f"Failed to update config.json: {e}")
+
+  return redirect(url_for('v2_devices_ident', ident=ident))
+
+
+@app.route('/v2/devices/<ident>/sessions/<session>')
+@flask_login.login_required
+def v2_devices_ident_session(ident, session):
+  try:
+    session_dir = os.path.join('data', 'v2', 'devices', ident, 'sessions', session)
+    device = read_v2_device_info(ident, file_path=os.path.join(session_dir, 'bicycleinit.json'))
+    config = read_v2_config_file(ident, file_path=os.path.join(session_dir, 'bicycleinit.json'))
+    try:
+      log = open(os.path.join(session_dir, 'bicycleinit.log')).read()
+    except Exception:
+      log = None
+    sensors = [name for name in os.listdir(session_dir) if os.path.isfile(os.path.join(session_dir, name)) and name != 'bicycleinit.log' and name != 'bicycleinit.json']
+    sensors.sort()
+
+    session_info = {'name': session,
+                    'start': '---',
+                    'end': '---',
+                    'duration': '---'
+                    }
+
+    # GPS track extraction
+    gps_track = []
+    gps_file = os.path.join(app.root_path, '..', session_dir, 'bicyclegps')
+    if os.path.isfile(gps_file):
+      import csv
+      with open(gps_file, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+          try:
+            lat = float(row['latitude'])
+            lon = float(row['longitude'])
+            gps_track.append([lat, lon])
+            if session_info['start'] == '---':
+              session_info['start']  = datetime.fromisoformat(row['time']).astimezone().strftime('%Y-%m-%d %H:%M')
+              start_time = datetime.fromisoformat(row['time'])
+            session_info['end'] = datetime.fromisoformat(row['time']).astimezone().strftime('%Y-%m-%d %H:%M')
+            duration = datetime.fromisoformat(row['time']) - start_time
+            total_seconds = int(duration.total_seconds())
+            hours, remainder = divmod(total_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            session_info['duration'] = f"{hours}h {minutes}min"
+          except Exception:
+            continue
+
+    return render_template(
+      'devices_v2_ident_session.html',
+      device=device,
+      config=config,
+      session=session_info,
+      log=log,
+      sensors=sensors,
+      gps_track=gps_track
+    )
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+
+@app.route('/v2/devices/<ident>/sessions/<session>/sensors/<sensor>')
+@flask_login.login_required
+def v2_devices_ident_sessions_session_sensors_sensor(ident, session, sensor):
+  if not check_v2_device_path(ident):
+    return jsonify({"error": "Device not found"}), 404
+
+  try:
+    directory = os.path.join(app.root_path, '..', 'data', 'v2', 'devices', ident, 'sessions', session)
+    return send_from_directory(directory, sensor, mimetype='text/plain', as_attachment=True)
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+###
+###
+### END
+### NEW API endpoints (v2)
+###
+###
+
+
+
+
+###
+###
+### OLD API endpoints (v1)
+### START
+###
+###
 
 @app.route('/api/time')
 def api_time():
@@ -320,6 +577,13 @@ def devices_sensor_tail(hash, sensor):
 def devices_sensor(hash, sensor):
   directory = os.path.join(app.root_path, '..', 'data', 'devices', hash, 'sensors')
   return send_from_directory(directory, sensor, mimetype='text/plain', as_attachment=True)
+
+###
+###
+### END
+### OLD API endpoints (v1)
+###
+###
 
 @app.route('/favicon.ico')
 def favicon():
