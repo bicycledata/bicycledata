@@ -31,6 +31,10 @@ def SendSlackMessage(message):
 
 @app.after_request
 def after_request(response):
+  # Log all requests except for successful ones (200) and not modified (304)
+  if response.status_code in (200, 304):
+    return response
+
   timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
   DIR = os.path.join('data', 'log')
