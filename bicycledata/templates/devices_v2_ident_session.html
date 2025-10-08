@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% set title = device.name %}
+
+{% block section %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<section>
+  <h4>Notification</h4>
+  <ul class="alt">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endwith %}
+
+<section id="banner">
+  <div class="content">
+    <header>
+      {% if device.online %}
+      <h1><span class="icon solid fa-server" style="color: green;"></span> <a href="/v2/devices/{{ device.ident }}">{{ device.name }}</a></h1>
+      {% else %}
+      <h1><span class="icon solid fa-server" style="color: red;"></span> <a href="/v2/devices/{{ device.ident }}">{{ device.name }}</a></h1>
+      {% endif %}
+    </header>
+  <table>
+      <tr><th>Start</th><td>{{ session.start }}</td></tr>
+      <tr><th>End</th><td>{{ session.end }}</td></tr>
+      <tr><th>Duration</th><td>{{ session.duration }}</td></tr>
+    </table>
+
+    <p>
+    <section>
+      <h2>Data</h2>
+      <ul>
+        {% for sensor in sensors %}
+        <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/sensors/{{ sensor }}"
+            class="button icon solid fa-download">{{ sensor }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+
+  </div>
+  {% if gps_track and gps_track|length > 1 %}
+  <div id="map" style="height: 400px; width: 100%; margin-bottom: 1em;"></div>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    var gpsTrack = {{ gps_track| tojson }};
+    if (gpsTrack.length > 1) {
+      var map = L.map('map');
+      var latlngs = gpsTrack.map(function (pt) { return [pt[0], pt[1]]; });
+      var bounds = L.latLngBounds(latlngs);
+      map.fitBounds(bounds);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      var polyline = L.polyline(latlngs, { color: 'blue' }).addTo(map);
+      L.marker(latlngs[0]).addTo(map).bindPopup('Start').openPopup();
+      L.marker(latlngs[latlngs.length - 1]).addTo(map).bindPopup('End');
+    }
+  </script>
+  {% else %}
+  <span class="image object">
+    <img src="{{ device.image }}" alt="" />
+  </span>
+  {% endif %}
+</section>
+
+<!-- Config file content -->
+<div class="col-6 col-12-small">
+  <label for="config"><strong>Config file</strong></label>
+  <pre id="config"
+    style="background:#f4f4f4; padding:1em; border-radius:4px; max-height:300px; overflow:auto;">{{ config }}</pre>
+</div>
+
+{%if log %}
+<!-- Log file content -->
+<div class="col-6 col-12-small">
+  <label for="log"><strong>Log file</strong></label>
+  <pre id="log"
+    style="background:#f4f4f4; padding:1em; border-radius:4px; max-height:300px; overflow:auto;">{{ log }}</pre>
+</div>
+{% endif %}
+
+{% endblock %}

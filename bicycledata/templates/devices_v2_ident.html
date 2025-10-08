@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% set title = device.name %}
+
+{% block section %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<section>
+  <h4>Notification</h4>
+  <ul class="alt">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endwith %}
+
+<section id="banner">
+  <div class="content">
+    <header>
+      {% if device.online %}
+      <h1><span class="icon solid fa-server" style="color: green;"></span> {{ device.name }}</h1>
+      {% else %}
+      <h1><span class="icon solid fa-server" style="color: red;"></span> {{ device.name }}</h1>
+      {% endif %}
+    </header>
+    <p>{{ device.username }}@{{ device.hostname }}<br>
+      {{ device.ping }}
+    </p>
+
+    <p>
+    <section>
+      <h2>Sensors</h2>
+      <ul>
+        {% for sensor in device.sensors %}
+        <li><a href="{{ sensor.git_url }}">{{ sensor.name}}</a> (branch: {{ sensor.git_branch }})</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Sessions</h2>
+      <ul>
+        {% for session in sessions %}
+        <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session}}">{{ session }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+  <span class="image object">
+    <img src="{{ device.image }}" alt="" />
+  </span>
+</section>
+
+<div class="col-6 col-12-small">
+  <form method="post" action="#">
+    <div class="col-6 col-12-xsmall">
+      <div class="col-12">
+        <textarea name="config" id="config" placeholder="config.json" rows="8" maxlength="5000">{{ config }}</textarea>
+      </div>
+      <!-- Break -->
+      <div class="col-12">
+        <ul class="actions">
+          <li><input type="submit" value="Update" class="primary" /></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
