@@ -69,6 +69,49 @@
   {% endif %}
 </section>
 
+{% if button_durations and button_durations|length > 0 %}
+<section>
+  <h2>Button Press Durations Histogram</h2>
+  <canvas id="buttonHistogram" width="600" height="300"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript">
+    // Prepare histogram bins
+    var durations = {{ button_durations | tojson | safe }};
+    // Define bin size and range
+    var binSize = 0.2;
+    var maxDuration = Math.max.apply(null, durations);
+    var binCount = Math.ceil(maxDuration / binSize);
+    var bins = Array(binCount).fill(0);
+    durations.forEach(function(d) {
+      var idx = Math.min(Math.floor(d / binSize), binCount - 1);
+      bins[idx]++;
+    });
+    var labels = bins.map(function(_, i) { return (i*binSize).toFixed(1) + '-' + ((i+1)*binSize).toFixed(1) + 's'; });
+    var ctx = document.getElementById('buttonHistogram').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Count',
+          data: bins,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Duration (seconds)' } },
+          y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</section>
+{% endif %}
+
+
 <!-- Config file content -->
 <div class="col-6 col-12-small">
   <label for="config"><strong>Config file</strong></label>

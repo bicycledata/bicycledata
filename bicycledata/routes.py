@@ -266,6 +266,20 @@ def v2_devices_ident_session(ident, session):
           except Exception:
             continue
 
+      # Button press durations for histogram
+      button_durations = []
+      button_file = os.path.join(session_dir, 'bicyclebutton')
+      if os.path.isfile(button_file):
+        import csv
+        with open(button_file, newline='') as csvfile:
+          reader = csv.DictReader(csvfile)
+          for row in reader:
+            try:
+              duration = float(row['duration'])
+              button_durations.append(duration)
+            except Exception:
+              continue
+
     return render_template(
       'devices_v2_ident_session.html',
       device=device,
@@ -273,7 +287,8 @@ def v2_devices_ident_session(ident, session):
       session=session_info,
       log=log,
       sensors=sensors,
-      gps_track=gps_track
+      gps_track=gps_track,
+      button_durations=button_durations
     )
   except Exception as e:
     return jsonify({"error": str(e)}), 500
