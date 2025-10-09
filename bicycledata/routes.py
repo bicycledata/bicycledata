@@ -266,6 +266,23 @@ def v2_devices_ident_session(ident, session):
           except Exception:
             continue
 
+        # Calculate total GPS distance in km using Haversine formula
+        from math import radians, sin, cos, sqrt, atan2
+        def haversine(lat1, lon1, lat2, lon2):
+            R = 6371.0  # Earth radius in km
+            dlat = radians(lat2 - lat1)
+            dlon = radians(lon2 - lon1)
+            a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+            c = 2 * atan2(sqrt(a), sqrt(1 - a))
+            return R * c
+
+        total_distance = 0.0
+        for i in range(1, len(gps_track)):
+            lat1, lon1 = gps_track[i-1]
+            lat2, lon2 = gps_track[i]
+            total_distance += haversine(lat1, lon1, lat2, lon2)
+        session_info['distance'] = f'{round(total_distance, 2)} km'
+
       # Button press durations for histogram
       button_durations = []
       button_file = os.path.join(session_dir, 'bicyclebutton')
