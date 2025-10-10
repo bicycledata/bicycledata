@@ -112,6 +112,48 @@
 </section>
 {% endif %}
 
+{% if lidar_distance and lidar_distance|length > 0 %}
+<section>
+  <h2>Lidar Distance Histogram (30cm bins)</h2>
+  <canvas id="lidarHistogram" width="600" height="300"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript">
+    // Prepare histogram bins
+    var durations = {{ lidar_distance | tojson | safe }};
+    // Define bin size and range
+    var binSize = 25.0;
+    var maxDuration = 700.0;
+    var binCount = Math.ceil(maxDuration / binSize);
+    var bins = Array(binCount).fill(0);
+    durations.forEach(function(d) {
+      var idx = Math.min(Math.floor(d / binSize), binCount - 1);
+      bins[idx]++;
+    });
+    var labels = bins.map(function(_, i) { return (i*binSize).toFixed(1) + '-' + ((i+1)*binSize).toFixed(1) + 'cm'; });
+    var ctx = document.getElementById('lidarHistogram').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Count',
+          data: bins,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Distance (cm)' } },
+          y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</section>
+{% endif %}
+
 
 <!-- Config file content -->
 <div class="col-6 col-12-small">

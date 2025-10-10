@@ -283,18 +283,32 @@ def v2_devices_ident_session(ident, session):
             total_distance += haversine(lat1, lon1, lat2, lon2)
         session_info['distance'] = f'{round(total_distance, 2)} km'
 
-      # Button press durations for histogram
-      button_durations = []
-      button_file = os.path.join(session_dir, 'bicyclebutton')
-      if os.path.isfile(button_file):
-        with open(button_file, newline='') as csvfile:
-          reader = csv.DictReader(csvfile)
-          for row in reader:
-            try:
-              duration = float(row['duration'])
-              button_durations.append(duration)
-            except Exception:
-              continue
+    # Button press durations for histogram
+    button_durations = []
+    button_file = os.path.join(session_dir, 'bicyclebutton')
+    if os.path.isfile(button_file):
+      with open(button_file, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+          try:
+            duration = float(row['duration'])
+            button_durations.append(duration)
+          except Exception:
+            continue
+
+    # Pre-compute histogram for bicyclelidar (30cm bins)
+    lidar_distance = []
+    lidar_file = os.path.join(session_dir, 'bicyclelidar')
+    if os.path.isfile(lidar_file):
+      with open(lidar_file, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+          try:
+            distance = float(row.get('distance [cm]', 65535))
+            if distance < 700:
+              lidar_distance.append(distance)
+          except Exception:
+            continue
 
     return render_template(
       'devices_v2_ident_session.html',
@@ -304,7 +318,8 @@ def v2_devices_ident_session(ident, session):
       log=log,
       sensors=sensors,
       gps_track=gps_track,
-      button_durations=button_durations
+      button_durations=button_durations,
+      lidar_distance=lidar_distance
     )
   except Exception as e:
     return jsonify({"error": str(e)}), 500
