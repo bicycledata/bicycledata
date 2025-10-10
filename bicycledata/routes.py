@@ -1,17 +1,19 @@
+import csv
 import json
 import os
 import secrets
 from datetime import UTC, datetime
+from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
 import slack
 from discord import SyncWebhook
-from flask import (Response, abort, flash, jsonify, make_response, redirect,
-                   render_template, request, send_from_directory, url_for)
+from flask import (flash, jsonify, redirect, render_template, request,
+                   send_from_directory, url_for)
 
 from bicycledata import app, config, dir, login_manager
 from bicycledata.devices import (check_v2_device_path, load_devices,
-                                 load_v2_devices, read_config_file,
+                                 load_v2_devices, ping_v2, read_config_file,
                                  read_device_info, read_v2_config_file,
                                  read_v2_device_info, read_v2_sessions,
                                  write_config_file, write_v2_config_file)
@@ -108,8 +110,7 @@ def api_v2_register():
       json.dump(data, file, indent=2)
 
     SendDiscordMessage(f'[v2] *register* {data["username"]}@{data["hostname"]} ({ident})')
-    with open(os.path.join(device_path, 'ping.log'), 'a') as f:
-      f.write(datetime.now(UTC).isoformat() + ", /api/v2/register\n")
+    ping_v2(ident, '/api/v2/register')
 
     return jsonify(data), 201  # 201 Created status
 
@@ -141,8 +142,7 @@ def api_v2_config():
       data = json.load(file)
 
     SendDiscordMessage(f'[v2] *config* {data["username"]}@{data["hostname"]} ({ident})')
-    with open(os.path.join(device_path, 'ping.log'), 'a') as f:
-      f.write(datetime.now(UTC).isoformat() + ", /api/config\n")
+    ping_v2(ident, '/api/v2/config')
 
     return jsonify(data)
 
@@ -184,6 +184,8 @@ def api_v2_session_upload_chunk():
     log_path = os.path.join(file_path, filename)
     with open(log_path, 'a') as file:
       file.write(data)
+
+    ping_v2(ident, '/api/v2/session/upload')
     return jsonify({"status": "ok"}), 200
   except Exception as e:
     return jsonify({"error": str(e)}), 500
@@ -246,7 +248,6 @@ def v2_devices_ident_session(ident, session):
     gps_track = []
     gps_file = os.path.join(app.root_path, '..', session_dir, 'bicyclegps')
     if os.path.isfile(gps_file):
-      import csv
       with open(gps_file, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -267,7 +268,6 @@ def v2_devices_ident_session(ident, session):
             continue
 
         # Calculate total GPS distance in km using Haversine formula
-        from math import radians, sin, cos, sqrt, atan2
         def haversine(lat1, lon1, lat2, lon2):
             R = 6371.0  # Earth radius in km
             dlat = radians(lat2 - lat1)
@@ -287,7 +287,6 @@ def v2_devices_ident_session(ident, session):
       button_durations = []
       button_file = os.path.join(session_dir, 'bicyclebutton')
       if os.path.isfile(button_file):
-        import csv
         with open(button_file, newline='') as csvfile:
           reader = csv.DictReader(csvfile)
           for row in reader:

@@ -83,6 +83,14 @@ def read_v2_sessions(ident, all=False):
   sessions.sort(reverse=True)
   return sessions
 
+def ping_v2(ident, call):
+  try:
+    ping_path = os.path.join('data', 'v2', 'devices', ident, 'ping.log')
+    with open(ping_path, 'a') as f:
+      f.write(datetime.now(UTC).isoformat() + f", {call}\n")
+  except Exception as e:
+    pass
+
 def read_device_info(ident):
   directory = os.path.join('data', 'devices', ident)
   filename = 'config.json'
