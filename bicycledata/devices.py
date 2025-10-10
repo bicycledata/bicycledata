@@ -1,6 +1,7 @@
 import json
 import os
-from datetime import datetime, UTC
+from datetime import UTC, datetime
+
 
 def check_v2_ident(ident: str) -> bool:
   return ident.isalnum()
@@ -79,7 +80,7 @@ def read_v2_sessions(ident, all=False):
   directory = os.path.join('data', 'v2', 'devices', ident, 'sessions')
   sessions = [name for name in os.listdir(directory) if os.path.isdir(os.path.join(directory, name))]
   if not all:
-    sessions = [s for s in sessions if os.path.exists(os.path.join(directory, s, 'bicyclegps'))]
+    sessions = [s for s in sessions if os.path.exists(os.path.join(directory, s, 'bicyclegps')) and os.path.getsize(os.path.join(directory, s, 'bicyclegps')) > 50]
   sessions.sort(reverse=True)
   return sessions
 
