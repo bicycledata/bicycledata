@@ -17,6 +17,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
                                  read_device_info, read_v2_config_file,
                                  read_v2_device_info, read_v2_sessions,
                                  write_config_file, write_v2_config_file)
+from bicycledata.session_info import SessionInfo
 from bicycledata.user import User, add_new_user, load_users
 
 
@@ -224,7 +225,7 @@ def v2_devices_ident(ident):
   return redirect(url_for('v2_devices_ident', ident=ident))
 
 
-@app.route('/v2/devices/<ident>/sessions/<session>')
+@app.route('/v2/devices/<ident>/sessions/<session>', methods=['GET', 'POST'])
 @flask_login.login_required
 def v2_devices_ident_session(ident, session):
   try:
@@ -235,8 +236,39 @@ def v2_devices_ident_session(ident, session):
       log = open(os.path.join(session_dir, 'bicycleinit.log')).read()
     except Exception:
       log = None
-    sensors = [name for name in os.listdir(session_dir) if os.path.isfile(os.path.join(session_dir, name)) and name != 'bicycleinit.log' and name != 'bicycleinit.json']
+    sensors = [name for name in os.listdir(session_dir) if os.path.isfile(os.path.join(session_dir, name)) and name not in ['bicycleinit.log', 'bicycleinit.json', 'session.info']]
     sensors.sort()
+
+    # Read session.info frontmatter and body
+    try:
+      session_front, session_body = SessionInfo.read_from(os.path.join(session_dir, 'session.info'))
+    except Exception:
+      session_front, session_body = {}, ''
+
+    # Handle form submission to update session metadata
+    if request.method == 'POST':
+      try:
+        # Get values from the form
+        battery_start = request.form.get('battery_start', None)
+        battery_end = request.form.get('battery_end', None)
+        session_body = request.form.get('notes', session_body)
+
+        try:
+          session_front['battery_start'] = int(battery_start)
+        except ValueError:
+          session_front['battery_start'] = battery_start
+
+        try:
+          session_front['battery_end'] = int(battery_end)
+        except ValueError:
+          session_front['battery_end'] = battery_end
+
+        # Write back to session.info
+        SessionInfo.write_to(os.path.join(session_dir, 'session.info'), session_front, session_body)
+        flash('Session updated successfully.')
+      except Exception as e:
+        flash(f'Failed to update session: {e}')
+      return redirect(url_for('v2_devices_ident_session', ident=ident, session=session))
 
     session_info = {'name': session,
                     'start': '---',
@@ -319,7 +351,9 @@ def v2_devices_ident_session(ident, session):
       sensors=sensors,
       gps_track=gps_track,
       button_durations=button_durations,
-      lidar_distance=lidar_distance
+      lidar_distance=lidar_distance,
+      session_front=session_front,
+      session_body=session_body
     )
   except Exception as e:
     return jsonify({"error": str(e)}), 500

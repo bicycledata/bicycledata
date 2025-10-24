@@ -19,19 +19,32 @@
   <div class="content">
     <header>
       {% if device.online %}
-      <h1><span class="icon solid fa-server" style="color: green;"></span> <a href="/v2/devices/{{ device.ident }}">{{ device.name }}</a></h1>
+      <h1><span class="icon solid fa-server" style="color: green;"></span> <a href="/v2/devices/{{ device.ident }}">{{
+          device.name }}</a></h1>
       {% else %}
-      <h1><span class="icon solid fa-server" style="color: red;"></span> <a href="/v2/devices/{{ device.ident }}">{{ device.name }}</a></h1>
+      <h1><span class="icon solid fa-server" style="color: red;"></span> <a href="/v2/devices/{{ device.ident }}">{{
+          device.name }}</a></h1>
       {% endif %}
     </header>
-  <table>
-      <tr><th>Start</th><td>{{ session.start }}</td></tr>
-      <tr><th>End</th><td>{{ session.end }}</td></tr>
-      <tr><th>Duration</th><td>{{ session.duration }}</td></tr>
-      <tr><th>Distance</th><td>{{ session.distance }}</td></tr>
+    <table>
+      <tr>
+        <th>Start</th>
+        <td>{{ session.start }}</td>
+      </tr>
+      <tr>
+        <th>End</th>
+        <td>{{ session.end }}</td>
+      </tr>
+      <tr>
+        <th>Duration</th>
+        <td>{{ session.duration }}</td>
+      </tr>
+      <tr>
+        <th>Distance</th>
+        <td>{{ session.distance }}</td>
+      </tr>
     </table>
 
-    <p>
     <section>
       <h2>Data</h2>
       <ul>
@@ -70,6 +83,35 @@
   {% endif %}
 </section>
 
+<!-- Session update form -->
+<section>
+  <h2>Session Info</h2>
+  <form method="post" action="">
+    <div class="row gtr-uniform">
+      <div class="col-4 col-12-small">
+        <label for="battery_start"><strong>Battery Start (%)</strong></label>
+        <input type="number" id="battery_start" name="battery_start" min="0" max="100" step="1"
+          value="{{ session_front.battery_start if session_front.battery_start is defined else '' }}" />
+      </div>
+      <div class="col-4 col-12-small">
+        <label for="battery_end"><strong>Battery End (%)</strong></label>
+        <input type="number" id="battery_end" name="battery_end" min="0" max="100" step="1"
+          value="{{ session_front.battery_end if session_front.battery_end is defined else '' }}" />
+      </div>
+      <div class="col-8 col-12-small">
+        <label for="notes"><strong>Notes</strong></label>
+        <textarea id="notes" name="notes" rows="4"
+          placeholder="Enter additional session notes">{{ session_body }}</textarea>
+      </div>
+      <div class="col-12">
+        <ul class="actions">
+          <li><button type="submit" class="button primary">Update</button></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+</section>
+
 {% if button_durations and button_durations|length > 0 %}
 <section>
   <h2>Button Press Durations Histogram</h2>
@@ -83,11 +125,11 @@
     var maxDuration = Math.max.apply(null, durations);
     var binCount = Math.ceil(maxDuration / binSize);
     var bins = Array(binCount).fill(0);
-    durations.forEach(function(d) {
+    durations.forEach(function (d) {
       var idx = Math.min(Math.floor(d / binSize), binCount - 1);
       bins[idx]++;
     });
-    var labels = bins.map(function(_, i) { return (i*binSize).toFixed(1) + '-' + ((i+1)*binSize).toFixed(1) + 's'; });
+    var labels = bins.map(function (_, i) { return (i * binSize).toFixed(1) + '-' + ((i + 1) * binSize).toFixed(1) + 's'; });
     var ctx = document.getElementById('buttonHistogram').getContext('2d');
     new Chart(ctx, {
       type: 'bar',
@@ -125,11 +167,11 @@
     var maxDuration = 700.0;
     var binCount = Math.ceil(maxDuration / binSize);
     var bins = Array(binCount).fill(0);
-    durations.forEach(function(d) {
+    durations.forEach(function (d) {
       var idx = Math.min(Math.floor(d / binSize), binCount - 1);
       bins[idx]++;
     });
-    var labels = bins.map(function(_, i) { return (i*binSize).toFixed(1) + '-' + ((i+1)*binSize).toFixed(1) + 'cm'; });
+    var labels = bins.map(function (_, i) { return (i * binSize).toFixed(1) + '-' + ((i + 1) * binSize).toFixed(1) + 'cm'; });
     var ctx = document.getElementById('lidarHistogram').getContext('2d');
     new Chart(ctx, {
       type: 'bar',
@@ -153,7 +195,6 @@
   </script>
 </section>
 {% endif %}
-
 
 <!-- Config file content -->
 <div class="col-6 col-12-small">
