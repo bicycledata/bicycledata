@@ -103,9 +103,9 @@
         <input type="number" id="people_joined" name="people_joined" min="0" max="100" step="1"
           value="{{ session_front.people_joined if session_front.people_joined is defined else '' }}" />
       </div>
-      <div class="col-8 col-12-small">
+      <div class="col-12">
         <label for="notes"><strong>Notes</strong></label>
-        <textarea id="notes" name="notes" rows="4"
+        <textarea id="notes" name="notes" rows="8" style="min-height:220px; width:100%; box-sizing:border-box;"
           placeholder="Enter additional session notes">{{ session_body }}</textarea>
       </div>
       <div class="col-12">
