@@ -248,20 +248,34 @@ def v2_devices_ident_session(ident, session):
     # Handle form submission to update session metadata
     if request.method == 'POST':
       try:
-        # Get values from the form
-        battery_start = request.form.get('battery_start', None)
-        battery_end = request.form.get('battery_end', None)
         session_body = request.form.get('notes', session_body)
 
-        try:
-          session_front['battery_start'] = int(battery_start)
-        except ValueError:
-          session_front['battery_start'] = battery_start
+        battery_start = request.form.get('battery_start', '')
+        if battery_start:
+          try:
+            session_front['battery_start'] = int(battery_start)
+          except ValueError:
+            session_front['battery_start'] = battery_start
+        elif 'battery_start' in session_front:
+          del session_front['battery_start']
 
-        try:
-          session_front['battery_end'] = int(battery_end)
-        except ValueError:
-          session_front['battery_end'] = battery_end
+        battery_end = request.form.get('battery_end', '')
+        if battery_end:
+          try:
+            session_front['battery_end'] = int(battery_end)
+          except ValueError:
+            session_front['battery_end'] = battery_end
+        elif 'battery_end' in session_front:
+          del session_front['battery_end']
+
+        people_joined = request.form.get('people_joined', '')
+        if people_joined:
+          try:
+            session_front['people_joined'] = int(people_joined)
+          except ValueError:
+            session_front['people_joined'] = people_joined
+        elif 'people_joined' in session_front:
+          del session_front['people_joined']
 
         # Write back to session.info
         SessionInfo.write_to(os.path.join(session_dir, 'session.info'), session_front, session_body)

@@ -83,7 +83,7 @@
   {% endif %}
 </section>
 
-<!-- Session update form -->
+<!-- Session Info form -->
 <section>
   <h2>Session Info</h2>
   <form method="post" action="">
@@ -97,6 +97,11 @@
         <label for="battery_end"><strong>Battery End (%)</strong></label>
         <input type="number" id="battery_end" name="battery_end" min="0" max="100" step="1"
           value="{{ session_front.battery_end if session_front.battery_end is defined else '' }}" />
+      </div>
+      <div class="col-4 col-12-small">
+        <label for="people_joined"><strong>People Joined</strong></label>
+        <input type="number" id="people_joined" name="people_joined" min="0" max="100" step="1"
+          value="{{ session_front.people_joined if session_front.people_joined is defined else '' }}" />
       </div>
       <div class="col-8 col-12-small">
         <label for="notes"><strong>Notes</strong></label>
