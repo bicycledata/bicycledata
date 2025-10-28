@@ -65,7 +65,6 @@ def user_loader(email):
 def unauthorized_handler():
   return redirect(url_for('login'))
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   if request.method == 'GET':
@@ -129,8 +128,11 @@ def logout():
 @app.route('/admin', methods=['GET', 'POST'])
 @flask_login.login_required
 def admin():
-  users = []
+  if not flask_login.current_user.is_admin:
+    flash('Access denied')
+    return redirect(url_for('index'))
 
+  users = []
   for email, user in load_users().items():
     login_info = "0"
     try:
