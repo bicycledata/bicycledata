@@ -1,3 +1,4 @@
+import json
 import os
 import secrets
 from datetime import datetime
@@ -21,33 +22,74 @@ class User(flask_login.UserMixin):
     return getattr(self, 'role', None) == 'admin'
 
 def load_users():
-  DIR = os.path.join('data', 'login')
-  filename = 'login.md'
+  """Load users from `data/login/login.json`.
 
-  dir.createFileIfNeeded(DIR, filename)
+  Supports two formats for compatibility:
+  - JSON array of objects with keys 'role','name','email','token' (preferred)
+  - legacy semicolon-separated lines (role;name;email;token)
+  Returns a dict mapping email -> user dict containing keys 'role','name','email','password'
+  where 'password' stores the token used by other parts of the app.
+  """
+  DIR = os.path.join('data', 'login')
 
   users = {}
-  with open(os.path.join(DIR, filename)) as file:
-    for line in file:
-      fields = line.rstrip().split(';')
-      if len(fields) != 4:
-        continue
-      email = fields[2]
-      users[email] = {'role': fields[0], 'name': fields[1], 'email': fields[2], 'password': fields[3]}
+  try:
+    path = os.path.join(DIR, 'login.json')
+    with open(path, 'r', encoding='utf-8') as fh:
+      content = fh.read().strip()
+      if not content:
+        data = []
+      else:
+        data = json.loads(content)
+
+    # Expecting a list of user objects
+    if isinstance(data, list):
+      for item in data:
+        role = item.get('role')
+        name = item.get('name')
+        email = item.get('email')
+        token = item.get('token') or item.get('password')
+        if not email:
+          continue
+        users[email] = {'role': role, 'name': name, 'email': email, 'password': token}
+    else:
+      # Unexpected JSON root; fall back to empty
+      return {}
+  except FileNotFoundError:
+    # Fallback: older semicolon format in a file named login.md
+    try:
+      path = os.path.join(DIR, 'login.md')
+      with open(path, 'r', encoding='utf-8') as fh:
+        for line in fh:
+          fields = line.rstrip().split(';')
+          if len(fields) != 4:
+            continue
+          email = fields[2]
+          users[email] = {'role': fields[0], 'name': fields[1], 'email': fields[2], 'password': fields[3]}
+    except Exception:
+      return {}
+
   return users
 
 def add_new_user(name, email):
+  """Add a new user to `data/login/login.json` and return True if added, False if user exists."""
   DIR = os.path.join('data', 'login')
-  filename = 'login.md'
+  filename = 'login.json'
 
-  dir.createFileIfNeeded(DIR, filename)
-
-  password = secrets.token_hex()
-  with open(os.path.join(DIR, filename), 'a') as file:
-    file.write(f'inactive;{name};{email};{password}\n')
+  users = load_users()
+  if email not in users:
+    token = secrets.token_hex()
+    users[email] = {'role': 'inactive', 'name': name, 'email': email, 'password': token}
+    print(users)
+    dir.createFileIfNeeded(DIR, filename)
+    path = os.path.join(DIR, filename)
+    with open(path, 'w', encoding='utf-8') as f:
+      json.dump(list(users.values()), f, indent=2, ensure_ascii=False)
+    return True
+  return False
 
 @login_manager.user_loader
-def user_loader(email):
+def get_user_by_email(email):
   users = load_users()
 
   if email not in users:
@@ -76,6 +118,7 @@ def login():
 @app.route('/login/<token>')
 def login_with_token(token):
   users = load_users()
+  print(users)
   for user in users.values():
     if user['password'] == token:
       if user['role'] == 'inactive':
@@ -90,7 +133,7 @@ def login_with_token(token):
       with open(os.path.join('data', 'login', token), 'a') as f:
         f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
 
-      return redirect(url_for('v2_devices'))
+      return redirect(url_for('user_sessions'))
 
   flash('Bad login')
   return redirect(url_for('login'))
@@ -112,8 +155,9 @@ def signup():
     flash('There is unusually high traffic at the moment. Please try to send your message later again.')
     return redirect(url_for('index'))
 
-  if not email in users:
-    add_new_user(name, email)
+  if not add_new_user(name, email):
+    flash('User with this email already exists.')
+    return redirect(url_for('login'))
 
   flash('All accounts get activated manually. You will get an email as soon as your request is processed.')
   SendSlackMessage(f'*signup* New user requests access: {name}, {email}')
@@ -124,6 +168,11 @@ def signup():
 def logout():
   flask_login.logout_user()
   return redirect(url_for('index'))
+
+@app.route('/sessions')
+@flask_login.login_required
+def user_sessions():
+  return render_template('user_sessions.html')
 
 @app.route('/admin', methods=['GET', 'POST'])
 @flask_login.login_required
