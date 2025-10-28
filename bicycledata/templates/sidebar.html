@@ -13,6 +13,9 @@
         {% else %}
         <li><a href="{{ url_for('v2_devices') }}">Devices</a></li>
         {% endif %}
+        {% if not current_user.is_anonymous and current_user.is_admin %}
+        <li><a href="{{ url_for('admin') }}">Admin</a></li>
+        {% endif %}
       </ul>
     </nav>
 

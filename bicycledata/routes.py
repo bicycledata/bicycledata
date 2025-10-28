@@ -13,7 +13,7 @@ import requests
 from flask import (flash, jsonify, redirect, render_template, request,
                    send_file, send_from_directory, url_for)
 
-from bicycledata import app, config, dir, login_manager
+from bicycledata import app, config, dir
 from bicycledata.devices import (check_v2_device_path, load_devices,
                                  load_v2_devices, ping_v2, read_config_file,
                                  read_device_info, read_v2_config_file,
@@ -21,7 +21,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
                                  write_config_file, write_v2_config_file)
 from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
-from bicycledata.user import User, add_new_user, load_users
+from bicycledata.slack import SendSlackMessage
 
 
 def SendMessage(message):
@@ -34,6 +34,7 @@ def SendMessage(message):
     requests.post(url, data=message, headers={"Authorization": f"Bearer {token}"}, timeout=2)
   except Exception:
     pass
+
 
 @app.after_request
 def after_request(response):
@@ -476,89 +477,12 @@ def elements():
   return render_template('elements.html')
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-  if request.method == 'GET':
-    return render_template('login.html')
-
-  token = request.form['password']
-  return redirect(url_for('login_with_token', token=token))
-
-
-@app.route('/login/<token>')
-def login_with_token(token):
-  users = load_users()
-  for user in users.values():
-    if user['password'] == token:
-      if user['role'] == 'inactive':
-        flash('User is not yet activated')
-        return redirect(url_for('login'))
-
-      login_user = User(user)
-      flask_login.login_user(login_user)
-
-      SendMessage(f'*login* {user["name"]}')
-
-      with open(os.path.join('data', 'login', token), 'a') as f:
-        f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
-
-      return redirect(url_for('v2_devices'))
-
-  flash('Bad login')
-  return redirect(url_for('login'))
-
-
-@app.route('/signup', methods=['POST'])
-def signup():
-  if not request.method == 'POST':
-    return redirect(url_for('login'))
-
-  name = request.form['name']
-  email = request.form['email']
-
-  if not name or not email:
-    flash('Registration failed: both name and email are required')
-    return redirect(url_for('login'))
-
-  users = load_users()
-  if len(users) > 100:
-    flash('There is unusually high traffic at the moment. Please try to send your message later again.')
-    return redirect(url_for('index'))
-
-  if not email in users:
-    add_new_user(name, email)
-
-  flash('All accounts get activated manually. You will get an email as soon as your request is processed.')
-  SendMessage(f'*signup* New user requests access: {name}, {email}')
-  return redirect(url_for('index'))
-
-
-@app.route('/logout')
-@flask_login.login_required
-def logout():
-  flask_login.logout_user()
-  return redirect(url_for('index'))
-
-
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
   DIR = 'data/contact/'
 
   if not request.method == 'POST':
-    comments = []
-    users = []
-
-    if not flask_login.current_user.is_anonymous and flask_login.current_user.role == "admin":
-      for email, user in load_users().items():
-        login_info = "0"
-        try:
-          with open(os.path.join('data/login/', user['password']), 'r') as f:
-            lines = f.readlines()
-            login_info = f'{len(lines)} {lines[-1]}'
-        except Exception:
-          pass
-        users.append({'email': email, 'name': user['name'], 'role': user['role'], 'token': user['password'], 'login_info': login_info})
-    return render_template('contact.html', comments=comments, users=users)
+    return render_template('contact.html')
 
   dir.createDirIfNeeded(DIR)
 
@@ -605,6 +529,7 @@ def apple_touch_icon_precomposed():
 @app.route('/robots.txt')
 def robots():
   return send_from_directory(app.static_folder, 'robots.txt')
+
 
 @app.errorhandler(404)
 def page_not_found(e):
