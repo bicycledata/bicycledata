@@ -19,4 +19,4 @@ app.config['SECRET_KEY'] = config['SECRET_KEY']
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-from bicycledata import routes
+from bicycledata import routes, user # noqa: E402
