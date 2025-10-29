@@ -23,7 +23,11 @@
 
     <section>
       <ul>
-        <li>xxx</li>
+      {% for session in sessions %}
+        <li><a href="/v2/devices/{{ session.device }}/sessions/{{ session.date }}">{{ session.date }}</a></li>
+      {% else %}
+        <li>No sessions found.</li>
+      {% endfor %}
       </ul>
     </section>
 
