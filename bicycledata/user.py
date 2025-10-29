@@ -80,13 +80,39 @@ def add_new_user(name, email):
   if email not in users:
     token = secrets.token_hex()
     users[email] = {'role': 'inactive', 'name': name, 'email': email, 'password': token}
-    print(users)
     dir.createFileIfNeeded(DIR, filename)
     path = os.path.join(DIR, filename)
     with open(path, 'w', encoding='utf-8') as f:
       json.dump(list(users.values()), f, indent=2, ensure_ascii=False)
     return True
   return False
+
+def read_user_data(email):
+  users = load_users()
+
+  if email not in users:
+    raise ValueError("Unknown user email")
+
+  data = {}
+  try:
+    with open(os.path.join('data/login/', users[email]["password"]), 'r') as f:
+      data = json.load(f)
+  except Exception:
+    pass
+
+  return data
+
+def write_user_data(email, data):
+  users = load_users()
+
+  if email not in users:
+    raise ValueError("Unknown user email")
+
+  try:
+    with open(os.path.join('data/login/', users[email]["password"]), 'w') as f:
+      json.dump(data, f, indent=2, ensure_ascii=False)
+  except Exception:
+    pass
 
 @login_manager.user_loader
 def get_user_by_email(email):
@@ -118,7 +144,6 @@ def login():
 @app.route('/login/<token>')
 def login_with_token(token):
   users = load_users()
-  print(users)
   for user in users.values():
     if user['password'] == token:
       if user['role'] == 'inactive':
@@ -130,8 +155,10 @@ def login_with_token(token):
 
       SendSlackMessage(f'*login* {user["name"]}')
 
-      with open(os.path.join('data', 'login', token), 'a') as f:
-        f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
+      udata = read_user_data(user['email'])
+      udata['last_login'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      udata['num_logins'] = udata.get('num_logins', 0) + 1
+      write_user_data(user['email'], udata)
 
       return redirect(url_for('user_sessions'))
 
@@ -183,12 +210,6 @@ def admin():
 
   users = []
   for email, user in load_users().items():
-    login_info = "0"
-    try:
-      with open(os.path.join('data/login/', user['password']), 'r') as f:
-        lines = f.readlines()
-        login_info = f'{len(lines)} {lines[-1]}'
-    except Exception:
-      pass
-    users.append({'email': email, 'name': user['name'], 'role': user['role'], 'token': user['password'], 'login_info': login_info})
+    udata = read_user_data(email)
+    users.append({'email': email, 'name': user['name'], 'role': user['role'], 'token': user['password'], 'last_login': udata.get("last_login", "n/a"), 'num_login': udata.get("num_logins", 0)})
   return render_template('admin.html', users=users)
