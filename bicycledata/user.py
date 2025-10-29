@@ -199,7 +199,13 @@ def logout():
 @app.route('/sessions')
 @flask_login.login_required
 def user_sessions():
-  return render_template('user_sessions.html')
+  udata = read_user_data(flask_login.current_user.id)
+  sessions = []
+  for s in udata.get('sessions', []):
+    device, date = s.split('/', 1)
+    sessions.append({'device': device, 'date': date})
+  sessions.sort(key=lambda x: x['date'], reverse=True)
+  return render_template('user_sessions.html', sessions=sessions)
 
 @app.route('/admin', methods=['GET', 'POST'])
 @flask_login.login_required

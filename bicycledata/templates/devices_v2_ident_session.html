@@ -19,10 +19,10 @@
   <div class="content">
     <header>
       {% if device.online %}
-      <h1><span class="icon solid fa-server" style="color: green;"></span> <a href="/v2/devices/{{ device.ident }}">{{
+      <h1><span class="icon solid fa-server" style="color: green;"></span> <a href="/sessions">{{
           device.name }}</a></h1>
       {% else %}
-      <h1><span class="icon solid fa-server" style="color: red;"></span> <a href="/v2/devices/{{ device.ident }}">{{
+      <h1><span class="icon solid fa-server" style="color: red;"></span> <a href="/sessions">{{
           device.name }}</a></h1>
       {% endif %}
     </header>

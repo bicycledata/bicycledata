@@ -22,6 +22,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
 from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
 from bicycledata.slack import SendSlackMessage
+from bicycledata.user import read_user_data, write_user_data
 
 
 def SendMessage(message):
@@ -179,6 +180,18 @@ def api_v2_session_upload_chunk():
     # Create data/devices/<ident>/sessions/<session> directory if it does not exist
     file_path = os.path.join('data', 'v2', 'devices', ident, 'sessions', session)
     os.makedirs(file_path, exist_ok=True)
+
+    # Update the session list in user data
+    config = read_v2_config_file(ident)
+    email = config.get('email')
+    if email:
+      udata = read_user_data(email)
+      sessions = udata.get('sessions', [])
+      session_entry = f'{ident}/{session}'
+      if session_entry not in sessions:
+        sessions.append(session_entry)
+        udata['sessions'] = sessions
+        write_user_data(email, udata)
 
     # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
     log_path = os.path.join(file_path, filename)
