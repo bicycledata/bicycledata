@@ -200,6 +200,10 @@ def api_v2_session_upload_chunk():
 @app.route('/v2/devices')
 @flask_login.login_required
 def v2_devices():
+  if not flask_login.current_user.is_private:
+    flash('Access denied')
+    return redirect(url_for('index'))
+
   devices = load_v2_devices()
   return render_template('devices_v2.html', devices=devices)
 
@@ -207,6 +211,10 @@ def v2_devices():
 @app.route('/v2/devices/<ident>', methods=['GET', 'POST'])
 @flask_login.login_required
 def v2_devices_ident(ident):
+  if not flask_login.current_user.is_private:
+    flash('Access denied')
+    return redirect(url_for('index'))
+
   if request.method == 'GET':
     all_sessions = request.args.get('all', '0') == '1'
     device = read_v2_device_info(ident)
@@ -537,11 +545,19 @@ def elements():
 @app.route('/devices')
 @flask_login.login_required
 def devices():
+  if not flask_login.current_user.is_private:
+    flash('Access denied')
+    return redirect(url_for('index'))
+
   devices = load_devices()
   return render_template('devices.html', devices=devices)
 
 @app.route('/devices/<ident>', methods=['GET', 'POST'])
 def devices_ident(ident):
+  if not flask_login.current_user.is_private:
+    flash('Access denied')
+    return redirect(url_for('index'))
+
   if request.method == 'GET':
     device = read_device_info(ident)
     config = read_config_file(ident)

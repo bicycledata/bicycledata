@@ -21,6 +21,12 @@ class User(flask_login.UserMixin):
     """Convenience property for templates to check admin role."""
     return getattr(self, 'role', None) == 'admin'
 
+  @property
+  def is_private(self):
+    """Convenience property for templates to check private role."""
+    role = getattr(self, 'role', None)
+    return role in ('admin', 'private')
+
 def load_users():
   """Load users from `data/login/login.json`.
 
