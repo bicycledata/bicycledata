@@ -12,8 +12,9 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>Login Info</th>
-            <th>Token</th>
+            <th>#Login</th>
+            <th>Last Login</th>
+            <th>Token/Email</th>
             <th>Role</th>
           </tr>
         </thead>
@@ -21,8 +22,9 @@
           {% for user in users %}
           <tr>
             <td>{{ user.name }}</td>
-            <td>{{ user.login_info }}</td>
-            <td>{{ user.token }}</td>
+            <td>{{ user.num_login }}</td>
+            <td>{{ user.last_login }}</td>
+            <td>{{ user.token }}<br>{{ user.email }}</td>
             <td>{{ user.role }}</td>
           </tr>
           {% endfor %}
