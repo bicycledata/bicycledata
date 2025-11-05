@@ -23,6 +23,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
                                  read_device_info, read_v2_config_file,
                                  read_v2_device_info, read_v2_sessions,
                                  write_config_file, write_v2_config_file)
+from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
 from bicycledata.user import User, add_new_user, load_users
 
@@ -63,62 +64,17 @@ def index():
 @app.route('/test-mail')
 def test_mail():
   try:
-    # Determine recipient
     to = request.args.get('to')
-    if not to:
-      return jsonify({"error": "No recipient configured. Provide ?to=..."}), 400
+    subject = 'BicycleData test email'
+    body = f'This is a test email sent by BicycleData at {datetime.now().isoformat()}'
+    status = send_email(to, subject, body, config)
 
-    # SMTP settings with sensible defaults
-    smtp_host = config.get('smtp-host')
-    smtp_port = int(config.get('smtp-port'))
-    smtp_user = config.get('smtp-user')
-    smtp_pass = config.get('smtp-pass')
-    smtp_from = config.get('smtp-from')
-    use_tls = bool(config.get('smtp-use-tls', smtp_port == 587))
-    use_ssl = bool(config.get('smtp-use-ssl', smtp_port == 465))
-
-    # Build message
-    msg = EmailMessage()
-    msg['Subject'] = 'BicycleData test email'
-    msg['From'] = smtp_from
-    msg['To'] = to
-    msg.set_content(f'This is a test email sent by BicycleData at {datetime.now().isoformat()}')
-
-    # Send: prefer implicit SSL only on standard port 465. For other ports (25, 587)
-    # use plain SMTP and upgrade with STARTTLS when requested (smtp-use-tls or smtp-use-ssl).
-    server = None
-    try:
-      if use_ssl and smtp_port == 465:
-        # Implicit SSL (SMTPS)
-        server = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10)
-        server.ehlo()
-      else:
-        # Plain SMTP, optionally upgrade with STARTTLS (covers EnableSsl on port 25/587)
-        server = smtplib.SMTP(smtp_host, smtp_port, timeout=10)
-        server.ehlo()
-        # If config requested TLS/SSL use STARTTLS
-        if use_tls or use_ssl:
-          try:
-            server.starttls()
-            server.ehlo()
-          except Exception:
-            # If STARTTLS fails, continue and let login/send raise a clear error
-            pass
-
-      if smtp_user and smtp_pass:
-        server.login(smtp_user, smtp_pass)
-
-      server.send_message(msg)
-    finally:
-      try:
-        if server is not None:
-          server.quit()
-      except Exception:
-        pass
-
-    return jsonify({"status": "sent", "to": to})
+    if status['success']:
+      return jsonify({"status": "sent", "to": to})
   except Exception as e:
     return jsonify({"error": str(e)}), 500
+
+  return jsonify(status), 500
 
 
 ###
