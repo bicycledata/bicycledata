@@ -294,6 +294,7 @@ def v2_devices_ident_session(ident, session):
     gps_track = []
     gps_times = []
     gps_intervals = []
+    gps_pdop = []
     gps_file = os.path.join(app.root_path, '..', session_dir, 'bicyclegps')
     if os.path.isfile(gps_file):
       with open(gps_file, newline='') as csvfile:
@@ -306,6 +307,13 @@ def v2_devices_ident_session(ident, session):
             t = datetime.fromisoformat(row['time'])
             gps_track.append([lat, lon])
             gps_times.append(t)
+            # optionally collect pdop if present
+            try:
+              pdop_val = row.get('pdop')
+              if pdop_val is not None and pdop_val != '':
+                gps_pdop.append(float(pdop_val))
+            except Exception:
+              pass
 
             if session_info['start'] == '---':
               session_info['start']  = t.astimezone().strftime('%Y-%m-%d %H:%M')
@@ -381,7 +389,8 @@ def v2_devices_ident_session(ident, session):
       log=log,
       sensors=sensors,
       gps_track=gps_track,
-  gps_intervals=gps_intervals,
+      gps_intervals=gps_intervals,
+      gps_pdop=gps_pdop,
       button_durations=button_durations,
       lidar_distance=lidar_distance,
       session_front=session_front,

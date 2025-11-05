@@ -149,6 +149,7 @@
         }]
       },
       options: {
+        plugins: { legend: { display: false } },
         scales: {
           x: { title: { display: true, text: 'Duration (seconds)' } },
           y: { title: { display: true, text: 'Count' }, beginAtZero: true }
@@ -217,8 +218,117 @@
         }]
       },
       options: {
+        plugins: { legend: { display: false } },
         scales: {
           x: { title: { display: true, text: 'Interval (seconds)' } },
+          y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</section>
+{% endif %}
+
+{% if gps_pdop and gps_pdop|length > 0 %}
+<section>
+  <h2>GPS PDOP Histogram</h2>
+  <p>Distribution of PDOP values (Position Dilution of Precision).</p>
+  <div style="margin-bottom:0.5em;">
+    <strong>PDOP quality legend:</strong>
+    <span style="display:inline-block; margin-left:0.5em;">
+      <span style="display:inline-block; width:12px; height:12px; background:rgba(39,174,96,0.8); border:1px solid rgba(39,174,96,1);"></span>
+      <small style="margin-left:6px;">&lt; 1.0 — Ideal</small>
+    </span>
+    <span style="display:inline-block; margin-left:0.8em;">
+      <span style="display:inline-block; width:12px; height:12px; background:rgba(46,204,113,0.8); border:1px solid rgba(46,204,113,1);"></span>
+      <small style="margin-left:6px;">1.0–2.0 — Excellent</small>
+    </span>
+    <span style="display:inline-block; margin-left:0.8em;">
+      <span style="display:inline-block; width:12px; height:12px; background:rgba(241,196,15,0.85); border:1px solid rgba(241,196,15,1);"></span>
+      <small style="margin-left:6px;">2.0–5.0 — Good / Acceptable</small>
+    </span>
+    <span style="display:inline-block; margin-left:0.8em;">
+      <span style="display:inline-block; width:12px; height:12px; background:rgba(230,126,34,0.85); border:1px solid rgba(230,126,34,1);"></span>
+      <small style="margin-left:6px;">5.0–10.0 — Moderate / Fair</small>
+    </span>
+    <span style="display:inline-block; margin-left:0.8em;">
+      <span style="display:inline-block; width:12px; height:12px; background:rgba(231,76,60,0.9); border:1px solid rgba(231,76,60,1);"></span>
+      <small style="margin-left:6px;">10.0–20.0 — Poor</small>
+    </span>
+    <span style="display:inline-block; margin-left:0.8em;">
+      <span style="display:inline-block; width:12px; height:12px; background:rgba(192,57,43,0.95); border:1px solid rgba(192,57,43,1);"></span>
+      <small style="margin-left:6px;">&gt; 20.0 — Very Poor / Unusable</small>
+    </span>
+  </div>
+  <canvas id="pdopHistogram" width="600" height="300"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript">
+    var pdops = {{ gps_pdop | tojson | safe }};
+    // bin size for PDOP (0.1s increments)
+    var binSize = 0.4;
+    var maxVal = pdops.length ? Math.max.apply(null, pdops) : 0;
+    var binCount = Math.max(1, Math.ceil(maxVal / binSize));
+    // limit binCount to avoid huge charts
+    binCount = Math.min(binCount, 200);
+    var bins = Array(binCount).fill(0);
+    pdops.forEach(function (v) {
+      var idx = Math.min(Math.floor(v / binSize), binCount - 1);
+      bins[idx]++;
+    });
+
+    // Build human-readable labels for bins
+    var allLabels = [];
+    for (var i = 0; i < binCount; i++) {
+      var start = i * binSize;
+      var end = (i + 1) * binSize;
+      allLabels.push(start.toFixed(1) + '-' + end.toFixed(1));
+    }
+
+    // Filter out empty bins, append counts to labels and pick color per bin midpoint
+    var filteredLabels = [];
+    var filteredData = [];
+    var filteredColors = [];
+    function pdopColor(mid, alpha) {
+      // Colors chosen to represent quality from ideal (green) to very poor (dark red)
+      alpha = (typeof alpha === 'number') ? alpha : 0.8;
+      if (mid < 1.0) return 'rgba(39,174,96,' + alpha + ')';        // <1.0 Ideal / Excellent (green)
+      if (mid < 2.0) return 'rgba(46,204,113,' + alpha + ')';       // 1.0-2.0 Excellent (light green)
+      if (mid < 5.0) return 'rgba(241,196,15,' + alpha + ')';      // 2.0-5.0 Good (yellow)
+      if (mid < 10.0) return 'rgba(230,126,34,' + alpha + ')';     // 5.0-10.0 Moderate (orange)
+      if (mid < 20.0) return 'rgba(231,76,60,' + alpha + ')';       // 10.0-20.0 Poor (red)
+      return 'rgba(192,57,43,' + alpha + ')';                     // >20 Very Poor (dark red)
+    }
+
+    for (var i = 0; i < bins.length; i++) {
+      if (bins[i] > 0) {
+        var start = i * binSize;
+        var mid = start + (binSize / 2);
+        filteredLabels.push(allLabels[i] + ' (' + bins[i] + ')');
+        filteredData.push(bins[i]);
+        filteredColors.push(pdopColor(mid, 0.6));
+        // border color with full opacity
+        if (typeof filteredBorderColors === 'undefined') var filteredBorderColors = [];
+        filteredBorderColors.push(pdopColor(mid, 1.0));
+      }
+    }
+
+    var ctx = document.getElementById('pdopHistogram').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: filteredLabels,
+        datasets: [{
+          label: 'Count',
+          data: filteredData,
+          backgroundColor: filteredColors,
+          borderColor: (typeof filteredBorderColors !== 'undefined') ? filteredBorderColors : filteredColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { title: { display: true, text: 'PDOP' } },
           y: { title: { display: true, text: 'Count' }, beginAtZero: true }
         }
       }
@@ -259,6 +369,7 @@
         }]
       },
       options: {
+        plugins: { legend: { display: false } },
         scales: {
           x: { title: { display: true, text: 'Distance (cm)' } },
           y: { title: { display: true, text: 'Count' }, beginAtZero: true }
