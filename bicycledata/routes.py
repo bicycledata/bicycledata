@@ -290,8 +290,10 @@ def v2_devices_ident_session(ident, session):
                     'duration': '---'
                     }
 
-    # GPS track extraction
+    # GPS track extraction and update interval histogram
     gps_track = []
+    gps_times = []
+    gps_intervals = []
     gps_file = os.path.join(app.root_path, '..', session_dir, 'bicyclegps')
     if os.path.isfile(gps_file):
       with open(gps_file, newline='') as csvfile:
@@ -300,18 +302,33 @@ def v2_devices_ident_session(ident, session):
           try:
             lat = float(row['latitude'])
             lon = float(row['longitude'])
+            # parse time once and reuse
+            t = datetime.fromisoformat(row['time'])
             gps_track.append([lat, lon])
+            gps_times.append(t)
+
             if session_info['start'] == '---':
-              session_info['start']  = datetime.fromisoformat(row['time']).astimezone().strftime('%Y-%m-%d %H:%M')
-              start_time = datetime.fromisoformat(row['time'])
-            session_info['end'] = datetime.fromisoformat(row['time']).astimezone().strftime('%Y-%m-%d %H:%M')
-            duration = datetime.fromisoformat(row['time']) - start_time
+              session_info['start']  = t.astimezone().strftime('%Y-%m-%d %H:%M')
+              start_time = t
+            session_info['end'] = t.astimezone().strftime('%Y-%m-%d %H:%M')
+            duration = t - start_time
             total_seconds = int(duration.total_seconds())
             hours, remainder = divmod(total_seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             session_info['duration'] = f"{hours}h {minutes}min"
           except Exception:
             continue
+
+        # Compute update intervals in seconds between successive GPS timestamps
+        if len(gps_times) > 1:
+          for i in range(1, len(gps_times)):
+            try:
+              diff = (gps_times[i] - gps_times[i-1]).total_seconds()
+              if diff > 0:
+                # keep as float seconds
+                gps_intervals.append(diff)
+            except Exception:
+              continue
 
         # Calculate total GPS distance in km using Haversine formula
         def haversine(lat1, lon1, lat2, lon2):
@@ -364,6 +381,7 @@ def v2_devices_ident_session(ident, session):
       log=log,
       sensors=sensors,
       gps_track=gps_track,
+  gps_intervals=gps_intervals,
       button_durations=button_durations,
       lidar_distance=lidar_distance,
       session_front=session_front,

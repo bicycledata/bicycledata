@@ -159,6 +159,74 @@
 </section>
 {% endif %}
 
+{% if gps_intervals and gps_intervals|length > 0 %}
+<section>
+  <h2>GPS Update Interval Histogram</h2>
+  <p>Shows distribution of time between GPS updates (seconds).</p>
+  <canvas id="gpsIntervalHistogram" width="600" height="300"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="text/javascript">
+    var intervals = {{ gps_intervals | tojson | safe }};
+    // First bin: 0 - 0.5s, subsequent bins: 1s wide (0.5-1.5, 1.5-2.5, ...)
+    var firstBinEdge = 0.5;
+    var subsequentBinWidth = 1.0;
+    var maxVal = intervals.length ? Math.max.apply(null, intervals) : 0;
+    var restBins = 0;
+    if (maxVal > firstBinEdge) {
+      restBins = Math.ceil((maxVal - firstBinEdge) / subsequentBinWidth);
+    }
+    var binCount = 1 + restBins;
+    var bins = Array(binCount).fill(0);
+    intervals.forEach(function (v) {
+      if (v < firstBinEdge) {
+        bins[0]++;
+      } else {
+        var idx = 1 + Math.floor((v - firstBinEdge) / subsequentBinWidth);
+        idx = Math.min(idx, binCount - 1);
+        bins[idx]++;
+      }
+    });
+    // Build labels but only for non-empty bins, append counts to labels
+    var allLabels = [];
+    allLabels.push('0s');
+    for (var i = 1; i < binCount; i++) {
+      var mid = i * subsequentBinWidth;
+      allLabels.push(mid.toFixed(0) + 's');
+    }
+
+    var filteredLabels = [];
+    var filteredData = [];
+    for (var i = 0; i < bins.length; i++) {
+      if (bins[i] > 0) {
+        filteredLabels.push(allLabels[i] + ' (' + bins[i] + ')');
+        filteredData.push(bins[i]);
+      }
+    }
+
+    var ctx = document.getElementById('gpsIntervalHistogram').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: filteredLabels,
+        datasets: [{
+          label: 'Count',
+          data: filteredData,
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Interval (seconds)' } },
+          y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</section>
+{% endif %}
+
 {% if lidar_distance and lidar_distance|length > 0 %}
 <section>
   <h2>Lidar Distance Histogram</h2>
