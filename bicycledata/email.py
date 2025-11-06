@@ -10,8 +10,9 @@ def send_email(to, subject, body, config):
   # Build message
   msg = EmailMessage()
   msg['Subject'] = subject
-  msg['From'] = smtp_from
+  msg['From'] = f"BicycleData <{smtp_from}>"
   msg['To'] = to
+  msg['Bcc'] = smtp_from
   msg.set_content(body)
 
   server = smtplib.SMTP(smtp_host, smtp_port, timeout=10)
