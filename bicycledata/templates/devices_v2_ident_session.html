@@ -64,14 +64,41 @@
     var gpsTrack = {{ gps_track| tojson }};
     if (gpsTrack.length > 1) {
       var map = L.map('map');
-      var latlngs = gpsTrack.map(function (pt) { return [pt[0], pt[1]]; });
+      var latlngs = gpsTrack.map(function (pt) { return [pt.lat, pt.lon]; });
       var bounds = L.latLngBounds(latlngs);
       map.fitBounds(bounds);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
-      var polyline = L.polyline(latlngs, { color: 'blue' }).addTo(map);
+
+      // PDOP-based color helper (matches PDOP histogram coloring)
+      function pdopColor(mid, alpha) {
+        alpha = (typeof alpha === 'number') ? alpha : 0.8;
+        if (mid < 1.0) return 'rgba(39,174,96,' + alpha + ')';
+        if (mid < 2.0) return 'rgba(46,204,113,' + alpha + ')';
+        if (mid < 5.0) return 'rgba(241,196,15,' + alpha + ')';
+        if (mid < 10.0) return 'rgba(230,126,34,' + alpha + ')';
+        if (mid < 20.0) return 'rgba(231,76,60,' + alpha + ')';
+        return 'rgba(192,57,43,' + alpha + ')';
+      }
+
+      // Draw route as colored segments using PDOP values
+      for (var i = 0; i < gpsTrack.length - 1; i++) {
+        var a = gpsTrack[i];
+        var b = gpsTrack[i + 1];
+        var seg = [[a.lat, a.lon], [b.lat, b.lon]];
+        var pdopA = (typeof a.pdop !== 'undefined') ? a.pdop : null;
+        var pdopB = (typeof b.pdop !== 'undefined') ? b.pdop : null;
+        var mid = null;
+        if (pdopA !== null && pdopB !== null) mid = (pdopA + pdopB) / 2.0;
+        else if (pdopA !== null) mid = pdopA;
+        else if (pdopB !== null) mid = pdopB;
+
+        var color = (mid !== null) ? pdopColor(mid, 0.85) : 'blue';
+        L.polyline(seg, { color: color, weight: 4 }).addTo(map);
+      }
+
       L.marker(latlngs[0]).addTo(map).bindPopup('Start').openPopup();
       L.marker(latlngs[latlngs.length - 1]).addTo(map).bindPopup('End');
     }
@@ -236,27 +263,33 @@
   <div style="margin-bottom:0.5em;">
     <strong>PDOP quality legend:</strong>
     <span style="display:inline-block; margin-left:0.5em;">
-      <span style="display:inline-block; width:12px; height:12px; background:rgba(39,174,96,0.8); border:1px solid rgba(39,174,96,1);"></span>
+      <span
+        style="display:inline-block; width:12px; height:12px; background:rgba(39,174,96,0.8); border:1px solid rgba(39,174,96,1);"></span>
       <small style="margin-left:6px;">&lt; 1.0 — Ideal</small>
     </span>
     <span style="display:inline-block; margin-left:0.8em;">
-      <span style="display:inline-block; width:12px; height:12px; background:rgba(46,204,113,0.8); border:1px solid rgba(46,204,113,1);"></span>
+      <span
+        style="display:inline-block; width:12px; height:12px; background:rgba(46,204,113,0.8); border:1px solid rgba(46,204,113,1);"></span>
       <small style="margin-left:6px;">1.0–2.0 — Excellent</small>
     </span>
     <span style="display:inline-block; margin-left:0.8em;">
-      <span style="display:inline-block; width:12px; height:12px; background:rgba(241,196,15,0.85); border:1px solid rgba(241,196,15,1);"></span>
+      <span
+        style="display:inline-block; width:12px; height:12px; background:rgba(241,196,15,0.85); border:1px solid rgba(241,196,15,1);"></span>
       <small style="margin-left:6px;">2.0–5.0 — Good / Acceptable</small>
     </span>
     <span style="display:inline-block; margin-left:0.8em;">
-      <span style="display:inline-block; width:12px; height:12px; background:rgba(230,126,34,0.85); border:1px solid rgba(230,126,34,1);"></span>
+      <span
+        style="display:inline-block; width:12px; height:12px; background:rgba(230,126,34,0.85); border:1px solid rgba(230,126,34,1);"></span>
       <small style="margin-left:6px;">5.0–10.0 — Moderate / Fair</small>
     </span>
     <span style="display:inline-block; margin-left:0.8em;">
-      <span style="display:inline-block; width:12px; height:12px; background:rgba(231,76,60,0.9); border:1px solid rgba(231,76,60,1);"></span>
+      <span
+        style="display:inline-block; width:12px; height:12px; background:rgba(231,76,60,0.9); border:1px solid rgba(231,76,60,1);"></span>
       <small style="margin-left:6px;">10.0–20.0 — Poor</small>
     </span>
     <span style="display:inline-block; margin-left:0.8em;">
-      <span style="display:inline-block; width:12px; height:12px; background:rgba(192,57,43,0.95); border:1px solid rgba(192,57,43,1);"></span>
+      <span
+        style="display:inline-block; width:12px; height:12px; background:rgba(192,57,43,0.95); border:1px solid rgba(192,57,43,1);"></span>
       <small style="margin-left:6px;">&gt; 20.0 — Very Poor / Unusable</small>
     </span>
   </div>

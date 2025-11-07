@@ -291,7 +291,7 @@ def v2_devices_ident_session(ident, session):
                     }
 
     # GPS track extraction and update interval histogram
-    gps_track = []
+    gps_track = []  # list of dicts: {lat, lon, pdop}
     gps_times = []
     gps_intervals = []
     gps_pdop = []
@@ -305,15 +305,19 @@ def v2_devices_ident_session(ident, session):
             lon = float(row['longitude'])
             # parse time once and reuse
             t = datetime.fromisoformat(row['time'])
-            gps_track.append([lat, lon])
-            gps_times.append(t)
             # optionally collect pdop if present
+            pdop_val = None
             try:
-              pdop_val = row.get('pdop')
-              if pdop_val is not None and pdop_val != '':
-                gps_pdop.append(float(pdop_val))
+              raw_pdop = row.get('pdop')
+              if raw_pdop is not None and raw_pdop != '':
+                pdop_val = float(raw_pdop)
+                gps_pdop.append(pdop_val)
             except Exception:
-              pass
+              pdop_val = None
+
+            # store point with optional pdop
+            gps_track.append({'lat': lat, 'lon': lon, 'pdop': pdop_val})
+            gps_times.append(t)
 
             if session_info['start'] == '---':
               session_info['start']  = t.astimezone().strftime('%Y-%m-%d %H:%M')
@@ -349,8 +353,13 @@ def v2_devices_ident_session(ident, session):
 
         total_distance = 0.0
         for i in range(1, len(gps_track)):
-            lat1, lon1 = gps_track[i-1]
-            lat2, lon2 = gps_track[i]
+            p1 = gps_track[i-1]
+            p2 = gps_track[i]
+            lat1, lon1 = p1.get('lat'), p1.get('lon')
+            lat2, lon2 = p2.get('lat'), p2.get('lon')
+            # ensure values are present
+            if lat1 is None or lon1 is None or lat2 is None or lon2 is None:
+                continue
             total_distance += haversine(lat1, lon1, lat2, lon2)
         session_info['distance'] = f'{round(total_distance, 2)} km'
 
@@ -363,7 +372,8 @@ def v2_devices_ident_session(ident, session):
         for row in reader:
           try:
             duration = float(row['duration'])
-            button_durations.append(duration)
+            if duration >= 0.01:
+              button_durations.append(duration)
           except Exception:
             continue
 
