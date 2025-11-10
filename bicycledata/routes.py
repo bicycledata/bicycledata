@@ -6,8 +6,7 @@ from datetime import UTC, datetime
 from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
-import slack
-from discord import SyncWebhook
+import requests
 from flask import (flash, jsonify, redirect, render_template, request,
                    send_from_directory, url_for)
 
@@ -21,17 +20,14 @@ from bicycledata.session_info import SessionInfo
 from bicycledata.user import User, add_new_user, load_users
 
 
-def SendDiscordMessage(message):
-  try:
-    webhook = SyncWebhook.from_url(config['discord-webhook'])
-    webhook.send(message)
-  except Exception:
-    pass
+def SendMessage(message):
+  url = config.get('ntfy-url')
+  token = config.get('ntfy-token')
+  if not url or not token:
+    return
 
-def SendSlackMessage(message):
   try:
-    client = slack.WebClient(token=config['slack-token'])
-    client.chat_postMessage(channel='#bicycledata', text=message)
+    requests.post(url, data=message, headers={"Authorization": f"Bearer {token}"}, timeout=2)
   except Exception:
     pass
 
@@ -110,7 +106,7 @@ def api_v2_register():
     with open(file_path, 'w') as file:
       json.dump(data, file, indent=2)
 
-    SendDiscordMessage(f'[v2] *register* {data["username"]}@{data["hostname"]} ({ident})')
+    SendMessage(f'[v2] *register* {data["username"]}@{data["hostname"]} ({ident})')
     ping_v2(ident, '/api/v2/register')
 
     return jsonify(data), 201  # 201 Created status
@@ -142,7 +138,7 @@ def api_v2_config():
     with open(file_path, 'r') as file:
       data = json.load(file)
 
-    SendDiscordMessage(f'[v2] *config* {data["username"]}@{data["hostname"]} ({ident})')
+    SendMessage(f'[v2] *config* {data["username"]}@{data["hostname"]} ({ident})')
     ping_v2(ident, '/api/v2/config')
 
     return jsonify(data)
@@ -216,7 +212,7 @@ def v2_devices_ident(ident):
   try:
     config = json.loads(config)
     write_v2_config_file(ident, config)
-    SendDiscordMessage(f'[v2] *config updated* {ident}')
+    SendMessage(f'[v2] *config updated* {ident}')
   except (FileNotFoundError, json.JSONDecodeError) as e:
     flash("Failed to update config.json. Please verify that the file has correct JSON syntax and try again.")
   except ValueError as e:
@@ -472,7 +468,7 @@ def api_register():
     with open(file_path, 'w') as file:
       json.dump(data, file, indent=2)
 
-    SendDiscordMessage(f'*register* {data["username"]}@{data["hostname"]} ({hash_value})')
+    SendMessage(f'*register* {data["username"]}@{data["hostname"]} ({hash_value})')
     with open(os.path.join(dir_path, 'ping.log'), 'a') as f:
       f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ", /api/register\n")
 
@@ -498,7 +494,7 @@ def api_config():
     with open(file_path, 'r') as file:
       data = json.load(file)
 
-    SendDiscordMessage(f'*config* {data["username"]}@{data["hostname"]} ({hash_value})')
+    SendMessage(f'*config* {data["username"]}@{data["hostname"]} ({hash_value})')
     with open(os.path.join(dir_path, 'ping.log'), 'a') as f:
       f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ", /api/config\n")
 
@@ -586,7 +582,7 @@ def devices_ident(ident):
   try:
     config = json.loads(config)
     write_config_file(ident, config)
-    SendDiscordMessage(f'*config updated* {ident}')
+    SendMessage(f'*config updated* {ident}')
   except (FileNotFoundError, json.JSONDecodeError) as e:
     flash("Failed to update config.json. Please verify that the file has correct JSON syntax and try again.")
 
@@ -612,7 +608,7 @@ def login_with_token(token):
       login_user = User(user)
       flask_login.login_user(login_user)
 
-      SendSlackMessage(f'*login* {user["name"]}')
+      SendMessage(f'*login* {user["name"]}')
 
       with open(os.path.join('data', 'login', token), 'a') as f:
         f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
@@ -643,7 +639,7 @@ def signup():
     add_new_user(name, email)
 
   flash('All accounts get activated manually. You will get an email as soon as your request is processed.')
-  SendSlackMessage(f'*signup* New user requests access: {name}, {email}')
+  SendMessage(f'*signup* New user requests access: {name}, {email}')
   return redirect(url_for('index'))
 
 @app.route('/logout')
@@ -686,7 +682,7 @@ def contact():
   email = request.form['email']
   message = request.form['message']
 
-  SendSlackMessage(f'*message* new message received from {name}, {email}')
+  SendMessage(f'*message* new message received from {name}, {email}')
 
   with open(os.path.join(DIR, filename), 'w') as file:
     file.write('---\n')
