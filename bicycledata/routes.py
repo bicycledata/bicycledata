@@ -7,6 +7,7 @@ from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
 import requests
+import base64
 from flask import (flash, jsonify, redirect, render_template, request,
                    send_from_directory, url_for)
 
@@ -179,8 +180,22 @@ def api_v2_session_upload_chunk():
 
     # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
     log_path = os.path.join(file_path, filename)
-    with open(log_path, 'a') as file:
-      file.write(data)
+    # Support optional encoding/mimetype in payload (e.g., base64-encoded PNG)
+    encoding = payload.get('encoding')
+    mimetype = payload.get('mimetype')
+
+    if encoding == 'base64':
+      try:
+        raw = base64.b64decode(data)
+      except Exception as e:
+        return jsonify({"error": f"Invalid base64 data: {e}"}), 400
+      # write binary data
+      with open(log_path, 'ab') as file:
+        file.write(raw)
+    else:
+      # default: treat as UTF-8 text
+      with open(log_path, 'a', encoding='utf-8') as file:
+        file.write(data)
 
     ping_v2(ident, '/api/v2/session/upload')
     return jsonify({"status": "ok"}), 200
