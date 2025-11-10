@@ -617,7 +617,7 @@ def login_with_token(token):
       with open(os.path.join('data', 'login', token), 'a') as f:
         f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\n")
 
-      return redirect(url_for('index'))
+      return redirect(url_for('v2_devices'))
 
   flash('Bad login')
   return redirect(url_for('login'))
