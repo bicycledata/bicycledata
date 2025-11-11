@@ -1,15 +1,17 @@
+import base64
 import csv
 import json
 import os
 import secrets
+import zipfile
 from datetime import UTC, datetime
+from io import BytesIO
 from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
 import requests
-import base64
 from flask import (flash, jsonify, redirect, render_template, request,
-                   send_from_directory, url_for)
+                   send_file, send_from_directory, url_for)
 
 from bicycledata import app, config, dir, login_manager
 from bicycledata.devices import (check_v2_device_path, load_devices,
@@ -430,6 +432,34 @@ def v2_devices_ident_sessions_session_sensors_sensor(ident, session, sensor):
   try:
     directory = os.path.join(app.root_path, '..', 'data', 'v2', 'devices', ident, 'sessions', session)
     return send_from_directory(directory, sensor, mimetype='text/plain', as_attachment=True)
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
+
+
+@app.route('/v2/devices/<ident>/sessions/<session>/download')
+@flask_login.login_required
+def v2_devices_ident_session_download(ident, session):
+  try:
+    session_dir = os.path.join('data', 'v2', 'devices', ident, 'sessions', session)
+    if not os.path.isdir(session_dir):
+      return jsonify({"error": "Session not found"}), 404
+
+    buf = BytesIO()
+    with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as z:
+      for root, dirs, files in os.walk(session_dir):
+        for f in files:
+          full = os.path.join(root, f)
+          # store files relative to session_dir
+          arcname = os.path.relpath(full, session_dir)
+          try:
+            z.write(full, arcname)
+          except Exception:
+            # skip files that can't be read
+            continue
+    buf.seek(0)
+
+    # Stream the in-memory ZIP to the client
+    return send_file(buf, as_attachment=True, download_name=f"{ident}_{session}.zip", mimetype='application/zip')
   except Exception as e:
     return jsonify({"error": str(e)}), 500
 

@@ -48,9 +48,9 @@
     <section>
       <h2>Data</h2>
       <ul>
+        <li><a class="button icon solid fa-download" href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/download">Download ZIP</a></li>
         {% for sensor in sensors %}
-        <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/sensors/{{ sensor }}"
-            class="button icon solid fa-download">{{ sensor }}</a></li>
+        <li><a class="button icon solid fa-download" href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/sensors/{{ sensor }}">{{ sensor }}</a></li>
         {% endfor %}
       </ul>
     </section>
