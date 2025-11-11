@@ -37,42 +37,45 @@
         {% endfor %}
       </ul>
     </section>
-
-    <section>
-      <h2>Sessions</h2>
-      <ul>
-        <li><strong>Total Sessions: {{ sessions|length }}</strong>
-          {% if request.args.get('all') == '1' %}
-          <a class="button small" href="/v2/devices/{{ device.ident }}">Show GPS only</a>
-          {% else %}
-          <a class="button small" href="/v2/devices/{{ device.ident }}?all=1">Show all</a>
-          {% endif %}
-        </li>
-        {% for session in sessions %}
-        <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session}}">{{ session }}</a></li>
-        {% endfor %}
-      </ul>
-    </section>
   </div>
-  <span class="image object">
+  <span class="image object"
+    style="flex:0 0 300px;">
     <img src="{{ device.image }}" alt="" />
   </span>
 </section>
 
-<div class="col-6 col-12-small">
-  <form method="post" action="#">
-    <div class="col-6 col-12-xsmall">
-      <div class="col-12">
-        <textarea name="config" id="config" placeholder="config.json" rows="8" maxlength="5000">{{ config }}</textarea>
+<section>
+  <h2>Sessions</h2>
+  <ul>
+    <li><strong>Total Sessions: {{ sessions|length }}</strong>
+      {% if request.args.get('all') == '1' %}
+      <a class="button small" href="/v2/devices/{{ device.ident }}">Show GPS only</a>
+      {% else %}
+      <a class="button small" href="/v2/devices/{{ device.ident }}?all=1">Show all</a>
+      {% endif %}
+    </li>
+    {% for session in sessions %}
+    <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session}}">{{ session }}</a></li>
+    {% endfor %}
+  </ul>
+</section>
+<section>
+
+  <div class="col-6 col-12-small">
+    <form method="post" action="#">
+      <div class="col-6 col-12-xsmall">
+        <div class="col-12">
+          <textarea name="config" id="config" placeholder="config.json" rows="8" maxlength="5000">{{ config }}</textarea>
+        </div>
+        <!-- Break -->
+        <div class="col-12">
+          <ul class="actions">
+            <li><input type="submit" value="Update" class="primary" /></li>
+          </ul>
+        </div>
       </div>
-      <!-- Break -->
-      <div class="col-12">
-        <ul class="actions">
-          <li><input type="submit" value="Update" class="primary" /></li>
-        </ul>
-      </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
+</section>
 
 {% endblock %}
