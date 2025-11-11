@@ -41,6 +41,13 @@
     <section>
       <h2>Sessions</h2>
       <ul>
+        <li><strong>Total Sessions: {{ sessions|length }}</strong>
+          {% if request.args.get('all') == '1' %}
+          <a class="button small" href="/v2/devices/{{ device.ident }}">Show GPS only</a>
+          {% else %}
+          <a class="button small" href="/v2/devices/{{ device.ident }}?all=1">Show all</a>
+          {% endif %}
+        </li>
         {% for session in sessions %}
         <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session}}">{{ session }}</a></li>
         {% endfor %}
