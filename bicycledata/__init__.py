@@ -15,6 +15,7 @@ from flask import Flask
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = config['SECRET_KEY']
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
