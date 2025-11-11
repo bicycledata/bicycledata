@@ -249,7 +249,8 @@ def v2_devices_ident_session(ident, session):
       log = open(os.path.join(session_dir, 'bicycleinit.log')).read()
     except Exception:
       log = None
-    sensors = [name for name in os.listdir(session_dir) if os.path.isfile(os.path.join(session_dir, name)) and name not in ['bicycleinit.log', 'bicycleinit.json', 'session.info']]
+    #sensors = [name for name in os.listdir(session_dir) if os.path.isfile(os.path.join(session_dir, name)) and name not in ['bicycleinit.log', 'bicycleinit.json', 'session.info']]
+    sensors = [name for name in os.listdir(session_dir) if os.path.isfile(os.path.join(session_dir, name)) and '.' not in name]
     sensors.sort()
 
     # Read session.info frontmatter and body
@@ -459,7 +460,7 @@ def v2_devices_ident_session_download(ident, session):
     buf.seek(0)
 
     # Stream the in-memory ZIP to the client
-    return send_file(buf, as_attachment=True, download_name=f"{ident}_{session}.zip", mimetype='application/zip')
+    return send_file(buf, as_attachment=True, download_name=f"{session}.zip", mimetype='application/zip')
   except Exception as e:
     return jsonify({"error": str(e)}), 500
 
