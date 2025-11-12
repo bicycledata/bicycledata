@@ -3,17 +3,13 @@ import csv
 import json
 import os
 import secrets
-import smtplib
 import zipfile
 from datetime import UTC, datetime
-from email.message import EmailMessage
 from io import BytesIO
 from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
 import requests
-import slack
-from discord import SyncWebhook
 from flask import (flash, jsonify, redirect, render_template, request,
                    send_file, send_from_directory, url_for)
 
