@@ -19,6 +19,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
                                  read_device_info, read_v2_config_file,
                                  read_v2_device_info, read_v2_sessions,
                                  write_config_file, write_v2_config_file)
+from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
 from bicycledata.user import User, add_new_user, load_users
 
@@ -55,6 +56,7 @@ def after_request(response):
 @app.route('/')
 def index():
   return render_template('index.html')
+
 
 ###
 ###
@@ -728,16 +730,17 @@ def contact():
   email = request.form['email']
   message = request.form['message']
 
-  SendMessage(f'*message* new message received from {name}, {email}')
+  message = '---\n' + f'"date":  "{date}"\n' + f'"name":  "{name}"\n' + f'"email": "{email}"\n' + '---\n\n' + message
 
   with open(os.path.join(DIR, filename), 'w') as file:
-    file.write('---\n')
-    file.write(f'"date":  "{date}",\n')
-    file.write(f'"name":  "{name}",\n')
-    file.write(f'"email": "{email}"\n')
-    file.write('---\n')
     file.write(message)
-    return redirect(url_for('index'))
+
+  status = send_email('bicycledata@vti.se', 'Message from bicycledata.vti.se/contact', message, config)
+
+  if not status['success']:
+    flash('Failed to send email. Please try again later.')
+
+  return redirect(url_for('index'))
 
 @app.route('/devices/<hash>/sensors/<sensor>/latest')
 @flask_login.login_required
