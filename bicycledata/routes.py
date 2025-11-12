@@ -9,7 +9,6 @@ from io import BytesIO
 from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
-import requests
 from flask import (flash, jsonify, redirect, render_template, request,
                    send_file, send_from_directory, url_for)
 
@@ -21,20 +20,8 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
                                  write_config_file, write_v2_config_file)
 from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
-from bicycledata.slack import SendSlackMessage
+from bicycledata.ntfy import SendMessage
 from bicycledata.user import read_user_data, write_user_data
-
-
-def SendMessage(message):
-  url = config.get('ntfy-url')
-  token = config.get('ntfy-token')
-  if not url or not token:
-    return
-
-  try:
-    requests.post(url, data=message, headers={"Authorization": f"Bearer {token}"}, timeout=2)
-  except Exception:
-    pass
 
 
 @app.after_request

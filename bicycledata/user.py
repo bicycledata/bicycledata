@@ -7,7 +7,7 @@ import flask_login
 from flask import flash, redirect, render_template, request, url_for
 
 from bicycledata import app, dir, login_manager
-from bicycledata.slack import SendSlackMessage
+from bicycledata.ntfy import SendMessage
 
 
 class User(flask_login.UserMixin):
@@ -159,7 +159,7 @@ def login_with_token(token):
       login_user = User(user)
       flask_login.login_user(login_user)
 
-      SendSlackMessage(f'*login* {user["name"]}')
+      SendMessage(f'*login* {user["name"]}')
 
       udata = read_user_data(user['email'])
       udata['last_login'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -193,7 +193,7 @@ def signup():
     return redirect(url_for('login'))
 
   flash('All accounts get activated manually. You will get an email as soon as your request is processed.')
-  SendSlackMessage(f'*signup* New user requests access: {name}, {email}')
+  SendMessage(f'*signup* New user requests access: {name}, {email}')
   return redirect(url_for('index'))
 
 @app.route('/logout')
