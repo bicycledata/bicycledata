@@ -61,21 +61,6 @@ def after_request(response):
 def index():
   return render_template('index.html')
 
-@app.route('/test-mail')
-def test_mail():
-  try:
-    to = request.args.get('to')
-    subject = 'BicycleData test email'
-    body = f'This is a test email sent by BicycleData at {datetime.now().isoformat()}'
-    status = send_email(to, subject, body, config)
-
-    if status['success']:
-      return jsonify({"status": "sent", "to": to})
-  except Exception as e:
-    return jsonify({"error": str(e)}), 500
-
-  return jsonify(status), 500
-
 
 ###
 ###
@@ -749,16 +734,17 @@ def contact():
   email = request.form['email']
   message = request.form['message']
 
-  SendMessage(f'*message* new message received from {name}, {email}')
+  message = '---\n' + f'"date":  "{date}"\n' + f'"name":  "{name}"\n' + f'"email": "{email}"\n' + '---\n\n' + message
 
   with open(os.path.join(DIR, filename), 'w') as file:
-    file.write('---\n')
-    file.write(f'"date":  "{date}",\n')
-    file.write(f'"name":  "{name}",\n')
-    file.write(f'"email": "{email}"\n')
-    file.write('---\n')
     file.write(message)
-    return redirect(url_for('index'))
+
+  status = send_email('bicycledata@vti.se', 'Message from bicycledata.vti.se/contact', message, config)
+
+  if not status['success']:
+    flash('Failed to send email. Please try again later.')
+
+  return redirect(url_for('index'))
 
 @app.route('/devices/<hash>/sensors/<sensor>/latest')
 @flask_login.login_required
