@@ -53,17 +53,11 @@ def after_request(response):
 
   return response
 
+
 @app.route('/')
 def index():
   return render_template('index.html')
 
-
-###
-###
-### NEW API endpoints (v2)
-### START
-###
-###
 
 @app.route('/api/v2/time', methods=['GET', 'POST'])
 def api_v2_time():
@@ -77,6 +71,7 @@ def api_v2_time():
     return jsonify({"server_time": server_time, "diff": diff.total_seconds()})
   except Exception as e:
     return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/v2/register', methods=['POST'])
 def api_v2_register():
@@ -122,6 +117,7 @@ def api_v2_register():
   except Exception as e:
     return jsonify({"error": str(e)}), 500
 
+
 @app.route('/api/v2/config', methods=['POST'])
 def api_v2_config():
   payload = request.get_json()
@@ -153,6 +149,7 @@ def api_v2_config():
 
   except Exception as e:
     return jsonify({"error": str(e)}), 500
+
 
 @app.route('/api/v2/session/upload', methods=['POST'])
 def api_v2_session_upload_chunk():
@@ -466,175 +463,18 @@ def v2_devices_ident_session_download(ident, session):
   except Exception as e:
     return jsonify({"error": str(e)}), 500
 
-###
-###
-### END
-### NEW API endpoints (v2)
-###
-###
-
-
-
-
-###
-###
-### OLD API endpoints (v1)
-### START
-###
-###
-
-@app.route('/api/time')
-def api_time():
-  return jsonify({"time": datetime.utcnow().isoformat() + 'Z'})
-
-@app.route('/api/register', methods=['POST'])
-def api_register():
-  # Generate a unique hash
-  hash_value = secrets.token_hex()
-  dir_path = f'data/devices/{hash_value}'
-
-  if os.path.exists(dir_path):
-    return jsonify({"error": "Please try again."}), 404
-
-  try:
-    data = request.get_json()
-
-    if not isinstance(data, dict):
-      return jsonify({"error": "Invalid data format, expected a JSON object"}), 400
-
-    # Add the registration timestamp
-    data['registration'] = datetime.utcnow().isoformat() + 'Z'  # ISO 8601 format with 'Z' for UTC
-    data['sensors'] = [ {'name': 'sensor_template', 'git_url': 'https://github.com/bicycledata/sensor_template.git', 'git_version': 'main', 'entry_point': 'sensor.py', 'args': ['--upload-interval', '5']} ]
-    if 'project' not in data:
-      data['project'] = 'dev'
-    if 'model' not in data:
-      data['model'] = 'unknown'
-
-    dir.createDirIfNeeded(dir_path)
-
-    file_path = os.path.join(dir_path, 'config.json')
-    with open(file_path, 'w') as file:
-      json.dump(data, file, indent=2)
-
-    SendMessage(f'*register* {data["username"]}@{data["hostname"]} ({hash_value})')
-    with open(os.path.join(dir_path, 'ping.log'), 'a') as f:
-      f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ", /api/register\n")
-
-    return jsonify({'hash': hash_value}), 201  # 201 Created status
-
-  except json.JSONDecodeError:
-    return jsonify({"error": "Invalid JSON format"}), 400
-
-  except Exception as e:
-    return jsonify({"error": str(e)}), 500
-
-@app.route('/api/config')
-def api_config():
-  hash_value = request.args.get('hash')
-  dir_path = f'data/devices/{hash_value}'
-
-  file_path = os.path.join(dir_path, 'config.json')
-
-  if not os.path.exists(dir_path):
-    return jsonify({"error": "Device not found"}), 404
-
-  try:
-    with open(file_path, 'r') as file:
-      data = json.load(file)
-
-    SendMessage(f'*config* {data["username"]}@{data["hostname"]} ({hash_value})')
-    with open(os.path.join(dir_path, 'ping.log'), 'a') as f:
-      f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ", /api/config\n")
-
-    return jsonify(data)
-
-  except json.JSONDecodeError:
-    return jsonify({"error": "Invalid JSON format"}), 400
-
-  except Exception as e:
-    return jsonify({"error": str(e)}), 500
-
-@app.route('/api/sensor/update', methods=['POST'])
-def api_sensor_update():
-  data = request.get_json()
-
-  hash = data.get('hash')
-  sensor = data.get('sensor')
-
-  dir_path = f'data/devices/{hash}'
-
-  if not os.path.exists(dir_path):
-    return jsonify({"error": "Device not found"}), 404
-
-  dir.createDirIfNeeded(dir_path + '/sensors/')
-
-  with open(dir_path + '/sensors/' + sensor + '.latest', 'w') as file:
-    file.writelines(data['csv_data'])
-
-  with open(dir_path + '/sensors/' + sensor, 'a') as file:
-    file.writelines(data['csv_data'])
-
-  with open(os.path.join(dir_path, 'ping.log'), 'a') as f:
-    f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S") + ", /api/sensor/update\n")
-
-  return 'Ok'
-
-@app.route('/api/<hash>/sensor/<name>')
-def api_hash_sensor_name(hash, name):
-    if not hash.isalnum():
-        return jsonify({"error": "Invalid input"}), 400
-
-    sensor_path = os.path.join('data', 'devices', hash, 'sensors', name)
-
-    if not os.path.exists(sensor_path):
-        return jsonify({"error": "Device or sensor not found"}), 404
-
-    try:
-        with open(sensor_path, 'r') as file:
-            data = file.readlines()
-
-        data = [x.rstrip() for x in data]
-
-        return jsonify({'sensor': name, "data": data})
-
-    except IOError as e:
-        return jsonify({"error": "Error reading the file", "details": str(e)}), 500
 
 @app.route('/generic')
 @flask_login.login_required
 def generic():
   return render_template('generic.html')
 
+
 @app.route('/elements')
 @flask_login.login_required
 def elements():
   return render_template('elements.html')
 
-@app.route('/devices')
-@flask_login.login_required
-def devices():
-  devices = load_devices()
-  return render_template('devices.html', devices=devices)
-
-@app.route('/devices/<ident>', methods=['GET', 'POST'])
-def devices_ident(ident):
-  if request.method == 'GET':
-    device = read_device_info(ident)
-    config = read_config_file(ident)
-    if device:
-      return render_template('devices_ident.html', device=device, config=config)
-    return render_template('404.html'), 404
-
-  # POST
-  config = request.form['config']
-  try:
-    config = json.loads(config)
-    write_config_file(ident, config)
-    SendMessage(f'*config updated* {ident}')
-  except (FileNotFoundError, json.JSONDecodeError) as e:
-    flash("Failed to update config.json. Please verify that the file has correct JSON syntax and try again.")
-
-  return redirect(url_for('devices_ident', ident=ident))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -643,6 +483,7 @@ def login():
 
   token = request.form['password']
   return redirect(url_for('login_with_token', token=token))
+
 
 @app.route('/login/<token>')
 def login_with_token(token):
@@ -665,6 +506,7 @@ def login_with_token(token):
 
   flash('Bad login')
   return redirect(url_for('login'))
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -690,11 +532,13 @@ def signup():
   SendMessage(f'*signup* New user requests access: {name}, {email}')
   return redirect(url_for('index'))
 
+
 @app.route('/logout')
 @flask_login.login_required
 def logout():
   flask_login.logout_user()
   return redirect(url_for('index'))
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -742,36 +586,21 @@ def contact():
 
   return redirect(url_for('index'))
 
-@app.route('/devices/<hash>/sensors/<sensor>/latest')
-@flask_login.login_required
-def devices_sensor_tail(hash, sensor):
-  directory = os.path.join(app.root_path, '..', 'data', 'devices', hash, 'sensors')
-  return send_from_directory(directory, sensor + '.latest', mimetype='text/plain', as_attachment=False)
-
-@app.route('/devices/<hash>/sensors/<sensor>')
-@flask_login.login_required
-def devices_sensor(hash, sensor):
-  directory = os.path.join(app.root_path, '..', 'data', 'devices', hash, 'sensors')
-  return send_from_directory(directory, sensor, mimetype='text/plain', as_attachment=True)
-
-###
-###
-### END
-### OLD API endpoints (v1)
-###
-###
 
 @app.route('/favicon.ico')
 def favicon():
   return send_from_directory(app.static_folder, 'favicon/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+
 @app.route('/apple-touch-icon.png')
 def apple_touch_icon():
   return send_from_directory(app.static_folder, 'favicon/apple-touch-icon.png', mimetype='image/png')
 
+
 @app.route('/apple-touch-icon-precomposed.png')
 def apple_touch_icon_precomposed():
   return send_from_directory(app.static_folder, 'favicon/apple-touch-icon.png', mimetype='image/png')
+
 
 @app.route('/robots.txt')
 def robots():
