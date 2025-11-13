@@ -30,35 +30,6 @@
         </div>
       </form>
     </div>
-    {% if users %}
-    <div class="col-6 col-12-small">
-      <header class="major">
-        <h2>User list</h2>
-      </header>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Login Info</th>
-              <th>Token</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for user in users %}
-            <tr>
-              <td>{{ user.name }}</td>
-              <td>{{ user.login_info }}</td>
-              <td>{{ user.token }}</td>
-              <td>{{ user.role }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    {% endif %}
   </div>
 
   {% if comments %}

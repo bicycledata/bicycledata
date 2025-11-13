@@ -30,6 +30,20 @@
 
     <p>
     <section>
+      <h2>Participants</h2>
+      <ul>
+        {% if participants|length > 0 %}
+        {% for participant in participants %}
+        <li>{{ participant }}</li>
+        {% endfor %}
+        {% else %}
+        <li>No participants listed</li>
+        {% endif %}
+      </ul>
+    </section>
+
+    <p>
+    <section>
       <h2>Sensors</h2>
       <ul>
         {% for sensor in device.sensors %}
@@ -38,8 +52,7 @@
       </ul>
     </section>
   </div>
-  <span class="image object"
-    style="flex:0 0 300px;">
+  <span class="image object" style="flex:0 0 300px;">
     <img src="{{ device.image }}" alt="" />
   </span>
 </section>
@@ -65,7 +78,8 @@
     <form method="post" action="#">
       <div class="col-6 col-12-xsmall">
         <div class="col-12">
-          <textarea name="config" id="config" placeholder="config.json" rows="8" maxlength="5000">{{ config }}</textarea>
+          <textarea name="config" id="config" placeholder="config.json" rows="8"
+            maxlength="5000">{{ config }}</textarea>
         </div>
         <!-- Break -->
         <div class="col-12">

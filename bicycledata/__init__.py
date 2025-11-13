@@ -20,4 +20,4 @@ app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-from bicycledata import routes
+from bicycledata import routes, user # noqa: E402

@@ -9,9 +9,17 @@
       <ul>
         <li><a href="{{ url_for('index') }}">Home</a></li>
         {% if current_user.is_anonymous %}
-        <li><a class="icon solid fa-lock" href="{{ url_for('v2_devices') }}"> Devices</a></li>
+        <li><a class="icon solid fa-lock" href="{{ url_for('user_sessions') }}"> Sessions</a></li>
         {% else %}
+        <li><a href="{{ url_for('user_sessions') }}">Sessions</a></li>
+        {% endif %}
+
+        {% if not current_user.is_anonymous and current_user.is_private %}
         <li><a href="{{ url_for('v2_devices') }}">Devices</a></li>
+        {% endif %}
+
+        {% if not current_user.is_anonymous and current_user.is_admin %}
+        <li><a href="{{ url_for('admin') }}">Admin</a></li>
         {% endif %}
       </ul>
     </nav>

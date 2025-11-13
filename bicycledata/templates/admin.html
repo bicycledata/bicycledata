@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% set title = "Direct Message" %}
+
+{% block section %}
+<section>
+  <div class="col-6 col-12-small">
+    <header class="major">
+      <h2>User list</h2>
+    </header>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>#Login</th>
+            <th>Last Login</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.id }}</td>
+            <td>{{ user.num_login }}</td>
+            <td>{{ user.last_login }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
