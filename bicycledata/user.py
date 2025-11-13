@@ -79,6 +79,15 @@ def load_users():
 
   return users
 
+def load_user_by_id(user_id):
+  users = load_users()
+
+  for user in users:
+    if user['id'] == user_id and user['role'] != 'inactive':
+      return user
+
+  return None
+
 def add_new_user(name, email):
   DIR = os.path.join('data', 'login')
 
@@ -117,11 +126,10 @@ def add_new_user(name, email):
 
 @login_manager.user_loader
 def get_user_by_id(user_id):
-  users = load_users()
+  user = load_user_by_id(user_id)
 
-  for user in users:
-    if user['id'] == user_id and user['role'] != 'inactive':
-      return User(user)
+  if user:
+    return User(user)
 
   return None
 

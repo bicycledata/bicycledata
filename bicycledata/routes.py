@@ -21,7 +21,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
 from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
 from bicycledata.ntfy import SendMessage
-from bicycledata.user import get_user_by_id, save_user
+from bicycledata.user import load_user_by_id, save_user
 
 
 @app.after_request
@@ -172,10 +172,10 @@ def api_v2_session_upload_chunk():
     config = read_v2_config_file(ident)
     participants = json.loads(config).get('participants', [])
     for participant in participants:
-      udata = get_user_by_id(participant)
+      udata = load_user_by_id(participant)
       session_entry = f'{ident}/{session}'
-      if session_entry not in udata.sessions:
-        udata.sessions.append(session_entry)
+      if session_entry not in udata['sessions']:
+        udata['sessions'].append(session_entry)
         save_user(udata)
 
     # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
