@@ -4,136 +4,130 @@ import secrets
 from datetime import datetime
 
 import flask_login
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 from flask import flash, redirect, render_template, request, url_for
 
-from bicycledata import app, dir, login_manager
+from bicycledata import app, config, dir, login_manager
+from bicycledata.email import send_email
 from bicycledata.ntfy import SendMessage
 
 
 class User(flask_login.UserMixin):
   def __init__(self, user):
+    self.id = user['id']
     self.name = user['name']
-    self.id = user['email']
-    self.role = user['role']
+    self.email = user['email']
+    self.role = user['role']    # inactive, public, private, admin
+    self.hash = user['hash']
+    self.last_login = user['last_login']
+    self.num_logins = user['num_logins']
+    self.sessions = user['sessions']
+
+  def save(self):
+    user = {
+             'id': self.id,
+             'name': self.name,
+             'email': self.email,
+             'role': self.role,
+             'hash': self.hash,
+             'last_login': self.last_login,
+             'num_logins': self.num_logins,
+             'sessions': self.sessions
+           }
+    save_user(user)
 
   @property
   def is_admin(self):
     """Convenience property for templates to check admin role."""
-    return getattr(self, 'role', None) == 'admin'
+    return self.role == 'admin'
 
   @property
   def is_private(self):
     """Convenience property for templates to check private role."""
-    role = getattr(self, 'role', None)
-    return role in ('admin', 'private')
+    return self.role in ('admin', 'private')
+
+def save_user(user):
+  DIR = os.path.join('data', 'login')
+  dir.createDirIfNeeded(DIR)
+  path = os.path.join(DIR, f"{user['id']}.json")
+  with open(path, 'w') as f:
+    json.dump({
+                'id': user['id'],
+                'name': user['name'],
+                'email': user['email'],
+                'role': user['role'],
+                'hash': user['hash'],
+                'last_login': user['last_login'],
+                'num_logins': user['num_logins'],
+                'sessions': user['sessions']
+              }, f, indent=2)
+
 
 def load_users():
-  """Load users from `data/login/login.json`.
-
-  Supports two formats for compatibility:
-  - JSON array of objects with keys 'role','name','email','token' (preferred)
-  - legacy semicolon-separated lines (role;name;email;token)
-  Returns a dict mapping email -> user dict containing keys 'role','name','email','password'
-  where 'password' stores the token used by other parts of the app.
-  """
   DIR = os.path.join('data', 'login')
 
-  users = {}
-  try:
-    path = os.path.join(DIR, 'login.json')
-    with open(path, 'r', encoding='utf-8') as fh:
-      content = fh.read().strip()
-      if not content:
-        data = []
-      else:
-        data = json.loads(content)
-
-    # Expecting a list of user objects
-    if isinstance(data, list):
-      for item in data:
-        role = item.get('role')
-        name = item.get('name')
-        email = item.get('email')
-        token = item.get('token') or item.get('password')
-        if not email:
-          continue
-        users[email] = {'role': role, 'name': name, 'email': email, 'password': token}
-    else:
-      # Unexpected JSON root; fall back to empty
-      return {}
-  except FileNotFoundError:
-    # Fallback: older semicolon format in a file named login.md
-    try:
-      path = os.path.join(DIR, 'login.md')
-      with open(path, 'r', encoding='utf-8') as fh:
-        for line in fh:
-          fields = line.rstrip().split(';')
-          if len(fields) != 4:
-            continue
-          email = fields[2]
-          users[email] = {'role': fields[0], 'name': fields[1], 'email': fields[2], 'password': fields[3]}
-    except Exception:
-      return {}
+  # load users from all .json files in DIR
+  users = []
+  if os.path.isdir(DIR):
+    for fname in os.listdir(DIR):
+      if not fname.endswith('.json'):
+        continue
+      with open(os.path.join(DIR, fname), 'r') as f:
+        user = json.load(f)
+      users.append(user)
 
   return users
 
 def add_new_user(name, email):
-  """Add a new user to `data/login/login.json` and return True if added, False if user exists."""
   DIR = os.path.join('data', 'login')
-  filename = 'login.json'
 
   users = load_users()
-  if email not in users:
-    token = secrets.token_hex()
-    users[email] = {'role': 'inactive', 'name': name, 'email': email, 'password': token}
-    dir.createFileIfNeeded(DIR, filename)
-    path = os.path.join(DIR, filename)
-    with open(path, 'w', encoding='utf-8') as f:
-      json.dump(list(users.values()), f, indent=2, ensure_ascii=False)
-    return True
-  return False
+
+  # check if any user already has this email
+  if any(user['email'] == email for user in users):
+    return False
+
+  # create a new user
+  ph = PasswordHasher()
+  password = secrets.token_hex(16)
+
+  user = {
+           'id': secrets.token_hex(3),
+           'name': name,
+           'email': email,
+           'role': 'public',
+           'hash': ph.hash(password),
+           'last_login': "n/a",
+           'num_logins': 0,
+           'sessions': []
+         }
+  save_user(user)
+
+  subject = "BicycleData account created"
+  body = f'email: {email}\npassword: {password}\n\nPlease keep this information safe. You will need the password to log in to your account.'
+  send_email(email, subject, body, config)
+
+  return True
 
 def read_user_data(email):
   users = load_users()
 
-  if email not in users:
-    raise ValueError("Unknown user email")
+  for user in users:
+    if user['email'] == email:
+      return user
 
-  data = {}
-  try:
-    with open(os.path.join('data/login/', users[email]["password"]), 'r') as f:
-      data = json.load(f)
-  except Exception:
-    pass
-
-  return data
-
-def write_user_data(email, data):
-  users = load_users()
-
-  if email not in users:
-    raise ValueError("Unknown user email")
-
-  try:
-    with open(os.path.join('data/login/', users[email]["password"]), 'w') as f:
-      json.dump(data, f, indent=2, ensure_ascii=False)
-  except Exception:
-    pass
+  raise ValueError("Unknown user email")
 
 @login_manager.user_loader
-def get_user_by_email(email):
+def get_user_by_id(user_id):
   users = load_users()
 
-  if email not in users:
-    return None
+  for user in users:
+    if user['id'] == user_id and user['role'] != 'inactive':
+      return User(user)
 
-  user = users[email]
-
-  if user['role'] == 'inactive':
-    return None
-
-  login_user = User(user)
-  return login_user
+  return None
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
@@ -149,24 +143,28 @@ def login():
 
 @app.route('/login/<token>')
 def login_with_token(token):
+  ph = PasswordHasher()
   users = load_users()
-  for user in users.values():
-    if user['password'] == token:
-      if user['role'] == 'inactive':
-        flash('User is not yet activated')
-        return redirect(url_for('login'))
+  for user in users:
+    try:
+      ph.verify(user['hash'], token)
+    except VerifyMismatchError:
+      continue
 
-      login_user = User(user)
-      flask_login.login_user(login_user)
+    if user['role'] == 'inactive':
+      flash('User is not yet activated')
+      return redirect(url_for('login'))
 
-      SendMessage(f'*login* {user["name"]}')
+    user['last_login'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user['num_logins'] = user.get('num_logins', 0) + 1
+    save_user(user)
 
-      udata = read_user_data(user['email'])
-      udata['last_login'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-      udata['num_logins'] = udata.get('num_logins', 0) + 1
-      write_user_data(user['email'], udata)
+    login_user = User(user)
+    flask_login.login_user(login_user)
 
-      return redirect(url_for('user_sessions'))
+    SendMessage(f'*login* {user["name"]}')
+
+    return redirect(url_for('user_sessions'))
 
   flash('Bad login')
   return redirect(url_for('login'))
@@ -185,14 +183,13 @@ def signup():
 
   users = load_users()
   if len(users) > 100:
-    flash('There is unusually high traffic at the moment. Please try to send your message later again.')
+    flash('There is unusually high traffic at the moment. Please try to signup later again.')
     return redirect(url_for('index'))
 
   if not add_new_user(name, email):
     flash('User with this email already exists.')
     return redirect(url_for('login'))
 
-  flash('All accounts get activated manually. You will get an email as soon as your request is processed.')
   SendMessage(f'*signup* New user requests access: {name}, {email}')
   return redirect(url_for('index'))
 
@@ -205,9 +202,8 @@ def logout():
 @app.route('/sessions')
 @flask_login.login_required
 def user_sessions():
-  udata = read_user_data(flask_login.current_user.id)
   sessions = []
-  for s in udata.get('sessions', []):
+  for s in flask_login.current_user.sessions:
     device, date = s.split('/', 1)
     sessions.append({'device': device, 'date': date})
   sessions.sort(key=lambda x: x['date'], reverse=True)
@@ -221,7 +217,6 @@ def admin():
     return redirect(url_for('index'))
 
   users = []
-  for email, user in load_users().items():
-    udata = read_user_data(email)
-    users.append({'email': email, 'name': user['name'], 'role': user['role'], 'token': user['password'], 'last_login': udata.get("last_login", "n/a"), 'num_login': udata.get("num_logins", 0)})
+  for user in load_users():
+    users.append({'email': user['email'], 'name': user['name'], 'role': user['role'], 'last_login': user["last_login"], 'num_login': user["num_logins"]})
   return render_template('admin.html', users=users)
