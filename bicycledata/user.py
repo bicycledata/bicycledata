@@ -211,7 +211,7 @@ def user_sessions():
   sessions = []
   for s in flask_login.current_user.sessions:
     device, date = s.split('/', 1)
-    path = os.path.join('data', 'v2', 'devices', device, 'sessions', s, 'bicyclegps')
+    path = os.path.join('data', 'v2', 'devices', device, 'sessions', date, 'bicyclegps')
     if all_sessions or (os.path.exists(path) and os.path.getsize(path) > 50):
       sessions.append({'device': device, 'date': date})
 
