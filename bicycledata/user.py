@@ -206,10 +206,15 @@ def logout():
 @app.route('/sessions')
 @flask_login.login_required
 def user_sessions():
+  all_sessions = request.args.get('all', '0') == '1'
+
   sessions = []
   for s in flask_login.current_user.sessions:
     device, date = s.split('/', 1)
-    sessions.append({'device': device, 'date': date})
+    path = os.path.join('data', 'v2', 'devices', device, 'sessions', s, 'bicyclegps')
+    if all_sessions or (os.path.exists(path) and os.path.getsize(path) > 50):
+      sessions.append({'device': device, 'date': date})
+
   sessions.sort(key=lambda x: x['date'], reverse=True)
   return render_template('user_sessions.html', sessions=sessions)
 

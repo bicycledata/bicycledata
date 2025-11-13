@@ -23,11 +23,16 @@
 
     <section>
       <ul>
-      {% for session in sessions %}
+        <li><strong>Total Sessions: {{ sessions|length }}</strong>
+          {% if request.args.get('all') == '1' %}
+          <a class="button small" href="/sessions">Show GPS only</a>
+          {% else %}
+          <a class="button small" href="/sessions?all=1">Show all</a>
+          {% endif %}
+        </li>
+        {% for session in sessions %}
         <li><a href="/v2/devices/{{ session.device }}/sessions/{{ session.date }}">{{ session.date }}</a></li>
-      {% else %}
-        <li>No sessions found.</li>
-      {% endfor %}
+        {% endfor %}
       </ul>
     </section>
 
