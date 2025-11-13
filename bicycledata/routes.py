@@ -170,7 +170,7 @@ def api_v2_session_upload_chunk():
 
     # Update the session list in user data
     config = read_v2_config_file(ident)
-    participants = config.get('participants', [])
+    participants = json.loads(config).get('participants', [])
     for participant in participants:
       udata = get_user_by_id(participant)
       sessions = udata.get('sessions', [])
