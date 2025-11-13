@@ -12,6 +12,7 @@
         <thead>
           <tr>
             <th>Name</th>
+            <th>ID</th>
             <th>#Login</th>
             <th>Last Login</th>
             <th>Email</th>
@@ -22,6 +23,7 @@
           {% for user in users %}
           <tr>
             <td>{{ user.name }}</td>
+            <td>{{ user.id }}</td>
             <td>{{ user.num_login }}</td>
             <td>{{ user.last_login }}</td>
             <td>{{ user.email }}</td>

@@ -21,7 +21,7 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
 from bicycledata.email import send_email
 from bicycledata.session_info import SessionInfo
 from bicycledata.ntfy import SendMessage
-from bicycledata.user import read_user_data, save_user
+from bicycledata.user import get_user_by_id, save_user
 
 
 @app.after_request
@@ -170,9 +170,9 @@ def api_v2_session_upload_chunk():
 
     # Update the session list in user data
     config = read_v2_config_file(ident)
-    email = config.get('email')
-    if email:
-      udata = read_user_data(email)
+    participants = config.get('participants', [])
+    for participant in participants:
+      udata = get_user_by_id(participant)
       sessions = udata.get('sessions', [])
       session_entry = f'{ident}/{session}'
       if session_entry not in sessions:
@@ -227,9 +227,10 @@ def v2_devices_ident(ident):
     all_sessions = request.args.get('all', '0') == '1'
     device = read_v2_device_info(ident)
     config = read_v2_config_file(ident)
+    participants = json.loads(config).get('participants', [])
     sessions = read_v2_sessions(ident, all_sessions)
     if device:
-      return render_template('devices_v2_ident.html', device=device, config=config, sessions=sessions)
+      return render_template('devices_v2_ident.html', device=device, config=config, participants=participants, sessions=sessions)
     return render_template('404.html'), 404
 
   # POST

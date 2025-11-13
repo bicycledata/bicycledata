@@ -115,15 +115,6 @@ def add_new_user(name, email):
 
   return True
 
-def read_user_data(email):
-  users = load_users()
-
-  for user in users:
-    if user['email'] == email:
-      return user
-
-  raise ValueError("Unknown user email")
-
 @login_manager.user_loader
 def get_user_by_id(user_id):
   users = load_users()
@@ -223,5 +214,5 @@ def admin():
 
   users = []
   for user in load_users():
-    users.append({'email': user['email'], 'name': user['name'], 'role': user['role'], 'last_login': user["last_login"], 'num_login': user["num_logins"]})
+    users.append({'email': user['email'], 'name': user['name'], 'id': user['id'], 'role': user['role'], 'last_login': user["last_login"], 'num_login': user["num_logins"]})
   return render_template('admin.html', users=users)

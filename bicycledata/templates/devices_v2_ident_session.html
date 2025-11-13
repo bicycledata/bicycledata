@@ -48,9 +48,11 @@
     <section>
       <h2>Data</h2>
       <ul>
-        <li><a class="button icon solid fa-download" href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/download">Download ZIP</a></li>
+        <li><a class="button icon solid fa-download"
+            href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/download">Download ZIP</a></li>
         {% for sensor in sensors %}
-        <li><a class="button icon solid fa-download" href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/sensors/{{ sensor }}">{{ sensor }}</a></li>
+        <li><a class="button icon solid fa-download"
+            href="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/sensors/{{ sensor }}">{{ sensor }}</a></li>
         {% endfor %}
       </ul>
     </section>
@@ -413,6 +415,7 @@
 </section>
 {% endif %}
 
+{% if not current_user.is_anonymous and current_user.is_private %}
 <!-- Config file content -->
 <div class="col-6 col-12-small">
   <label for="config"><strong>Config file</strong></label>
@@ -427,6 +430,7 @@
   <pre id="log"
     style="background:#f4f4f4; padding:1em; border-radius:4px; max-height:300px; overflow:auto;">{{ log }}</pre>
 </div>
+{% endif %}
 {% endif %}
 
 {% endblock %}
