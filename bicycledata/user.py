@@ -85,7 +85,7 @@ def add_new_user(name, email):
   users = load_users()
 
   # check if any user already has this email
-  if any(user['email'] == email for user in users):
+  if any(u['email'] == email for u in users):
     return False
 
   # create a new user
@@ -93,15 +93,20 @@ def add_new_user(name, email):
   password = secrets.token_hex(16)
 
   user = {
-           'id': secrets.token_hex(3),
-           'name': name,
-           'email': email,
-           'role': 'public',
-           'hash': ph.hash(password),
-           'last_login': "n/a",
-           'num_logins': 0,
-           'sessions': []
-         }
+          'id': secrets.token_hex(3),
+          'name': name,
+          'email': email,
+          'role': 'public',
+          'hash': ph.hash(password),
+          'last_login': "n/a",
+          'num_logins': 0,
+          'sessions': []
+        }
+
+  # ensure unique user ID
+  while any(u['id'] == user['id'] for u in users):
+    user['id'] += secrets.token_hex(1)
+
   save_user(user)
 
   subject = "BicycleData account created"
