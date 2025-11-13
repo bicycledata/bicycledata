@@ -173,11 +173,9 @@ def api_v2_session_upload_chunk():
     participants = json.loads(config).get('participants', [])
     for participant in participants:
       udata = get_user_by_id(participant)
-      sessions = udata.get('sessions', [])
       session_entry = f'{ident}/{session}'
-      if session_entry not in sessions:
-        sessions.append(session_entry)
-        udata['sessions'] = sessions
+      if session_entry not in udata.sessions:
+        udata.sessions.append(session_entry)
         save_user(udata)
 
     # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
