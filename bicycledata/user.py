@@ -18,7 +18,7 @@ class User(flask_login.UserMixin):
     self.id = user['id']
     self.name = user['name']
     self.email = user['email']
-    self.role = user['role']    # inactive, public, private, admin
+    self.role = user['role']    # inactive, public, private
     self.hash = user['hash']
     self.last_login = user['last_login']
     self.num_logins = user['num_logins']
@@ -36,11 +36,6 @@ class User(flask_login.UserMixin):
              'sessions': self.sessions
            }
     save_user(user)
-
-  @property
-  def is_admin(self):
-    """Convenience property for templates to check admin role."""
-    return self.role == 'admin'
 
   @property
   def is_private(self):
