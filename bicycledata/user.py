@@ -223,4 +223,5 @@ def admin():
   users = []
   for user in load_users():
     users.append({'email': user['email'], 'name': user['name'], 'id': user['id'], 'role': user['role'], 'last_login': user["last_login"], 'num_login': user["num_logins"]})
+  users.sort(key=lambda x: x['id'])
   return render_template('admin.html', users=users)
