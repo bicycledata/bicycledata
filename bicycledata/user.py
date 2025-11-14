@@ -218,10 +218,10 @@ def user_sessions():
   sessions.sort(key=lambda x: x['date'], reverse=True)
   return render_template('user_sessions.html', sessions=sessions)
 
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin')
 @flask_login.login_required
 def admin():
-  if not flask_login.current_user.is_admin:
+  if not flask_login.current_user.is_private:
     flash('Access denied')
     return redirect(url_for('index'))
 
