@@ -202,13 +202,32 @@ def logout():
 @flask_login.login_required
 def user_sessions():
   all_sessions = request.args.get('all', '0') == '1'
+  show_hidden = request.args.get('hidden', '0') == '1'
 
   sessions = []
   for s in flask_login.current_user.sessions:
     device, date = s.split('/', 1)
     path = os.path.join('data', 'v2', 'devices', device, 'sessions', date, 'bicyclegps')
-    if all_sessions or (os.path.exists(path) and os.path.getsize(path) > 50):
-      sessions.append({'device': device, 'date': date})
+    
+    # Check if session should be included based on GPS data
+    if not all_sessions and not (os.path.exists(path) and os.path.getsize(path) > 50):
+      continue
+    
+    # Check if session is hidden
+    session_info_path = os.path.join('data', 'v2', 'devices', device, 'sessions', date, 'session.info')
+    is_hidden = False
+    try:
+      from bicycledata.session_info import SessionInfo
+      session_front, _ = SessionInfo.read_from(session_info_path)
+      is_hidden = session_front.get('hidden', False)
+    except Exception:
+      pass
+    
+    # Filter by hidden status
+    if is_hidden and not show_hidden:
+      continue
+    
+    sessions.append({'device': device, 'date': date, 'hidden': is_hidden})
 
   sessions.sort(key=lambda x: x['date'], reverse=True)
   return render_template('user_sessions.html', sessions=sessions)

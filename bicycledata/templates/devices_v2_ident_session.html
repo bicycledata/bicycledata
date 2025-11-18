@@ -57,6 +57,17 @@
       </ul>
     </section>
 
+    <section>
+      <h2>Session Actions</h2>
+      <form method="post" action="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/hide">
+        {% if session_front.hidden %}
+        <button type="submit" class="button icon solid fa-eye">Unhide Session</button>
+        {% else %}
+        <button type="submit" class="button icon solid fa-eye-slash">Hide Session</button>
+        {% endif %}
+      </form>
+    </section>
+
   </div>
   {% if gps_track and gps_track|length > 1 %}
   <div id="map" style="height: 400px; width: 100%; margin-bottom: 1em;"></div>
