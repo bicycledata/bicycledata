@@ -86,7 +86,7 @@ def api_v2_register():
     data['ident'] = ident
 
     # Add a default sensor
-    data['sensors'] = [ {'name': 'sensor_template', 'git_url': 'https://github.com/bicycledata/sensor_template.git', 'git_branch': 'api-v2', 'entry_point': 'sensor:main', 'restart': False, 'args': {'upload_interval': 5}} ]
+    data['sensors'] = [ {'name': 'sensor_template', 'git_url': 'https://github.com/bicycledata/sensor_template.git', 'git_branch': 'main', 'entry_point': 'sensor:main', 'restart': False, 'args': {'upload_interval': 5}} ]
 
     os.makedirs(device_path, exist_ok=True)
     os.makedirs(sessions_path, exist_ok=True)
