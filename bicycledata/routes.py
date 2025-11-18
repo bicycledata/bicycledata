@@ -223,10 +223,11 @@ def v2_devices_ident(ident):
 
   if request.method == 'GET':
     all_sessions = request.args.get('all', '0') == '1'
+    show_hidden = request.args.get('hidden', '0') == '1'
     device = read_v2_device_info(ident)
     config = read_v2_config_file(ident)
     participants = json.loads(config).get('participants', [])
-    sessions = read_v2_sessions(ident, all_sessions)
+    sessions = read_v2_sessions(ident, all_sessions, show_hidden)
     if device:
       return render_template('devices_v2_ident.html', device=device, config=config, participants=participants, sessions=sessions)
     return render_template('404.html'), 404
@@ -297,6 +298,10 @@ def v2_devices_ident_session(ident, session):
             session_front['people_joined'] = people_joined
         elif 'people_joined' in session_front:
           del session_front['people_joined']
+
+        # Handle hidden checkbox
+        hidden = request.form.get('hidden', 'off')
+        session_front['hidden'] = (hidden == 'on')
 
         # Write back to session.info
         SessionInfo.write_to(os.path.join(session_dir, 'session.info'), session_front, session_body)
@@ -470,36 +475,6 @@ def v2_devices_ident_session_download(ident, session):
     return send_file(buf, as_attachment=True, download_name=f"{session}.zip", mimetype='application/zip')
   except Exception as e:
     return jsonify({"error": str(e)}), 500
-
-
-@app.route('/v2/devices/<ident>/sessions/<session>/hide', methods=['POST'])
-@flask_login.login_required
-def v2_devices_ident_session_hide(ident, session):
-  """Toggle the hidden status of a session"""
-  try:
-    session_dir = os.path.join('data', 'v2', 'devices', ident, 'sessions', session)
-    if not os.path.isdir(session_dir):
-      return jsonify({"error": "Session not found"}), 404
-
-    # Read current session info
-    try:
-      session_front, session_body = SessionInfo.read_from(os.path.join(session_dir, 'session.info'))
-    except Exception:
-      session_front, session_body = {}, ''
-
-    # Toggle hidden status
-    current_hidden = session_front.get('hidden', False)
-    session_front['hidden'] = not current_hidden
-
-    # Write back to session.info
-    SessionInfo.write_to(os.path.join(session_dir, 'session.info'), session_front, session_body)
-
-    action = 'hidden' if session_front['hidden'] else 'unhidden'
-    flash(f'Session {action} successfully.')
-    return redirect(url_for('v2_devices_ident_session', ident=ident, session=session))
-  except Exception as e:
-    flash(f'Failed to update session: {e}')
-    return redirect(url_for('v2_devices_ident_session', ident=ident, session=session))
 
 
 @app.route('/generic')

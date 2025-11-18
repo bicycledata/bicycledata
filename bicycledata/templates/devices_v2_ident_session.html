@@ -57,17 +57,6 @@
       </ul>
     </section>
 
-    <section>
-      <h2>Session Actions</h2>
-      <form method="post" action="/v2/devices/{{ device.ident }}/sessions/{{ session.name }}/hide">
-        {% if session_front.hidden %}
-        <button type="submit" class="button icon solid fa-eye">Unhide Session</button>
-        {% else %}
-        <button type="submit" class="button icon solid fa-eye-slash">Hide Session</button>
-        {% endif %}
-      </form>
-    </section>
-
   </div>
   {% if gps_track and gps_track|length > 1 %}
   <div id="map" style="height: 400px; width: 100%; margin-bottom: 1em;"></div>
@@ -142,6 +131,10 @@
         <label for="people_joined"><strong>People Joined</strong></label>
         <input type="number" id="people_joined" name="people_joined" min="0" max="100" step="1"
           value="{{ session_front.people_joined if session_front.people_joined is defined else '' }}" />
+      </div>
+      <div class="col-12">
+        <input type="checkbox" id="hidden" name="hidden" {% if session_front.hidden %}checked{% endif %} />
+        <label for="hidden">Hide this session from session lists</label>
       </div>
       <div class="col-12">
         <label for="notes"><strong>Notes</strong></label>

@@ -76,11 +76,28 @@ def read_v2_device_info(ident, file_path=None):
   except (FileNotFoundError, json.JSONDecodeError) as e:
     return None
 
-def read_v2_sessions(ident, all=False):
+def read_v2_sessions(ident, all=False, show_hidden=False):
   directory = os.path.join('data', 'v2', 'devices', ident, 'sessions')
   sessions = [name for name in os.listdir(directory) if os.path.isdir(os.path.join(directory, name))]
   if not all:
     sessions = [s for s in sessions if os.path.exists(os.path.join(directory, s, 'bicyclegps')) and os.path.getsize(os.path.join(directory, s, 'bicyclegps')) > 50]
+  
+  # Filter hidden sessions unless show_hidden is True
+  if not show_hidden:
+    from bicycledata.session_info import SessionInfo
+    filtered_sessions = []
+    for s in sessions:
+      session_info_path = os.path.join(directory, s, 'session.info')
+      try:
+        session_front, _ = SessionInfo.read_from(session_info_path)
+        is_hidden = session_front.get('hidden', False)
+        if not is_hidden:
+          filtered_sessions.append(s)
+      except Exception:
+        # If no session.info or error reading, include the session (not hidden by default)
+        filtered_sessions.append(s)
+    sessions = filtered_sessions
+  
   sessions.sort(reverse=True)
   return sessions
 
