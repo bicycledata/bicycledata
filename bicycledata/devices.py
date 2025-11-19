@@ -2,6 +2,8 @@ import json
 import os
 from datetime import UTC, datetime
 
+from bicycledata.session_info import SessionInfo
+
 
 def check_v2_ident(ident: str) -> bool:
   return ident.isalnum()
@@ -78,27 +80,16 @@ def read_v2_device_info(ident, file_path=None):
 
 def read_v2_sessions(ident, all=False, show_hidden=False):
   directory = os.path.join('data', 'v2', 'devices', ident, 'sessions')
-  sessions = [name for name in os.listdir(directory) if os.path.isdir(os.path.join(directory, name))]
+  sessions = [{'device': ident, 'date': name, 'hidden': SessionInfo.is_hidden(os.path.join(directory, name, 'session.info'))} for name in os.listdir(directory) if os.path.isdir(os.path.join(directory, name))]
+
   if not all:
-    sessions = [s for s in sessions if os.path.exists(os.path.join(directory, s, 'bicyclegps')) and os.path.getsize(os.path.join(directory, s, 'bicyclegps')) > 50]
-  
+    sessions = [s for s in sessions if os.path.exists(os.path.join(directory, s['date'], 'bicyclegps')) and os.path.getsize(os.path.join(directory, s['date'], 'bicyclegps')) > 50]
+
   # Filter hidden sessions unless show_hidden is True
   if not show_hidden:
-    from bicycledata.session_info import SessionInfo
-    filtered_sessions = []
-    for s in sessions:
-      session_info_path = os.path.join(directory, s, 'session.info')
-      try:
-        session_front, _ = SessionInfo.read_from(session_info_path)
-        is_hidden = session_front.get('hidden', False)
-        if not is_hidden:
-          filtered_sessions.append(s)
-      except Exception:
-        # If no session.info or error reading, include the session (not hidden by default)
-        filtered_sessions.append(s)
-    sessions = filtered_sessions
-  
-  sessions.sort(reverse=True)
+    sessions = [s for s in sessions if not s['hidden']]
+
+  sessions.sort(reverse=True, key=lambda x: x['date'])
   return sessions
 
 def ping_v2(ident, call):
