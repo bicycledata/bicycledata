@@ -133,6 +133,10 @@
           value="{{ session_front.people_joined if session_front.people_joined is defined else '' }}" />
       </div>
       <div class="col-12">
+        <input type="checkbox" id="hidden" name="hidden" {% if session_front.hidden %}checked{% endif %} />
+        <label for="hidden">Hide this session from session lists</label>
+      </div>
+      <div class="col-12">
         <label for="notes"><strong>Notes</strong></label>
         <textarea id="notes" name="notes" rows="8" style="min-height:220px; width:100%; box-sizing:border-box;"
           placeholder="Enter additional session notes">{{ session_body }}</textarea>

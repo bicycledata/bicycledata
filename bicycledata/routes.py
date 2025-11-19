@@ -223,10 +223,11 @@ def v2_devices_ident(ident):
 
   if request.method == 'GET':
     all_sessions = request.args.get('all', '0') == '1'
+    show_hidden = request.args.get('hidden', '0') == '1'
     device = read_v2_device_info(ident)
     config = read_v2_config_file(ident)
     participants = json.loads(config).get('participants', [])
-    sessions = read_v2_sessions(ident, all_sessions)
+    sessions = read_v2_sessions(ident, all_sessions, show_hidden)
     if device:
       return render_template('devices_v2_ident.html', device=device, config=config, participants=participants, sessions=sessions)
     return render_template('404.html'), 404
@@ -297,6 +298,10 @@ def v2_devices_ident_session(ident, session):
             session_front['people_joined'] = people_joined
         elif 'people_joined' in session_front:
           del session_front['people_joined']
+
+        # Handle hidden checkbox
+        hidden = request.form.get('hidden', 'off')
+        session_front['hidden'] = (hidden == 'on')
 
         # Write back to session.info
         SessionInfo.write_to(os.path.join(session_dir, 'session.info'), session_front, session_body)

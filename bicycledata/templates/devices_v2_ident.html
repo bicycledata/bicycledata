@@ -66,9 +66,20 @@
       {% else %}
       <a class="button small" href="/v2/devices/{{ device.ident }}?all=1">Show all</a>
       {% endif %}
+      {% if request.args.get('hidden') == '1' %}
+      <a class="button small"
+        href="/v2/devices/{{ device.ident }}{% if request.args.get('all') == '1' %}?all=1{% endif %}">Hide hidden</a>
+      {% else %}
+      <a class="button small"
+        href="/v2/devices/{{ device.ident }}?hidden=1{% if request.args.get('all') == '1' %}&all=1{% endif %}">Show
+        hidden</a>
+      {% endif %}
     </li>
     {% for session in sessions %}
-    <li><a href="/v2/devices/{{ device.ident }}/sessions/{{ session}}">{{ session }}</a></li>
+    <li>
+      <a href="/v2/devices/{{ session.device }}/sessions/{{ session.date }}">{{ session.date }}</a>
+      {% if session.hidden %}<span style="color: #888;"> (hidden)</span>{% endif %}
+    </li>
     {% endfor %}
   </ul>
 </section>

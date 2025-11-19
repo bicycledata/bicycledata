@@ -88,3 +88,11 @@ class SessionInfo:
   @staticmethod
   def write_to(path: str, metadata, body = None) -> None:
     SessionInfo(path).write(metadata, body)
+
+  @staticmethod
+  def is_hidden(path: str) -> bool:
+    try:
+      metadata, _ = SessionInfo.read_from(path)
+      return metadata.get('hidden', False)
+    except (FileNotFoundError, ValueError):
+      return False

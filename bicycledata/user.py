@@ -11,6 +11,7 @@ from flask import flash, redirect, render_template, request, url_for
 from bicycledata import app, config, dir, login_manager
 from bicycledata.email import send_email
 from bicycledata.ntfy import SendMessage
+from bicycledata.session_info import SessionInfo
 
 
 class User(flask_login.UserMixin):
@@ -202,13 +203,24 @@ def logout():
 @flask_login.login_required
 def user_sessions():
   all_sessions = request.args.get('all', '0') == '1'
+  show_hidden = request.args.get('hidden', '0') == '1'
 
   sessions = []
   for s in flask_login.current_user.sessions:
     device, date = s.split('/', 1)
-    path = os.path.join('data', 'v2', 'devices', device, 'sessions', date, 'bicyclegps')
-    if all_sessions or (os.path.exists(path) and os.path.getsize(path) > 50):
-      sessions.append({'device': device, 'date': date})
+    gps_path = os.path.join('data', 'v2', 'devices', device, 'sessions', date, 'bicyclegps')
+    info_path = os.path.join('data', 'v2', 'devices', device, 'sessions', date, 'session.info')
+
+    # Check if session should be included based on GPS data
+    if not all_sessions and not (os.path.exists(gps_path) and os.path.getsize(gps_path) > 50):
+      continue
+
+    # Check if session is hidden
+    is_hidden = SessionInfo.is_hidden(info_path)
+    if not show_hidden and is_hidden:
+      continue
+
+    sessions.append({'device': device, 'date': date, 'hidden': is_hidden})
 
   sessions.sort(key=lambda x: x['date'], reverse=True)
   return render_template('user_sessions.html', sessions=sessions)
