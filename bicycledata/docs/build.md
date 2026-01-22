@@ -1,7 +1,7 @@
 # Build Instructions
 
 ## Bill of Materials (BOM)
-1. Print all parts in PETG (345,06g incl. support) (116kr) [[Bicycledata v2.3mf]]
+1. Print all parts in PETG (345,06g incl. support) (116kr) [Bicycledata v2.3mf](/static/files/Bicycledata v2.3mf)
     * Box Body
     * Box Bottom
     * Pi Tray
