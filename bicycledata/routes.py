@@ -9,6 +9,7 @@ from io import BytesIO
 from math import atan2, cos, radians, sin, sqrt
 
 import flask_login
+import markdown
 from flask import (flash, jsonify, redirect, render_template, request,
                    send_file, send_from_directory, url_for)
 
@@ -19,8 +20,8 @@ from bicycledata.devices import (check_v2_device_path, load_devices,
                                  read_v2_device_info, read_v2_sessions,
                                  write_config_file, write_v2_config_file)
 from bicycledata.email import send_email
-from bicycledata.session_info import SessionInfo
 from bicycledata.ntfy import SendMessage
+from bicycledata.session_info import SessionInfo
 from bicycledata.user import load_user_by_id, save_user
 
 
@@ -546,3 +547,35 @@ def robots():
 @app.errorhandler(404)
 def page_not_found(e):
   return render_template('404.html'), 404
+
+
+@app.route('/docs/')
+@app.route('/docs/<path:page>')
+def docs(page='index'):
+  try:
+    docs_dir = os.path.join(app.root_path, 'docs')
+
+    if not page:
+      page = 'index'
+
+    # ensure .md extension
+    if not page.endswith('.md'):
+      page += '.md'
+
+    # Resolve path and prevent path traversal
+    requested = os.path.normpath(os.path.join(docs_dir, page))
+    if not os.path.abspath(requested).startswith(os.path.abspath(docs_dir)):
+      return render_template('404.html'), 404
+
+    if not os.path.isfile(requested):
+      return render_template('404.html'), 404
+
+    with open(requested, 'r', encoding='utf-8') as fh:
+      text = fh.read()
+
+    # Convert Markdown to HTML
+    html = markdown.markdown(text, extensions=['fenced_code', 'tables', 'toc'])
+
+    return render_template('docs.html', content=html)
+  except Exception as e:
+    return jsonify({"error": str(e)}), 500
