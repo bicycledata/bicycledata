@@ -107,12 +107,12 @@ instructions below) by pressing the button.
 <table>
   <tr>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-043.jpg" alt="Left side of device" style="width: 250px; max-width: 100%;" alt="..."><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-043.jpg" style="width: 250px; max-width: 100%;" alt="Push button with cable"><br>
       <strong>Left side of the device, with the lidar sensor.</strong><br>
       You attach the button to the handlebars with the velcro-strip and connect it to the logger via USB-C.
     </td>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-044.jpg" alt="Front side of device" style="width: 250px; max-width: 100%;" alt="..."><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-044.jpg" style="width: 250px; max-width: 100%;" alt="Close-up of push button"><br>
       <strong>Front side of the device.</strong><br>
       Close-up of the push button you use to mark overtakes. 
     </td>
