@@ -17,6 +17,30 @@ Do not mark any overtakes if you are in a separate cycle lane, behind a guardrai
 _(Work in progress, table to be inserted.)_
 
 
+Of course, your safety always comes first. You decide when you feel safe to mark overtaking. Don't feel pressured to press the button when it feels unsafe, for whatever reason.
+
+# When and how should I mark the overtakes?
+
+You ride as usual, except that you use the push button to mark when you have been overtaken. The idea is that you press the button soon after the vehicle has passed you – as a guideline, the earliest when you can see the license plate. This helps us to reliably find the overtakes in the data material (see also _link to be inserted_). Only press the button if it feels safe and secure in the situation.
+
+_(Work in progress, table to be inserted.)_
+
+# Bonus – marking of oncoming traffic
+
+If you want, you can mark both overtaking and oncoming traffic. This gives us additional information, but it is also more complex for you as a cyclist to keep track of. So – better good markings of only overtakes than half-bad markings of both overtaking and oncoming traffic.
+
+If you want to mark both: Make the button presses for overtakes long, about a second.
+
+Make the button presses for oncoming traffic short, just a “click” (0.1-0.2 seconds). Mark oncoming traffic when it is physically in about the same place as where you are marking overtaking vehicles. This means that oncoming traffic is still in front of you when you press the button.
+
+The button press should ideally be completed before the vehicle passes you. Note on your dashboard whether you pressed the button for overtaking only or also for oncoming vehicles.
+
+A rule of thumb to remember: The vehicle is always in front of you when you press the button. Overtaking vehicles take longer to pass you --> long button press; oncoming vehicles pass in a shorter time --> short button press.
+
+_(Work in progress, table to be inserted.)_
+
+
+
 
 # Instructions
 
