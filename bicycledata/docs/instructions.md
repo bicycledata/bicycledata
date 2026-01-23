@@ -88,7 +88,7 @@ approaching from behind, logging their distance and relative speed from
 a range of about 140 m.
 
 <img
-  src="/bicycledata/static/images/devices/KatjaKircher_VTITrafficLogger-045.jpg"
+  src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-045.jpg"
   alt="Garmin Varia 716"
   width="100"
 />
@@ -109,4 +109,4 @@ Link to [docs](/docs/index).
 2. Then do this
 3. You are done
 
-![image](/static/images/index.jpg)
+![image](/bicycledata/static/images/index.jpg)
