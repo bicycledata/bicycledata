@@ -39,15 +39,7 @@ A rule of thumb to remember: The vehicle is always in front of you when you pres
 
 _(Work in progress, table to be inserted.)_
 
+# Riding with others
 
+If you are cycling with others, make sure not to press the button when another cyclist is on your left, as the distance to the cyclist will then be measured. If you are to the left of others, you can press the button as above. You indicate on your dashboard whether you were cycling alone or with others.
 
-
-# Instructions
-
-Link to [docs](/docs/index).
-
-1. Do this first
-2. Then do this
-3. You are done
-
-![image](/bicycledata/static/images/index.jpg)
