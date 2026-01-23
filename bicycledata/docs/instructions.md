@@ -22,8 +22,11 @@ What you'll get from us:
 A holder for Garmin and GoPro devices to attach the logger to your seat
 rails with a hex key.
 
-![Garmin seat rail mount with screws](/bicycledata/static/images/devices/KatjaKircher_VTITrafficLogger-050.jpg){width="3.4166666666666665in"
-height="2.28125in"}
+<img
+  src="/bicycledata/static/images/devices/KatjaKircher_VTITrafficLogger-050.jpg"
+  alt="Garmin seat rail mount with screws"
+  width="350"
+/>
 
 ## TrafficLogger
 
