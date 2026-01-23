@@ -25,7 +25,7 @@ rails with a hex key.
 <img
   src="/bicycledata/static/images/devices/KatjaKircher_VTITrafficLogger-050.jpg"
   alt="Garmin seat rail mount with screws"
-  width="350"
+  width="300"
 />
 
 ## TrafficLogger
@@ -40,29 +40,46 @@ device contains:
 
 - GPS-sensor logging your position and speed
 
-  -----------------------------------------------------------------------------------------------------------
-   ![](/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-037.jpg){width="3.1496062992125986in"    ![](media/image4.jpeg){width="3.1496062992125986in"
-             height="2.0659962817147854in"}                        height="2.1007633420822396in"}
-  ----------------------------------------------------- -----------------------------------------------------
-   Left side of the device, with the lidar sensor. The  Front side of the device with the USB-C-ports for the
-  device is attached to the holder via the holes on top            button and the charging cable.
-  and is secured with a zip tie through the seat rails. 
+ <table>
+  <tr>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-037.jpg" alt="Left side of device" width="300"><br>
+      <strong>Left side of the device, with the lidar sensor.</strong><br>
+      The device is attached to the holder via the holes on top and is secured with a zip tie through the seat rails.
+    </td>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-036.jpg" alt="Front side of device" width="250"><br>
+      <strong>Front side of the device.</strong><br>
+      USB-C ports for the button and the charging cable.
+    </td>
+  </tr>
 
-   ![](media/image5.png){width="3.1496062992125986in"    ![](media/image6.png){width="3.1496062992125986in"
-              height="2.100972222222222in"}                        height="1.8596117672790902in"}
+  <tr>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-041.jpg" alt="Rear of device" width="250"><br>
+      <strong>Rear of the device.</strong><br>
+      Data button, ON/OFF switch, and radar attachment point.
+    </td>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-042.jpg" alt="Device LEDs" width="250"><br>
+      <strong>Status LEDs.</strong><br>
+      LEDs indicate GPS fix and connection to Wi-Fi and radar.
+    </td>
+  </tr>
 
-     Rear of the device, with the "data button", the     The LEDs on the rear indicate the status for a GPS
-      ON/OFF-switch and the radar attachment point.         fix and the connection to Wifi and the radar.
-
-   ![](media/image7.jpeg){width="3.1496062992125986in"   ![](media/image8.jpeg){width="3.1496062992125986in"
-             height="2.1007633420822396in"}                        height="2.1019247594050743in"}
-
-   The bottom of the device with a window showing the   The inside of the device, with the Raspberry Pi, the
-     battery status (visible for a few seconds after               battery, the lidar sensor etc.
-   switching on/off and after putting on/removing from  
-                        charge).                        
-  -----------------------------------------------------------------------------------------------------------
-
+  <tr>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-039.jpg" alt="Bottom of device" width="250"><br>
+      <strong>Bottom of the device.</strong><br>
+      Window showing battery status after power or charging events.
+    </td>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/ComCy_BoxInside.jpg" alt="Inside of device" width="250"><br>
+      <strong>Inside of the device.</strong><br>
+      Raspberry Pi, battery, lidar sensor, and other components.
+    </td>
+  </tr>
+</table>
 
 
 
