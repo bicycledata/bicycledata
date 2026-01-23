@@ -1,6 +1,6 @@
 # Bicycledata Docs
 
-* [Unboxing, mounting and operation of equipment](/docs/instructions)
+* [Unboxing, mounting and operation of equipment](/bicycledata/docs/instructions)
 * [Marking of overtaking events](/docs/mark-overtaking-events)
 * [Traffic Logger](/docs/traffic-logger)
 * [Build](/docs/build)
