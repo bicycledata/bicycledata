@@ -14,7 +14,7 @@
 
 2. Core Electronics (4383kr)
     * 1x Raspberry Pi 5 (4GB RAM) [price: 829kr](https://www.electrokit.com/raspberry-pi-5-4gb)
-    * 1x microSD card (32GB) [price: 149kr(https://www.electrokit.com/minneskort-microsd-a2-class-32gb-raspberry-pi)
+    * 1x microSD card (32GB) [price: 149kr](https://www.electrokit.com/minneskort-microsd-a2-class-32gb-raspberry-pi)
     * 1x USB GPS module [price: 249kr](https://www.electrokit.com/gps-mottagare-usb-dfrobot-tel0137)
     * 1x LiDAR sensor TFMini-S [price: 769kr](https://www.electrokit.com/avstandsgivare-lidar-0.1-12m-tf-mini-s)
     * 1x Garmin Varia RVR315 [price: 1599kr](https://www.garmin.com/sv-SE/p/669024/pn/010-02253-00/)
@@ -37,8 +37,8 @@
     * 4× M2.5×6 screws (for mounting the Raspberry Pi)
     * 1× 60×80×1 mm metal plate (metallplåt)
     * 1× M5×20 bolt + lock nut (rear mount)
-    * 12× M4×10 bolts + lock nuts (for the enclosure / *lock*) [link: https://www.amazon.se/Cylinderhuvudskruvar-Zinkpl%C3%A4terad-Fasteners-Cylindrical-Certified/dp/B09446MZL1/ref=sr_1_3?crid=2YMGE7AE67AT&dib=eyJ2IjoiMSJ9.elDdXwmNjtOsCUoqT0DnAT1FkysZOxggMbxHYPMo64oqTNi6N4xkq6KkJZyZrpgyGzLy6vMwyF__uHmvk0rz9G5S9hxxMaoErbv4socIZucftnMkdhfBdIzJ0mtsIndXvBGom1QPUMuUGzE-9Pt4yEcEFrdSgLLy9s1PIWAqsRCMgM-1nRvNHGphLJwkxffvF7amRyPBP8T4M37bfNdIT0I6OpfJ1JS_rXIKXsIc-h8eSl5XvTJ7bjFyBKW35ywttgO9XBZkOYVXCQfw6Stbn5K7LJHnSAsWd2Wo_FWvGbY.yVHheR_4ZdCm-XGuWqlWZP7afv_R3SczEzjlB81FeU4&dib_tag=se&keywords=M4x10%2Bhex&qid=1768824131&sprefix=m4x10%2Bhex%2Caps%2C122&sr=8-3&th=1]
-    * 1× Garmin SEAT RAIL MOUNT KIT [price: 459kr] [link: https://www.garmin.com/sv-SE/p/874032/]
+    * 12× M4×10 bolts + lock nuts (for the enclosure / *lock*) [link](https://www.amazon.se/Cylinderhuvudskruvar-Zinkpl%C3%A4terad-Fasteners-Cylindrical-Certified/dp/B09446MZL1/ref=sr_1_3?crid=2YMGE7AE67AT&dib=eyJ2IjoiMSJ9.elDdXwmNjtOsCUoqT0DnAT1FkysZOxggMbxHYPMo64oqTNi6N4xkq6KkJZyZrpgyGzLy6vMwyF__uHmvk0rz9G5S9hxxMaoErbv4socIZucftnMkdhfBdIzJ0mtsIndXvBGom1QPUMuUGzE-9Pt4yEcEFrdSgLLy9s1PIWAqsRCMgM-1nRvNHGphLJwkxffvF7amRyPBP8T4M37bfNdIT0I6OpfJ1JS_rXIKXsIc-h8eSl5XvTJ7bjFyBKW35ywttgO9XBZkOYVXCQfw6Stbn5K7LJHnSAsWd2Wo_FWvGbY.yVHheR_4ZdCm-XGuWqlWZP7afv_R3SczEzjlB81FeU4&dib_tag=se&keywords=M4x10%2Bhex&qid=1768824131&sprefix=m4x10%2Bhex%2Caps%2C122&sr=8-3&th=1)
+    * 1× Garmin SEAT RAIL MOUNT KIT [price: 459kr](https://www.garmin.com/sv-SE/p/874032/)
 
 6. Enclosure & Display Parts
     * 1x 24x35x2mm plastic glass (plexiglas / plastglas)
