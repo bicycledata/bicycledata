@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<style>
+  /* Make images in rendered markdown responsive */
+  .doc-content img { max-width: 100%; height: auto; display: block; margin: 0.5em 0; }
+  .doc-content img.center { margin-left: auto; margin-right: auto; }
+  /* Ensure images inside pre/code blocks don't overflow */
+  .doc-content pre img { max-width: 100%; }
+</style>
+{% endblock %}
+
+{% block section %}
+<section>
+  <div class="doc-content">
+    {{ content | safe }}
+  </div>
+</section>
+{% endblock %}

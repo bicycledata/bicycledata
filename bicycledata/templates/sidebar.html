@@ -8,6 +8,7 @@
       </header>
       <ul>
         <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('docs') }}">Documentation</a></li>
         {% if current_user.is_anonymous %}
         <li><a class="icon solid fa-lock" href="{{ url_for('user_sessions') }}"> Sessions</a></li>
         {% else %}
