@@ -1,4 +1,4 @@
-title: Getting started
+# Getting started
 
 # Registration
 
@@ -25,7 +25,7 @@ rails with a hex key.
 <img
   src="/bicycledata/static/images/devices/KatjaKircher_VTITrafficLogger-050.jpg"
   alt="Garmin seat rail mount with screws"
-  width="300"
+  width="200"
 />
 
 ## TrafficLogger
@@ -80,6 +80,22 @@ device contains:
     </td>
   </tr>
 </table>
+
+## Garmin Varia radar
+
+The radar is placed on the rear of the logger. It registers vehicles
+approaching from behind, logging their distance and relative speed from
+a range of about 140 m.
+
+<img
+  src="/bicycledata/static/images/devices/KatjaKircher_VTITrafficLogger-045.jpg"
+  alt="Garmin Varia 716"
+  width="100"
+/>
+Garmin Varia 716. To switch on/off, press the large button for 2 s. Charge the unit with a USB-C cable (included).
+
+
+
 
 
 
