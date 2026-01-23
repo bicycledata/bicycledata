@@ -43,12 +43,12 @@ device contains:
  <table>
   <tr>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-037.jpg" alt="Left side of device" width="300"><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-037.jpg" alt="Left side of device" style="width: 250px; max-width: 100%;" alt="..."><br>
       <strong>Left side of the device, with the lidar sensor.</strong><br>
       The device is attached to the holder via the holes on top and is secured with a zip tie through the seat rails.
     </td>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-036.jpg" alt="Front side of device" width="250"><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-036.jpg" alt="Front side of device" style="width: 250px; max-width: 100%;" alt="..."><br>
       <strong>Front side of the device.</strong><br>
       USB-C ports for the button and the charging cable.
     </td>
@@ -56,25 +56,25 @@ device contains:
 
   <tr>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-041.jpg" alt="Rear of device" width="250"><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-041.jpg" alt="Rear of device" style="width: 250px; max-width: 100%;" alt="..."><br>
       <strong>Rear of the device.</strong><br>
-      Data button, ON/OFF switch, and radar attachment point.
+      Data button, ON/OFF switch, and radar attachment point (open).
     </td>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-042.jpg" alt="Device LEDs" width="250"><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-042.jpg" alt="Device LEDs" style="width: 250px; max-width: 100%;" alt="..."><br>
       <strong>Status LEDs.</strong><br>
-      LEDs indicate GPS fix and connection to Wi-Fi and radar.
+      LEDs indicate GPS fix (GP) and connection to Wi-Fi (WF) and radar (RA). The radar attachment point is closed.
     </td>
   </tr>
 
   <tr>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-039.jpg" alt="Bottom of device" width="250"><br>
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-039.jpg" alt="Bottom of device" style="width: 250px; max-width: 100%;" alt="..."><br>
       <strong>Bottom of the device.</strong><br>
       Window showing battery status after power or charging events.
     </td>
     <td align="center">
-      <img src="/bicycledata/static/images/devices/ComCy_BoxInside.jpg" alt="Inside of device" width="250"><br>
+      <img src="/bicycledata/static/images/devices/ComCy_BoxInside.jpg" alt="Inside of device" style="width: 250px; max-width: 100%;" alt="..."><br>
       <strong>Inside of the device.</strong><br>
       Raspberry Pi, battery, lidar sensor, and other components.
     </td>
