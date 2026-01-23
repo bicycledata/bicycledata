@@ -132,6 +132,24 @@ instructions below) by pressing the button.
 - A few pieces of soft material to put between the holder clamp and the
   seat rails
 
+# How do I mount the equipment?
+
+1.	Mount the clamp to the saddle rails using an Allen key. It is advisable to place the soft material underneath to avoid scratching the rails. It may take a little creativity to get a good placement, for example some saddles are designed such that it works better to mount the clamp upside down.
+2.	Mount the logger to the clamp (tighten firmly). Test to make sure the logger does not interfere with your pedalling. If so, move it one hole back.
+3.	Secure the logger with a zip tie or similar so that the rear end does not drop onto the wheel due to possible vibrations or shocks. 
+4.	Attach the push button to the handlebar using the Velcro. Choose a location that is easy to reach, but where you will not accidentally press the button. You may want to try a few different locations.
+5.	Route the cable from the button along the frame to the logger. Make sure the cable does not get in your way and that you can turn the handlebars freely. You can secure the cable with tape or a zip tie.
+6.	Connect the cable to the logger using the USB connector.
+7.	Attach the Garmin Varia radar to the holder on the back of the logger.
+
+
+
+# How do I operate the equipment?
+
+# How do I charge the equipment?
+
+# How do I access my data?
+
 
 # Instructions
 
