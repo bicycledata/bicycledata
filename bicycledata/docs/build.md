@@ -13,13 +13,13 @@
     * Box Top
 
 2. Core Electronics (4383kr)
-    * 1x Raspberry Pi 5 (4GB RAM) [price: 829kr] [link: https://www.electrokit.com/raspberry-pi-5-4gb]
-    * 1x microSD card (32GB) [price: 149kr] [link: https://www.electrokit.com/minneskort-microsd-a2-class-32gb-raspberry-pi]
-    * 1x USB GPS module [price: 249kr] [link: https://www.electrokit.com/gps-mottagare-usb-dfrobot-tel0137]
-    * 1x LiDAR sensor TFMini-S [price: 769kr] [link: https://www.electrokit.com/avstandsgivare-lidar-0.1-12m-tf-mini-s]
-    * 1x Garmin Varia RVR315 [price: 1599kr] [link: https://www.garmin.com/sv-SE/p/669024/pn/010-02253-00/]
-    * 1x Powerbank Anker Nano [price: 699kr] [link: https://www.amazon.se/Anker-Powerbank-powerbank-USB-C-kabel-kompatibel/dp/B0C9CJKCH3/ref=asc_df_B0C9CJKCH3?mcid=44fa350b25113a49a44dd1843a368505&tag=shpngadsglede-21&linkCode=df0&hvadid=719621620464&hvpos=&hvnetw=g&hvrand=10941814230683062894&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9062421&hvtargid=pla-2197490552831&language=sv_SE&gad_source=1&th=1]
-    * 1x RTC-batteri för Raspberry Pi 5 [price: 89kr] [link: https://www.electrokit.com/rtc-batteri-for-raspberry-pi-5]
+    * 1x Raspberry Pi 5 (4GB RAM) [price: 829kr](https://www.electrokit.com/raspberry-pi-5-4gb)
+    * 1x microSD card (32GB) [price: 149kr(https://www.electrokit.com/minneskort-microsd-a2-class-32gb-raspberry-pi)
+    * 1x USB GPS module [price: 249kr](https://www.electrokit.com/gps-mottagare-usb-dfrobot-tel0137)
+    * 1x LiDAR sensor TFMini-S [price: 769kr](https://www.electrokit.com/avstandsgivare-lidar-0.1-12m-tf-mini-s)
+    * 1x Garmin Varia RVR315 [price: 1599kr](https://www.garmin.com/sv-SE/p/669024/pn/010-02253-00/)
+    * 1x Powerbank Anker Nano [price: 699kr](https://www.amazon.se/Anker-Powerbank-powerbank-USB-C-kabel-kompatibel/dp/B0C9CJKCH3/ref=asc_df_B0C9CJKCH3?mcid=44fa350b25113a49a44dd1843a368505&tag=shpngadsglede-21&linkCode=df0&hvadid=719621620464&hvpos=&hvnetw=g&hvrand=10941814230683062894&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9062421&hvtargid=pla-2197490552831&language=sv_SE&gad_source=1&th=1)
+    * 1x RTC-batteri för Raspberry Pi 5 [price: 89kr](https://www.electrokit.com/rtc-batteri-for-raspberry-pi-5)
 
 3. USB & Power Components
     * 1× USB-C female connector
