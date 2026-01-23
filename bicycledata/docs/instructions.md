@@ -90,13 +90,34 @@ a range of about 140 m.
 <img
   src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-045.jpg"
   alt="Garmin Varia 716"
-  width="100"
+  width="150"
 />
-Garmin Varia 716. To switch on/off, press the large button for 2 s. Charge the unit with a USB-C cable (included).
+
+Garmin Varia 716. To switch on/off, press the large button for 2 s. 
+Charge the unit with a USB-C cable (included).
 
 
+## Button
+
+The button is placed on the handlebars and attached to the logger via
+USB-C. You mark overtakes (and possibly also oncoming traffic, see
+instructions below) by pressing the button.
 
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-043.jpg" alt="Left side of device" style="width: 250px; max-width: 100%;" alt="..."><br>
+      <strong>Left side of the device, with the lidar sensor.</strong><br>
+      You attach the button to the handlebars with the velcro-strip and connect it to the logger via USB-C.
+    </td>
+    <td align="center">
+      <img src="/bicycledata/static/images/devices/KatjaKircherVTI_TrafficLogger-044.jpg" alt="Front side of device" style="width: 250px; max-width: 100%;" alt="..."><br>
+      <strong>Front side of the device.</strong><br>
+      Close-up of the push button you use to mark overtakes. 
+    </td>
+  </tr>
+</table>
 
 
 
