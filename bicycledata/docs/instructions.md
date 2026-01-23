@@ -120,6 +120,17 @@ instructions below) by pressing the button.
 </table>
 
 
+## Accessories
+
+- USB-C-cable for charging
+
+- USB-C- or micro-USB-cable to charge the Garmin Varia (depends on the
+  model you get)
+
+- A few re-usable zip ties to secure the logger to the seat rails
+
+- A few pieces of soft material to put between the holder clamp and the
+  seat rails
 
 
 # Instructions
