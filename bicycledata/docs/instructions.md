@@ -187,7 +187,7 @@ instructions below) by pressing the button.
 
 # How do I configure my hotspot?
 
- <table>
+<table>
   <tr>
     <td align="left">
       On your phone, configure your hotspot such that it is called `bicycledata` 
@@ -198,7 +198,7 @@ instructions below) by pressing the button.
       <img src="/static/images/devices/MobileHotspot.jpg" style="width: 150px; max-width: 100%;" alt="Front side of device"><br>
     </td>
   </tr>
-
+</table>
 
 # How do I operate the equipment?
 
