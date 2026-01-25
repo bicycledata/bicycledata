@@ -164,7 +164,7 @@ instructions below) by pressing the button.
       Status indicators for radar (RA) - connected, WiFi (WF) - not connected, and GPS fix (GP) - no fix yet.
     </td>
     <td align="center">
-      <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-028.jpg" style="width: 250px; max-width: 100%;" alt="Left rear side of device"><br>
+      <img src="/static/images/devices/KatjaKircher_VTITrafficLogger-028.jpg" style="width: 250px; max-width: 100%;" alt="Left rear side of device"><br>
       <strong>Upload button and ON/OFF-switch</strong><br>
       The lidar sensor on the left side, the data button for upload and the ON/OFF/Charge-switch.
     </td>
