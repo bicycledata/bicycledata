@@ -55,8 +55,8 @@
     From the back, connector on the top: Ground, 5V. TX, RX
 
 2. Button OT
-    * PIN 14: Ground
-    * PIN 16: GPIO 23
+    * D+ -> PIN 14: Ground
+    * D- -> PIN 16: GPIO 23
 
 3. Button Power-off:
     * PIN 30: Ground
@@ -67,6 +67,12 @@
     * PIN 36: GPIO 16
     * PIN 38: GPIO 20
     * PIN 40: GPIO 21
+
+5. USB-C (for power supply)
+    * V
+    * G
+    * CC1: A5
+    * CC2: B5
 
 ## Build Steps
 
