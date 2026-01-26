@@ -64,9 +64,9 @@
 
 4. LEDs
     * PIN 34: Ground
-    * PIN 36: GPIO 16
-    * PIN 38: GPIO 20
-    * PIN 40: GPIO 21
+    * PIN 36: GPIO 16 (wifi)
+    * PIN 38: GPIO 20 (gps)
+    * PIN 40: GPIO 21 (radar)
 
 5. USB-C (for power supply)
     * V
