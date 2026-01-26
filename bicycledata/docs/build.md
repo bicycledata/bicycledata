@@ -67,3 +67,13 @@
     * PIN 36: GPIO 16
     * PIN 38: GPIO 20
     * PIN 40: GPIO 21
+
+## Build Steps
+
+1. Print [Bicycledata v2.3mf](/static/files/Bicycledata v2.3mf)
+2. Remove the supports and insert 12 M4 lock nuts into the bottom and top covers.
+3. Mount the Raspberry Pi to the Pi tray using 4 M2.5x6 mm screws.
+4. Insert the plastic window into the bottom cover (e.g., secure it with CA glue).
+5. Place the power bank with the screen facing up on top of the plastic window inside the bottom cover.
+6. Prepare the buttons, USB-C connectors, and LEDs with Molex connectors (TODO: add more detailed instructions).
+7. ...
