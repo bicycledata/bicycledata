@@ -83,3 +83,37 @@
 5. Place the power bank with the screen facing up on top of the plastic window inside the bottom cover.
 6. Prepare the buttons, USB-C connectors, and LEDs with Molex connectors (TODO: add more detailed instructions).
 7. ...
+
+### Power Supply
+
+The box is powered by a USB-C power bank. To allow recharging without opening the enclosure, a USB-C receptacle is mounted to the housing.
+
+An ON–OFF–ON switch is used to select between charging mode and operating mode. This ensures that only one active power connection is present at a time — or none when the switch is in the neutral (center) position.
+
+#### Wiring
+
+The common (middle) terminal of the switch is connected to a usb-c receptacle which is connected to the USB-C output/input  cable of the power bank. (important: not the output/input port)
+
+The two ON positions are wired as follows:
+
+**Charging mode**
+Connects the power bank to the external USB-C receptacle on the housing (for charging the power bank).
+
+**Operating mode**
+Connects the power bank to the USB-C connector connected to the Raspberry Pi (to power the system).
+
+In the center (OFF) position, the power bank is disconnected from both circuits.
+
+**Note**
+
+This wiring solution is functional but not ideal from an electrical design perspective. Improvements such as power-path management, proper load sharing, or protection circuitry may increase safety and reliability. Suggestions for enhancement are welcome.
+
+
+**Switch schema**
+```
+###
+# ON ---> usb-c receptacle -> charging
+# OFF --> usb-c receptacle -> power bank's cable
+# ON ---> usb-c connector -> raspberry pi
+###
+```
