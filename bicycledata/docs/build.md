@@ -92,6 +92,8 @@ An ON–OFF–ON switch is used to select between charging mode and operating mo
 
 #### Wiring
 
+Each USB-C power connection requires four wires: V, G, CC1 (A5), and CC2 (B5). The switch must connect V to V, G to G, CC1 to CC1, and CC2 to CC2.
+
 The common (middle) terminal of the switch is connected to a usb-c receptacle which is connected to the USB-C output/input  cable of the power bank. (important: not the output/input port)
 
 The two ON positions are wired as follows:
