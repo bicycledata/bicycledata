@@ -14,9 +14,9 @@ These instructions are intended for participants in the so-called "Citizen Scien
       <ul>
         <li><a href="#registration">Registration</a></li>
         <li><a href="#unboxing">Unboxing</a></li>
-        <li><a href="#how-do-i-mount-the-equipment">Mounting Logger on Bike</a></li>
+        <li><a href="#how-do-i-mount-the-logger">Mounting Logger on Bike</a></li>
         <li><a href="#how-do-i-configure-my-hotspot">Hotspot Configuration</a></li>
-        <li><a href="#how-do-i-operate-the-equipment">Operation of Logger</a></li>
+        <li><a href="#how-do-i-operate-the-logger">Operation of Logger</a></li>
       </ul>
     </td>
 
@@ -62,14 +62,15 @@ rails with an Allen key.
 
 ### TrafficLogger
 
-A logging device measuring the lateral distance to passing traffic. The
-device contains:
+A logging device measuring the lateral distance to passing traffic. The device you get 
+can have a different colour and look slightly different, but you will find all the 
+buttons, sensors and LEDs that are described here.  
+
+The device contains:  
 
 - Raspberry Pi as core unit
-
 - A Lidar-sensor measuring lateral distance to passing vehicles (and
   everything else on your left side, up to around 10 m)
-
 - GPS-sensor logging your position and speed
 
  <table>
@@ -90,7 +91,7 @@ device contains:
     <td align="center">
       <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-041.jpg" style="width: 250px; max-width: 100%;" alt="Rear of device"><br>
       <strong>Rear of the device</strong><br>
-      Data button, ON/OFF switch, and radar attachment point (open).
+      Data button, ON/OFF/Charge switch, and radar attachment point (open).
     </td>
     <td align="center">
       <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-042.jpg" style="width: 250px; max-width: 100%;" alt="Device LEDs"><br>
@@ -111,41 +112,65 @@ device contains:
       Raspberry Pi, battery, lidar sensor, and other components.
     </td>
   </tr>
+
+  <tr>
+    <td align="center">
+      <img src="/static/images/devices/KatjaKircher_Box_v10_02.jpg" style="width: 250px; max-width: 100%;" alt="Grey edition of logging device"><br>
+      <strong>Slightly differently shaped version of the device</strong><br>
+      This version has a slightly different layout of the buttons and contacts, but the functionality is the same.
+    </td>
+    <td align="center">
+      <img src="/static/images/devices/KatjaKircher_Box_v10_01.jpg" style="width: 250px; max-width: 100%;" alt="Rear side of grey edition"><br>
+      <strong>Button and charging port</strong><br>
+      The button and charging ports are vertically aligned, and the charging port has a dust and rain cover.
+    </td>
+  </tr>  
 </table>
 
 ### Garmin Varia radar
 
-The radar is placed on the rear of the logger. It registers vehicles
+You can use any Garmin Varia in the 3-, 5- or 7-series. The device you will get from us is a Varia 315.  
+The radar is placed on the rear of the logger. It connects to the TrafficLogger via Bluetooth and it registers vehicles
 approaching from behind, logging their distance and relative speed from
 a range of about 140 m.
 
-<img
-  src="/static/images/devices/KatjaKircherVTI_TrafficLogger-045.jpg"
-  alt="Garmin Varia 716"
-  width="150"
-/>
 
-Garmin Varia 716. To switch on/off, press the large button for 2 s.
-Charge the unit with a USB-C cable (included).
+<table>
+  <tr>
+    <td align="center">
+      <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-045.jpg" style="width: 250px; max-width: 100%;" alt="Garmin Varia 716"><br>
+      <strong>Garmin Varia 716 radar</strong><br>
+      Press the big button on the side for 2 s to turn the device on or off.  
+      Charge with a USB-C cable (included).
+    </td>
+    <td align="center">
+      <img src="/static/images/devices/KatjaKircher_Box_v10_05.jpg" style="width: 250px; max-width: 100%;" alt="Garmin Varia 315"><br>
+      <strong>Garmin Varia 315 radar</strong><br>
+      Press the button on top for 2 s to turn the device on or off.  
+      Charge with a micro-USB cable (included).
+    </td>
+  </tr>
+</table>
+
 
 
 ### Button
 
 The button is placed on the handlebars and attached to the logger via
-USB-C. You mark overtakes (and possibly also oncoming traffic, see
-instructions below) by pressing the button.
+USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the button, for instructions see
+[here](/docs/mark-overtaking-events).
 
 
 <table>
   <tr>
     <td align="center">
       <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-043.jpg" style="width: 250px; max-width: 100%;" alt="Push button with cable"><br>
-      <strong>Left side of the device, with the lidar sensor</strong><br>
+      <strong>The button to mark passing events</strong><br>
       You attach the button to the handlebars with the velcro-strip and connect it to the logger via USB-C.
     </td>
     <td align="center">
       <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-044.jpg" style="width: 250px; max-width: 100%;" alt="Close-up of push button"><br>
-      <strong>Front side of the device</strong><br>
+      <strong>Close-up of button</strong><br>
       Close-up of the push button you use to mark overtakes.
     </td>
   </tr>
@@ -155,12 +180,9 @@ instructions below) by pressing the button.
 ### Accessories
 
 - USB-C-cable for charging
-
 - USB-C- or micro-USB-cable to charge the Garmin Varia (depends on the
   model you get)
-
 - A few re-usable zip ties to secure the logger to the seat rails
-
 - A few pieces of soft material to put between the holder clamp and the
   seat rails
 
@@ -185,7 +207,7 @@ instructions below) by pressing the button.
     <td align="center">
       <img src="/static/images/devices/KatjaKircher_VTITrafficLogger_010.jpg" style="width: 250px; max-width: 100%;" alt="Hands operate push button"><br>
       <strong>Attach push button</strong><br>
-      Have the button within easy reach, but "out of the way" for accidental presses. You might want to try several locations.
+      Make sure to have the button within easy reach, but "out of the way" for accidental presses. You might want to try several locations.
     </td>
   </tr>
 
@@ -197,7 +219,7 @@ instructions below) by pressing the button.
     </td>
     <td align="center">
       <img src="/static/images/devices/KatjaKircher_VTITrafficLogger-028.jpg" style="width: 250px; max-width: 100%;" alt="Left rear side of device"><br>
-      <strong>Upload button and ON/OFF-switch</strong><br>
+      <strong>Upload button and ON/OFF/Charge-switch</strong><br>
       The lidar sensor on the left side, the data button for upload and the ON/OFF/Charge-switch.
     </td>
   </tr>Here
@@ -211,7 +233,7 @@ instructions below) by pressing the button.
     <td align="center">
       <img src="/static/images/devices/KatjaKircher_VTITrafficLogger-049.jpg" style="width: 250px; max-width: 100%;" alt="Box with USB-C-cable in charging port"><br>
       <strong>Charge the logger</strong><br>
-      Charge the box with a USB-C cable. Upon attaching and detaching the cable, you can see the charging status for a few seconds in the window on the bottom of the box. The switch must be set to CHARGE to enable charging.
+      Charge the box with a USB-C cable. Upon attaching and detaching the cable, you can see the charging status for a few seconds in the window on the bottom of the box. The ON/OFF/Charge switch must be set to Charge to enable charging.
     </td>
   </tr>
 </table>
@@ -251,7 +273,8 @@ It is important that you turn the equipment on and off **in the described order*
 
   <li>
     Start the Garmin Varia (press the big button on the side for 2 seconds).
-    The LED will turn green, then red.
+    Varia 315: The LED will flash blue.
+    Varia 716: The LED will turn green, then red.
     <em>(This can differ between devices.)</em>
   </li>
 
@@ -285,6 +308,16 @@ Now you're ready to go riding. Please read [here](/docs/mark-overtaking-events) 
 
 ## How do I charge the equipment?
 
+It is easiest if you can leave the logger on the bike for charging. If you have to take it off, it can be easiest do detach the button from the logger, leaving the button on the bike, and then unscrew the logger from the holder by the middle screw instead of removing the holder from the seat rails.  
+The Garmin Varia radar is easy to take off, so that's probably the preferred method for charging it.
+
+<img
+  src="/static/images/devices/KatjaKircher_Box_v10_04.jpg"
+  alt="Garmin Varia 716"
+  width="250"
+/>
+It is easiest to detach the logger like this.
+
 ### Logger
 One charge lasts for around 8-9 hours of riding.  
 Charge the logger via a USB-C-cable.  
@@ -303,8 +336,7 @@ After each ride, you upload the logged data as described above. You can then ann
 
 ## After each ride
 
-Go to the homepage and log in here: <https://bicycledata.vti.se/login>
-OBS: This section will be updated when we introduce additional functionality
+Go to the homepage and log in here: <https://bicycledata.vti.se/login>  
 
 <p><strong>Log in on your dashboard after each ride to:</strong></p>
 
@@ -337,15 +369,15 @@ OBS: This section will be updated when we introduce additional functionality
 Under "Sessions" all occasions when you turned the logger on are listed. You can hide occasions that were not a proper ride. Click on a ride to see its contents.
 
 <img
-  src="/static/images/graphics/dashboard_sessions_2026jan.jpg"
+  src="/static/images/graphics/Dashboard_Sessions_English.jpg"
   alt="A screenshot of the dashboard as of January 2026"
-  width="400"
+  width="500"
 />
 
 Here you can see some meta-information about your ride and have the possibility to make annotations. 
 
 <img
-  src="/static/images/graphics/dashboard_2026jan.jpg"
+  src="/static/images/graphics/Dashboard_SingleRide_English.jpg"
   alt="A screenshot of the dashboard as of January 2026"
   width="400"
 />
@@ -358,7 +390,16 @@ Each sensor generates a file that contains data from your entire ride (raw data)
 
 ## Who can access my data?
 
-Only you, via your dashboard, and the researchers at VTI who participate in the project can access your raw data. The processed events can be published on openly accessible maps and in other publications and will be shared with other researchers within the [ComCy](https://www.vti.se/en/archives/projects/ComCy)-project.
+Only you, via your dashboard, and the researchers at VTI who participate in the project can access your raw data. The processed events can be published on openly accessible maps and in other publications, like scientific articles, research reports and on social media. They will be shared with other researchers within the [ComCy](https://www.vti.se/en/archives/projects/ComCy)-project. Processed means that single overtakes and oncoming passes are identifiable via their location and time, but without cyclist ID.
+
+The data could for example be displayed as in the excpert of the map below, where a mouseover shows the speed and lateral clearance of the overtaking vehicle.
+
+<img
+  src="/static/images/graphics/otMap.png"
+  alt="A screenshot of a map with overtaking events marked by colour (latera clearance) and size (vehicle speed)"
+  width="400"
+/>
+
 
 ## What happens when I’m done with the data collection? 
 

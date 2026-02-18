@@ -87,7 +87,7 @@ You ride as usual, except that you use the push button to mark when you have bee
       Do not wait this long before pressing the button.
     </td>
     <td align="center">
-      <img src="/static/images/graphics/buttonpress_severalcars.jpg" style="width: 350px; max-width: 100%;" alt="Graphical illustration of several overtakes in a row"><br>
+      <img src="/static/images/graphics/buttonpress_severalcars_English.jpg" style="width: 350px; max-width: 100%;" alt="Graphical illustration of several overtakes in a row"><br>
       <strong>Press button in gaps between vehicles</strong><br>
       Several cars in a row overtake you. If possible, press the button in the gaps between them. Try to end the previous press before the next car starts to pass you.
     </td>
@@ -97,25 +97,25 @@ You ride as usual, except that you use the push button to mark when you have bee
 
 ## Bonus – marking of oncoming traffic
 
-If you want, you can mark both overtaking and oncoming traffic. This gives us additional information, but it is also more complex for you as a cyclist to keep track of. So – better good markings of only overtakes than half-bad markings of both overtaking and oncoming traffic.
+If you want, you can mark both overtaking and oncoming traffic. This gives us additional information, but it is also more complex for you to keep track of while cycling. So – better good markings of overtakes only than half-bad markings of both overtaking and oncoming traffic.
 
-If you want to mark both: Make the button presses for overtakes long, about a second.
+If you want to mark both: Make the button presses for overtakes long, at least a second. Mark overtakes as described above, when the vehicle has passed you and is in front of you.
 
 Make the button presses for oncoming traffic short, just a “click” (0.1-0.2 seconds). Mark oncoming traffic when it is physically in about the same place as where you are marking overtaking vehicles. This means that oncoming traffic is still in front of you when you press the button.
 
 The button press should ideally be completed before the vehicle passes you. Note on your dashboard whether you pressed the button for overtaking only or also for oncoming vehicles.
 
-A rule of thumb to remember: The vehicle is always in front of you when you press the button. Overtaking vehicles take longer to pass you --> long button press; oncoming vehicles pass in a shorter time --> short button press.
+To remember: The vehicle is always in front of you when you press the button. Overtaking vehicles take longer to pass you --> long button press; oncoming vehicles pass in a shorter time --> short button press.
 
 <table>
   <tr>
     <td align="center">
       <strong>Overtake</strong>
-      <img src="/static/images/graphics/buttonpress_long.jpg" style="width: 250px; max-width: 100%;" alt="Graphical illustration of long button press after overtake"><br>
+      <img src="/static/images/graphics/longbuttonpress_English.jpg" style="width: 250px; max-width: 100%;" alt="Graphical illustration of long button press after overtake"><br>
     </td>
     <td align="center">
       <strong>Oncoming</strong>
-      <img src="/static/images/graphics/buttonpress_short.jpg" style="width: 250px; max-width: 100%;" alt="Graphical illustration of short button press before oncoming event"><br>
+      <img src="/static/images/graphics/shortbuttonpress_English.jpg" style="width: 250px; max-width: 100%;" alt="Graphical illustration of short button press before oncoming event"><br>
     </td>
   </tr>
   <tr>
@@ -133,7 +133,18 @@ A rule of thumb to remember: The vehicle is always in front of you when you pres
 </table>
 
 
+If you mark both overtaking and oncoming vehicles based on button press duration, your histogram of button press durations should look something like this:
+
+<img
+  src="/static/images/graphics/histogram_buttonPressDuration.png"
+  alt="Garmin Varia 716"
+  width="300"
+/>
+
+The presses for oncoming vehicles are well below 0.5 s long, and the button press durations for overtaking vehicles are clearly longer than 0.5 s.
+
+
 ## Riding with others
 
-If you are cycling with others, make sure not to press the button when another cyclist is on your left, as the distance to the cyclist will then be measured. If you are to the left of others, you can press the button as above. You indicate on your dashboard whether you were cycling alone or with others.
+If you are cycling with others, make sure not to press the button when another cyclist is on your left, as the distance to the cyclist will then be measured. If you are to the left of others, you can press the button as above. You indicate on your dashboard whether you were cycling alone (enter "0") or with others (enter the number of people you were riding with).
 
