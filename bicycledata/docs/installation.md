@@ -1,5 +1,7 @@
 # Installation Guide
 
+[bicycledata_36ed03d.img](/static/files/bicycledata_36ed03d.img)
+
 ## 1. Install Raspberry Pi OS Lite (64-bit)
 
 We recommand the Raspberry Pi Imager to configure and install the OS.
