@@ -62,11 +62,11 @@ rails with an Allen key.
 
 ### TrafficLogger
 
-A logging device measuring the lateral distance to passing traffic. The device you get 
-can have a different colour and look slightly different, but you will find all the 
-buttons, sensors and LEDs that are described here.  
+A logging device measuring the lateral distance to passing traffic. The device you get
+can have a different colour and look slightly different, but you will find all the
+buttons, sensors and LEDs that are described here.
 
-The device contains:  
+The device contains:
 
 - Raspberry Pi as core unit
 - A Lidar-sensor measuring lateral distance to passing vehicles (and
@@ -124,12 +124,12 @@ The device contains:
       <strong>Button and charging port</strong><br>
       The button and charging ports are vertically aligned, and the charging port has a dust and rain cover.
     </td>
-  </tr>  
+  </tr>
 </table>
 
 ### Garmin Varia radar
 
-You can use any Garmin Varia in the 3-, 5- or 7-series. The device you will get from us is a Varia 315.  
+You can use any Garmin Varia in the 3-, 5- or 7-series. The device you will get from us is a Varia 315.
 The radar is placed on the rear of the logger. It connects to the TrafficLogger via Bluetooth and it registers vehicles
 approaching from behind, logging their distance and relative speed from
 a range of about 140 m.
@@ -140,13 +140,13 @@ a range of about 140 m.
     <td align="center">
       <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-045.jpg" style="width: 250px; max-width: 100%;" alt="Garmin Varia 716"><br>
       <strong>Garmin Varia 716 radar</strong><br>
-      Press the big button on the side for 2 s to turn the device on or off.  
+      Press the big button on the side for 2 s to turn the device on or off.
       Charge with a USB-C cable (included).
     </td>
     <td align="center">
       <img src="/static/images/devices/KatjaKircher_Box_v10_05.jpg" style="width: 250px; max-width: 100%;" alt="Garmin Varia 315"><br>
       <strong>Garmin Varia 315 radar</strong><br>
-      Press the button on top for 2 s to turn the device on or off.  
+      Press the button on top for 2 s to turn the device on or off.
       Charge with a micro-USB cable (included).
     </td>
   </tr>
@@ -222,7 +222,7 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
       <strong>Upload button and ON/OFF/Charge-switch</strong><br>
       The lidar sensor on the left side, the data button for upload and the ON/OFF/Charge-switch.
     </td>
-  </tr>Here
+  </tr>
 
   <tr>
     <td align="center">
@@ -308,7 +308,7 @@ Now you're ready to go riding. Please read [here](/docs/mark-overtaking-events) 
 
 ## How do I charge the equipment?
 
-It is easiest if you can leave the logger on the bike for charging. If you have to take it off, it can be easiest do detach the button from the logger, leaving the button on the bike, and then unscrew the logger from the holder by the middle screw instead of removing the holder from the seat rails.  
+It is easiest if you can leave the logger on the bike for charging. If you have to take it off, it can be easiest do detach the button from the logger, leaving the button on the bike, and then unscrew the logger from the holder by the middle screw instead of removing the holder from the seat rails.
 The Garmin Varia radar is easy to take off, so that's probably the preferred method for charging it.
 
 <img
@@ -319,15 +319,15 @@ The Garmin Varia radar is easy to take off, so that's probably the preferred met
 It is easiest to detach the logger like this.
 
 ### Logger
-One charge lasts for around 8-9 hours of riding.  
-Charge the logger via a USB-C-cable.  
-The ON/OFF/Charge-switch must be set to Charge.  
-You see the charging level on the display for a few seconds when you attach or detach the cable.  
+One charge lasts for around 8-9 hours of riding.
+Charge the logger via a USB-C-cable.
+The ON/OFF/Charge-switch must be set to Charge.
+You see the charging level on the display for a few seconds when you attach or detach the cable.
 
 ### Garmin Varia
-One charge lasts for approximately 6 hours.  
-Charge the Garmin Varia with the enclosed cable.  
-While charging, a LED flashes green. When fully charged, the LED remains on.    
+One charge lasts for approximately 6 hours.
+Charge the Garmin Varia with the enclosed cable.
+While charging, a LED flashes green. When fully charged, the LED remains on.
 
 
 # My data
@@ -336,7 +336,7 @@ After each ride, you upload the logged data as described above. You can then ann
 
 ## After each ride
 
-Go to the homepage and log in here: <https://bicycledata.vti.se/login>  
+Go to the homepage and log in here: <https://bicycledata.vti.se/login>
 
 <p><strong>Log in on your dashboard after each ride to:</strong></p>
 
@@ -374,7 +374,7 @@ Under "Sessions" all occasions when you turned the logger on are listed. You can
   width="500"
 />
 
-Here you can see some meta-information about your ride and have the possibility to make annotations. 
+Here you can see some meta-information about your ride and have the possibility to make annotations.
 
 <img
   src="/static/images/graphics/Dashboard_SingleRide_English.jpg"
@@ -401,6 +401,6 @@ The data could for example be displayed as in the excpert of the map below, wher
 />
 
 
-## What happens when I’m done with the data collection? 
+## What happens when I’m done with the data collection?
 
-Also after returning the logger, you’ll be able to log in, see and download your data as long as the server is running and we have the possibility to maintain it. We cannot give any guarantees about the timeframe, however. 
+Also after returning the logger, you’ll be able to log in, see and download your data as long as the server is running and we have the possibility to maintain it. We cannot give any guarantees about the timeframe, however.
