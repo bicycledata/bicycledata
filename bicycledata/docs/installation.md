@@ -42,11 +42,13 @@ sudo apt full-upgrade -y
 sudo apt install -y git jq curl btop
 ```
 
+```
 sudo nano /boot/firmware/config.txt
+```
 add these two lines under [all]
 ```
-enable_uart = 1
-dtparam = uart0=on
+enable_uart=1
+dtparam=uart0=on
 ```
 
 ## 3. Setup bicycleinit
