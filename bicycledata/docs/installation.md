@@ -9,9 +9,7 @@ We recommand the Raspberry Pi Imager to configure and install the OS.
 ### System Configuration
 
 * **Hostname:**
-  The hostname must be unique.
-  We use the format `radaridevX`, where `X` is incremented for each device (e.g., `radaridev10`).
-  For community-owned devices, use a similar naming scheme but with a different prefix.
+  Set hostname to "bicycledata"
 
 * **Username and Password:**
   Set a username and password to allow SSH access.
@@ -19,7 +17,7 @@ We recommand the Raspberry Pi Imager to configure and install the OS.
 Example configuration:
 
 ```
-hostname: radaridev10   # <- Use a unique hostname!
+hostname: bicycledata
 username: <user>
 password: *****
 
@@ -44,6 +42,12 @@ sudo apt full-upgrade -y
 sudo apt install -y git jq curl btop
 ```
 
+sudo nano /boot/firmware/config.txt
+add these two lines under [all]
+```
+enable_uart = 1
+dtparam = uart0=on
+```
 
 ## 3. Setup bicycleinit
 
@@ -106,6 +110,23 @@ To verify that the service is running:
 
 ```zsh
 sudo systemctl status bicycleinit
+```
+
+Create vti-nopasswd file:
+```
+sudo nano /etc/sudoers.d/vti-nopasswd
+```
+
+add following line to the vti-nopasswd
+```
+vti ALL=(ALL) NOPASSWD: /usr/sbin/shutdown, /usr/bin/nmcli, /usr/bin/hciconfig
+```
+
+ctrl+x to exit, select yes when asked to save.
+
+enter following line:
+```
+sudo chmod 440 /etc/sudoers.d/vti-nopasswd
 ```
 
 Your system should now be fully configured and running the bicycleinit service automatically at startup. After the first handshake, the administrator needs to map the device to your user account. This step is currently performed manually and cannot be completed by a community user. (this might change in the future)
