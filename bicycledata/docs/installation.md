@@ -42,6 +42,14 @@ sudo apt full-upgrade -y
 sudo apt install -y git jq curl btop
 ```
 
+sudo raspi-config
+-> Interface Options
+-> Serial Port
+-> select no (login shell)
+-> select yes (enable serial port)
+-> finish
+-> reboot
+
 ```
 sudo nano /boot/firmware/config.txt
 ```
