@@ -1,4 +1,4 @@
-# Getting started
+# Getting started (Prototype Box)
 
 These instructions are intended for participants in the so-called "Citizen Scientist" data collection in the [ComCy](https://www.vti.se/en/archives/projects/ComCy)-project. If you are interested in participating, you can find out more [here](https://www.vti.se/en/archives/projects/ComCy/comcy/contribute-as-test-participant). You will also find a link to our recruitment questionnaire.
 
@@ -264,7 +264,7 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
 
 ## How do I operate the logger?
 
-It is important that you turn the equipment on and off **in the described order** so that all sensors can find each other and the data upload will work. The order is also stated on the sticker on the logger.
+It is important that you turn the equipment on and off **in the described order** so that all sensors will be found and the data upload will work. The order is also stated on the sticker on the logger.
 
 ### Start
 
