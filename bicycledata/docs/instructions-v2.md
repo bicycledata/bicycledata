@@ -243,7 +243,7 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
 
     <td style="vertical-align: top; max-width: 420px;">
       Android: On your phone, configure your hotspot such that it is called <code>bicycledata</code><br>
-      iPhone: Rename your phone to <code>bicycledata</code><br> via Settings > General > About > Name; tap <code>x</code> then enter a new name.
+      iPhone: Rename your phone to <code>bicycledata</code><br> via Settings > General > About > Name; tap <code>x</code> then enter a new name.<br>
       Also the password should be set to <code>bicycledata</code><br>
       Use 2.4&nbsp;GHz.
     </td>
