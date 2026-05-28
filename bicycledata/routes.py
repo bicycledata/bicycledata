@@ -348,6 +348,14 @@ def v2_devices_ident_session(ident, session):
                 elif "people_joined" in session_front:
                     del session_front["people_joined"]
 
+                # Handle marked_overtaking checkbox
+                marked_ot = request.form.get("marked_overtaking", "off")
+                session_front["marked_overtaking"] = marked_ot == "on"
+
+                # Handle marked_overtaking checkbox
+                marked_oc = request.form.get("marked_oncoming", "off")
+                session_front["marked_oncoming"] = marked_oc == "on"
+
                 # Handle hidden checkbox
                 hidden = request.form.get("hidden", "off")
                 session_front["hidden"] = hidden == "on"
