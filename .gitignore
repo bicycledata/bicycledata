@@ -3,3 +3,4 @@ __pycache__/
 /wsgi.log
 /wsgi.sock
 /data/
+/bicycledata/static/files/*.img
