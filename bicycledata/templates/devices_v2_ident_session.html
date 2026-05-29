@@ -132,6 +132,15 @@
         <input type="number" id="people_joined" name="people_joined" min="0" max="100" step="1"
           value="{{ session_front.people_joined if session_front.people_joined is defined else '' }}" />
       </div>
+      <div class="col-4 col-12-small">
+        <input type="checkbox" id="marked_overtaking" name="marked_overtaking" {% if session_front.marked_overtaking %}checked{% endif %} />
+        <label for="marked_overtaking">Marked Overtaking</label>
+      </div>
+      <div class="col-4 col-12-small">
+        <input type="checkbox" id="marked_oncoming" name="marked_oncoming" {% if session_front.marked_oncoming %}checked{% endif %} />
+        <label for="marked_oncoming">Marked Oncoming</label>
+      </div>
+
       <div class="col-12">
         <input type="checkbox" id="hidden" name="hidden" {% if session_front.hidden %}checked{% endif %} />
         <label for="hidden">Hide this session from session lists</label>
