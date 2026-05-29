@@ -1,10 +1,34 @@
-# Getting started
+<!--
 
-These instructions are intended for participants in the so-called "Citizen Scientist" data collection in the [ComCy](https://www.vti.se/en/archives/projects/ComCy)-project. If you are interested in participating, you can find out more [here](https://www.vti.se/en/archives/projects/ComCy/comcy/contribute-as-test-participant). You will also find a link to our recruitment questionnaire.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-->
 
-If you use the old version of the logger (we tell you if you do), please follow the instructions [here](/docs/instructions).
+<h1 id="getting-started">Getting started</h1>
 
-## Table of Contents
+  <p>
+    These instructions are intended for participants in the so-called
+    "Citizen Scientist" data collection in the
+    <a href="https://www.vti.se/en/archives/projects/ComCy">ComCy</a>-project.
+    If you are interested in participating, you can find out more
+    <a href="https://www.vti.se/en/archives/projects/ComCy/comcy/contribute-as-test-participant">here</a>.
+  </p>
+
+  <p>
+    If you use the old version of the logger, please follow the
+    <a href="/docs/instructions">legacy instructions</a>.
+  </p>
+
+  <p>
+    <a href="#quick-guide-logging">Jump to Quick Guide</a>
+  </p>
+
+
+
+<h2 id="toc">Table of Contents</h2>
 <table>
   <tr>
     <th align="left">Getting Started</th>
@@ -19,10 +43,12 @@ If you use the old version of the logger (we tell you if you do), please follow 
         <li><a href="#how-do-i-mount-the-logger">Mounting Logger on Bike</a></li>
         <li><a href="#how-do-i-configure-my-hotspot">Hotspot Configuration</a></li>
         <li><a href="#how-do-i-operate-the-logger">Operation of Logger</a></li>
+        <li><a href="#how-do-i-charge">Charging the equipment</a></li>
       </ul>
     </td>
 
     <td valign="top">
+
       <ul>
         <li><a href="#after-each-ride">After Each Ride</a></li>
         <li><a href="#how-do-i-access-my-data">Data Access</a></li>
@@ -34,24 +60,23 @@ If you use the old version of the logger (we tell you if you do), please follow 
 </table>
 
 
-## Registration
+<h2 id="registration">Registration</h2>
 
-You find our homepage with all relevant information here:
-<https://bicycledata.vti.se/>
+![Close-up of login information](/static/images/devices/login.jpg) 
 
-You can request a login as follows:
+<p>
+  You can <a href="https://bicycledata.vti.se/login">register</a> via our homepage (<a href="https://bicycledata.vti.se/">https://bicycledata.vti.se/</a>), , where you'll find all relevant information.
+</p>
 
-![Close-up of login information](/static/images/devices/login.jpg) Click on the person symbol in the upper
-right-hand corner on the homepage or follow this [link](https://bicycledata.vti.se/login)
+<p>
+  Sign up with your name and a valid email address. You use the same address to log in to your dashboard and to view, annotate and download your data. We handle registrations manually, so it may take a while before you receive a response.
+</p>
 
-Sign up with your name and a valid email address. You use the same address to log in to your dashboard and to view, annotate and download your data. We handle registrations manually, so it may take a while before you receive a response.
-
-
-## Unboxing
+<h2 id="unboxing">Unboxing</h2>
 
 What you'll get from us:
 
-### Holder
+<h3 id="holder">Holder</h3>
 
 A holder for Garmin and GoPro devices to attach the logger to your seat
 rails with an Allen key.
@@ -62,29 +87,35 @@ rails with an Allen key.
   width="250"
 />
 
-### TrafficLogger
+<h3 id="trafficlogger">TrafficLogger</h3>
 
-A logging device measuring the lateral distance to passing traffic. The device you get
-can have a different colour and look slightly different, but you will find the
-buttons, sensors and LEDs that are described here.
+<p>
+  A logging device measuring the lateral distance to passing traffic. The device you get
+  can have a different colour and look slightly different, but you will find the
+  buttons, sensors and LEDs that are described here.
+</p>
 
-The device contains:
+<p>
+  <b>Content</b>
+</p>
 
-- A Raspberry Pi as core unit
-- A Lidar-sensor measuring lateral distance to passing vehicles (and
-  everything else on your left side, up to around 10 m)
-- A GPS-sensor logging your position and speed
+<ul>
+  <li>Raspberry Pi core unit</li>
+  <li>Lidar sensor</li>
+  <li>GPS sensor</li>
+</ul>
+
 
  <table>
   <tr>
     <td align="center">
       <img src="/static/images/devices/box1_0021.jpg" style="width: 250px; max-width: 100%;" alt="Left side of device"><br>
-      <strong>Left side of the device</strong><br>
-      Lidar sensor, data button and USB-C-contact to power the device on. The device is attached to the holder via the holes on top.
+      <strong>Left side</strong><br>
+      Lidar sensor, upload button and USB-C-port to power the device on.
     </td>
     <td align="center">
       <img src="/static/images/devices/box1_0022.jpg" style="width: 250px; max-width: 100%;" alt="Front side of device"><br>
-      <strong>Front side of the device</strong><br>
+      <strong>Front</strong><br>
       USB-C port for the event button.
     </td>
   </tr>
@@ -92,13 +123,13 @@ The device contains:
   <tr>
     <td align="center">
       <img src="/static/images/devices/box1_0026.jpg" style="width: 250px; max-width: 100%;" alt="Rear side of device"><br>
-      <strong>Rear side of the device</strong><br>
+      <strong>Rear</strong><br>
       Radar attachment point, opening for power bank.
     </td>
     <td align="center">
       <img src="/static/images/devices/box1_0020.jpg" style="width: 250px; max-width: 100%;" alt="Top side of device"><br>
-      <strong>Top side of device</strong><br>
-      Top of device with status LEDs indicating GPS fix (GP) and connection to WiFi (WF) and radar (RA).
+      <strong>Top side</strong><br>
+      Top of device with status LEDs.
     </td>
   </tr>
 
@@ -106,37 +137,40 @@ The device contains:
     <td align="center">
       <img src="/static/images/devices/box1_0029.jpg" style="width: 250px; max-width: 100%;" alt="Power on"><br>
       <strong>USB-C-cable from power bank plugged in</strong><br>
-      The cable from the power bank is plugged into the device to power the Raspberry Pi.
+      The cable from the power bank is plugged into the device to power the device.
     </td>
     <td align="center">
       <img src="/static/images/devices/box1_0030.jpg" style="width: 250px; max-width: 100%;" alt="Box with event button"><br>
       <strong>Box with event button</strong><br>
-      The complete logging kit device, with event button attached.
+      The logger with event button attached.
     </td>
   </tr>
 
 </table>
 
-### Garmin Varia radar
+<h3 id="garmin-varia">Garmin Varia radar</h3>
 
-You can use any Garmin Varia in the 3-, 5- or 7-series. The device you will get from us is a Varia 315. If you want to use your own Garmin Varia, please let us know.
+<p>
+  You can use Garmin Varia devices in the 3-, 5- or 7-series. You'll get a Varia 315 from us. If you want to use your own Garmin Varia, please let us know.
+</p>
 
-The radar is attached to the rear of the logger. It connects to the TrafficLogger via Bluetooth and it registers vehicles
-approaching from behind, logging their distance and relative speed from
-a range of about 140 m.
-
+<p>
+  The radar is attached to the rear of the logger. It connects to the TrafficLogger via Bluetooth and it registers vehicles
+  approaching from behind, logging their distance and relative speed from
+  a range of about 140 m.
+</p>
 
 <table>
   <tr>
     <td align="center">
       <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-045.jpg" style="width: 250px; max-width: 100%;" alt="Garmin Varia 716"><br>
-      <strong>Garmin Varia 716 radar</strong><br>
+      <strong>Garmin Varia 716</strong><br>
       Press the big button on the side for 2 s to turn the device on or off.
       Charge with a USB-C cable (included).
     </td>
     <td align="center">
       <img src="/static/images/devices/KatjaKircher_Box_v10_05.jpg" style="width: 250px; max-width: 100%;" alt="Garmin Varia 315"><br>
-      <strong>Garmin Varia 315 radar</strong><br>
+      <strong>Garmin Varia 315</strong><br>
       Press the button on top for 2 s to turn the device on or off.
       Charge with a micro-USB cable (included).
     </td>
@@ -145,45 +179,39 @@ a range of about 140 m.
 
 
 
-### Button
+<h3 id="button">Button</h3>
 
-The button is placed on the handlebars and attached to the logger via
-USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the button, for instructions see
-[here](/docs/mark-overtaking-events).
-
+<p>
+  The button is placed on the handlebars and attached to the front side of the logger via USB-C. You mark passing events by pressing the button, for instructions see <a href="/docs/mark-overtaking-events">here</a>.
+</p>
 
 <table>
   <tr>
     <td align="center">
-      <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-043.jpg" style="width: 250px; max-width: 100%;" alt="Push button with cable"><br>
+      <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-043.jpg" style="width: 250px; max-width: 100%;" alt="Event button with cable"><br>
       <strong>The button to mark passing events</strong><br>
       You attach the button to the handlebars with the velcro-strip and connect it to the logger via USB-C.
     </td>
     <td align="center">
-      <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-044.jpg" style="width: 250px; max-width: 100%;" alt="Close-up of push button"><br>
+      <img src="/static/images/devices/KatjaKircherVTI_TrafficLogger-044.jpg" style="width: 250px; max-width: 100%;" alt="Close-up of event button"><br>
       <strong>Close-up of button</strong><br>
-      Close-up of the push button you use to mark overtakes.
+      Close-up of the event button you use to mark overtakes.
     </td>
   </tr>
 </table>
 
 
-### Accessories
 
-- USB-C-cable for charging
-- USB-C- or micro-USB-cable to charge the Garmin Varia (depends on the
-  model you get)
-- (A few re-usable zip ties to secure the logger to the seat rails)
+<h2 id="how-do-i-mount-the-logger"> How do I mount the logger?</h2>
 
-
-## How do I mount the logger?
-
-1.	Mount the clamp to the saddle rails using an Allen key. You may want to place some protection underneath to avoid scratching the rails. It may take a little creativity to get a good placement, for example, some saddles are designed such that it works better to mount the clamp upside down.
-2.	Mount the logger to the clamp (it should sit stable, but don't overtighten, as the plastic may crack). Make sure the logger does not interfere with your pedalling. If so, move the attachment point.
-3.	Attach the push button to the handlebar using the Velcro. Choose a location that is easy to reach, but where you will not accidentally press the button. You may want to try a few different locations.
-4.	Route the cable from the button along the frame to the logger. Make sure the cable does not get in your way and that you can turn the handlebars freely. You can secure the cable with tape or a zip tie.
-5.	Connect the cable to the logger using the USB connector.
-6.	Attach the Garmin Varia radar to the holder on the back of the logger.
+<ol>
+  <li>Mount the clamp to the seat rails using an Allen key. You may want to place some protection underneath to avoid scratching the rails. It may take some creativity to get a good placement, for example, some saddles are designed such that it works better to mount the clamp upside down.</li>
+  <li>Mount the logger to the clamp. Do not overtighten. Make sure the logger is not in the way for your legs.</li>
+  <li>Attach the event button to the handlebars in a location that is easy to reach, but where you won't press it accidentally.</li>
+  <li>Route the cable along the frame. Make sure that you can still turn the handlebars.</li>
+  <li>Connect the USB cable to the front USB-port of the logger.</li>
+  <li>Attach the Garmin Varia radar to the logger.</li>
+</ol>
 
 
 <table>
@@ -194,9 +222,9 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
       Mount the logger on the seat rails choosing a hole that does not interfere with your legs and keeps the logger as balanced as possible.
     </td>
     <td align="center">
-      <img src="/static/images/devices/KatjaKircher_VTITrafficLogger_010.jpg" style="width: 250px; max-width: 100%;" alt="Hands operate push button"><br>
-      <strong>Attach push button</strong><br>
-      Make sure to have the button within easy reach, but "out of the way" for accidental presses. You might want to try several locations.
+      <img src="/static/images/devices/KatjaKircher_VTITrafficLogger_010.jpg" style="width: 250px; max-width: 100%;" alt="Hands operate event button"><br>
+      <strong>Attach event button</strong><br>
+      Make sure to have the button within easy reach, but "out of the way" for accidental presses.
     </td>
   </tr>
 
@@ -204,7 +232,7 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
     <td align="center">
       <img src="/static/images/devices/box1_0007.jpg" style="width: 250px; max-width: 100%;" alt="LED status indicators"><br>
       <strong>LEDs for status indication</strong><br>
-      Status indicators for radar (RA) - lit when connected, flashing when searching; WiFi (WF) - lit when connected; and GPS fix (GP) - position fix when lit, flashing when searching.
+      Status indicators for radar (RA) - lit when connected, flashing when searching;<br> WiFi (WF) - lit when connected;<br> and GPS fix (GP) - position fix when lit, flashing when searching.
     </td>
     <td align="center">
       <img src="/static/images/devices/box1_0017.jpg" style="width: 250px; max-width: 100%;" alt="Power bank holder"><br>
@@ -215,12 +243,12 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
 
   <tr>
     <td align="center">
-      <img src="/static/images/devices/box1_0005.jpg" style="width: 250px; max-width: 100%;" alt="Push button attachment point"><br>
-      <strong>USB-contact for push button</strong><br>
-      Attach the button to the logger via USB-C.
+      <img src="/static/images/devices/box1_0005.jpg" style="width: 250px; max-width: 100%;" alt="Event button attachment point"><br>
+      <strong>USB-contact for event button</strong><br>
+      Attach the button to the logger via USB-C. Make sure to use the USB-contact on the front side of the logger.
     </td>
     <td align="center">
-      <img src="/static/images/devices/box1_0004.jpg" style="width: 250px; max-width: 100%;" alt="Box with USB-C-cable in charging port"><br>
+      <img src="/static/images/devices/box4_0003.jpg" style="width: 250px; max-width: 100%;" alt="Box with USB-C-cable in charging port"><br>
       <strong>Charge the logger</strong><br>
       Charge the box by inserting the USB-C-contact of the power bank into a USB wall charger, alternatively, remove the power bank and insert a USB-C-charger into the contact on the side. When fully charged, the logger will work for around 8h. After around 5h of charging, the power bank is fully charged. [correct picture to come]
     </td>
@@ -228,7 +256,7 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
 </table>
 
 
-## How do I configure my hotspot?
+<h2 id="how-do-i-configure-my-hotspot">How do I configure my hotspot?</h2>
 
 
 <table>
@@ -237,13 +265,13 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
       <img
         src="/static/images/devices/MobileHotspot.jpg"
         style="width: 200px; max-width: 100%;"
-        alt="Phone screenshot with hotspot settings"
+        alt="Android phone screenshot with hotspot settings"
       >
     </td>
 
     <td style="vertical-align: top; max-width: 420px;">
-      Android: On your phone, configure your hotspot such that it is called <code>bicycledata</code><br>
-      iPhone: Rename your phone to <code>bicycledata</code><br> via Settings > General > About > Name; tap <code>x</code> then enter a new name.<br>
+      <b>Android:</b> On your phone, configure your hotspot such that it is called <code>bicycledata</code><br>
+      <b>iPhone:</b> Rename your phone to <code>bicycledata</code> via Settings > General > About > Name; tap <code>x</code> then enter a new name.<br><br>
       Also the password should be set to <code>bicycledata</code><br>
       Use 2.4&nbsp;GHz.
     </td>
@@ -252,24 +280,30 @@ USB-C. You mark overtakes (and possibly also oncoming traffic) by pressing the b
 
 
 
-## How do I operate the logger?
+<h2 id="how-do-i-operate-the-logger">How do I operate the logger?</h2>
 
-It is important that you turn the equipment on and off **in the described order** so that all sensors will be found and the data upload will work. 
+<p>
+  <div class="note">
+    <b>Important:</b> Turn the devices on and off in the specified order.
+  </div>
+</p>
 
-### Start
+<h3 id="startup">Start</h3>
 
 <ol>
   <li>Activate your hotspot (<code>bicycledata</code>).</li>
 
   <li>
     Start the Garmin Varia (press the ON/OFF button for 2 seconds).
-    Varia 315: The LED will flash blue.
-    Varia 716: The LED will turn green, then red.
-    <em>(This can differ between devices.)</em>
+    <ul>
+      <li>Varia 315: The LED will flash blue.</li>
+      <li>Varia 716: The LED will turn green, then red. 
+      <br><em>(This can differ between devices.)</em></li>
+    </ul>
   </li>
 
   <li>
-    Start the logger by inserting the USB-cable into the port. It takes one or two minutes to start up. You will see the LEDs flash after a while.
+    Start the logger by inserting the USB-cable into the port on the left side of the device. It takes one or two minutes to start up. You will see the LEDs flash after a while.
     <ul>
       <li><strong>WiFi:</strong> <code>WF</code> LED indicates connection to hotspot.</li>
       <li><strong>WiFi:</strong> When <code>WF</code> LED turns off, the hotspot can be shut off.</li>
@@ -279,54 +313,79 @@ It is important that you turn the equipment on and off **in the described order*
   </li>
 </ol>
 
-Now you're ready to go riding. Please read [here](/docs/mark-overtaking-events) how to mark overtaking events with the button.
+<p>
+  Now you're ready to go riding. Please read <a href="/docs/mark-overtaking-events">here</a> how to mark passing events with the button.
+</p>
 
-### Data upload and shutting down
+<h3 id="data-upload">Data upload and shutting down</h3>
 
 <ol>
   <li>Activate your hotspot again (<code>bicycledata</code>).</li>
-  <li>Press the data button for 5 seconds (until the LEDs start flashing).
+  <li>Press the upload button for 5 seconds (until the LEDs start flashing).
     <ul style="margin-bottom: 0;">
       <li>WiFi-LED lit: Connection established (data upload starts).</li>
       <li>LEDS are flashing (data are being uploaded).</li>
-      <li>Wait until all LEDs have turned off.</li>
+      <li>Wait until LEDs turn off.</li>
     </ul>
   </li>
-  <li>Turn off the Garmin Varia by pressing the button for 2 seconds. All LEDs on the Garmin should be off.</li>
-  <li>Turn off the logger by carefully removing the power bank cable from the port. If necessary, charge the logger.</li>
+  <li>Turn off the Garmin Varia (press the button for 2 seconds)</li>
+  <li>Turn off the logger by carefully removing the power bank cable from the port.</li>
+  <li>If necessary, charge the logger. If you leave the cable plugged into the logger, the battery will drain.</li>
 </ol>
 
+<p>
+  <b>Note:</b> Sometimes the ride does not upload fully. You can either start the equipment again and then press the upload button (with the hotspot on throughout, no need to start the radar), or you can wait until you ride the next time. The data will only be deleted from the logger once uploaded to the server.
+</p>
 
-## How do I charge the equipment?
+<h2 id="how-do-i-charge">How do I charge the equipment?</h2>
 
-It is easiest if you can leave the logger on the bike for charging, but this requires that you can get it close to a USB-C-charger. If you have to take it off, it is easiest do detach the button from the logger, leaving the button on the bike, and then unscrew the middle screw in the holder instead of removing the holder from the seat rails or removing the logger from the holder.
-The Garmin Varia radar needs to be charged more frequently. The 315 requires micro-USB. You take off the Varia by turning it counter-clockwise. 
+
+<h3 id="charge-logger">Logger</h3>
+
+<ul>
+  <li>One charge lasts for around 8-9 hours of riding.</li>
+  <li>Charge the logger via USB-C.</li>
+  <li>The power bank has a display indicating the charging level. To see it, the power bank has to be removed from the logger.</li>
+</ul>
+
+You can charge the power bank of the logger in two ways:
+<ol>
+  <li>Plug the cable that you use to start the logger into a USB-C-charger.</li>
+  <li>Plug a USB-C-cable into the side of the power bank (you'll have to take the power bank out).</li>
+</ol>
+
+<p>
+  For the first solution, you'll either have to get the bike close to a USB-C-charger or you'll have to remove the logger from the bike. If you do the latter, it is easiest do detach the button from the logger, leaving the button on the bike, and then unscrew the middle screw in the holder instead of removing the holder from the seat rails or removing the logger from the holder (see picture).
+</p>
 
 <img
   src="/static/images/devices/KatjaKircher_Box_v10_04.jpg"
   alt="Garmin Varia 716"
   width="250"
 />
-It is easiest to detach the logger like this.
 
-### Logger
-One charge lasts for around 8-9 hours of riding.
-Charge the logger via USB-C.
-The power bank has a display indicating the charging level, but unfortunately you'll have to remove it to see the display. 
+<p>
+  For the second solution, carefully remove the red splint. Apply pressure through the hole in the front to press out the power bank. There can be a piece of rubber keeping the power bank in place, such that this may require some effort.
+</p>
 
-### Garmin Varia
-One charge lasts for up to 6 hours.
-Charge the Garmin Varia with the enclosed cable.
-While charging, a LED flashes green. When fully charged, the LED remains on.
+<p>
+  To re-insert, make sure that the cable comes through the hole in the front. Do <b>not</b> pull on the cable. Apply pressure from the rear instead.
+</p>
 
+<h3 id="charge-garmin-varia">Garmin Varia</h3>
 
-# My data
+<ul>
+  <li>One charge lasts for up to 6 hours.</li>
+  <li>You take off the Varia by turning it counter-clockwise.</li>
+  <li>Charge the Garmin Varia with the enclosed micro-USB cable.</li>
+  <li>While charging, a LED flashes green. When fully charged, the LED remains on.</li>
+</ul>
 
-After each ride, you upload the logged data as described above. You can then annotate and download your data.
+<h1 id="my-data">My data</h1>
 
-## After each ride
+After uploading the logged data as described above, you can annotate and download your data via the dashboard.
 
-Go to the homepage and log in here: <https://bicycledata.vti.se/login>
+<h2 id="after-each-ride">After each ride</h2>
 
 <p><strong>Log in on your dashboard after each ride to:</strong></p>
 
@@ -342,21 +401,21 @@ Go to the homepage and log in here: <https://bicycledata.vti.se/login>
   </li>
 
   <li>
-    Optional: note the battery status of the logger at the beginning and end
-    of the ride (for future development of the logger).
-  </li>
-
-  <li>
-    Comment on certain events or other things we should know about the ride
-    (traffic situations, weather, overtaking events, logger handling, or
+    Comment on certain events or other things we should know 
+    (traffic situations, weather, logger issues, or
     anything else you find relevant).
   </li>
 </ul>
 
+<p>
+  You do not have to fill in the battery fields.
+</p>
 
-## How do I access my data?
+<h2 id="how-do-i-access-my-data">How do I access my data?</h2>
 
-Under "Sessions" all occasions when you turned the logger on are listed. You can hide occasions that were not a proper ride. Click on a ride to see its contents.
+<p>
+  Under "Sessions" all occasions when you turned the logger on are listed. You can hide occasions that were not a proper ride. Click on a ride to see its contents.
+</p>
 
 <img
   src="/static/images/graphics/Dashboard_Sessions_English.jpg"
@@ -364,7 +423,9 @@ Under "Sessions" all occasions when you turned the logger on are listed. You can
   width="500"
 />
 
-Here you can see some meta-information about your ride and have the possibility to make annotations.
+<p>
+  Here you can see some meta-information about your ride and have the possibility to make annotations.
+</p>
 
 <img
   src="/static/images/graphics/Dashboard_SingleRide_English.jpg"
@@ -372,17 +433,27 @@ Here you can see some meta-information about your ride and have the possibility 
   width="400"
 />
 
-## Download data
+<h2 id="download-data">Download data</h2>
 
-You can download both the raw data and processed events (observe, currently only raw data are available). Below is a brief description of what this means. For more information, see the detailed description (information to come).
+<p>
+  You can download raw data files. In the future, you will be able to also download processed events.
+</p>
 
-Each sensor generates a file that contains data from your entire ride (raw data). This information forms the basis of our analyses. In addition, there is a data file containing the overtake events found in the material. For each event it contains the location, the lateral distance, the vehicle speed when overtaking and other information. If you also marked oncoming vehicles, you will find an additional file for those passes, but they do not contain vehicle speed.
+<!-->
+<p>
+  Each sensor generates a file that contains data from your entire ride (raw data). This information forms the basis of our analyses. In addition, there is a data file containing the overtake events found in the material. For each event it contains the location, the lateral distance, the vehicle speed when overtaking and other information. If you also marked oncoming vehicles, you will find an additional file for those passes, but they do not contain vehicle speed.
+</p>
+-->
 
-## Who can access my data?
+<h2 id="who-can-access-my-data">Who can access my data?</h2>
 
-Only you, via your dashboard, and the researchers at VTI who participate in the project can access your raw data. The processed events can be published on openly accessible maps and in other publications, like scientific articles, research reports and on social media. They will be shared with other researchers within the [ComCy](https://www.vti.se/en/archives/projects/ComCy)-project. Processed means that single overtakes and oncoming passes are identifiable via their location and time, but without cyclist ID.
+<p>
+  Only you, via your dashboard, and the researchers at VTI who participate in the project can access your raw data. The processed events can eventually be published on openly accessible maps and in other publications, like scientific articles, research reports and on social media. They will be shared with other researchers within the <a href="https://www.vti.se/en/archives/projects/ComCy">ComCy-project</a>. Processed means that single overtakes and oncoming passes are identifiable via their location and time, but without cyclist ID.
+</p>
 
-The data could for example be displayed as in the excpert of the map below, where a mouseover shows the speed and lateral clearance of the overtaking vehicle.
+<p>
+  The data could for example be displayed as in the excerpt of the map below, where a mouseover shows the speed and lateral clearance of the overtaking vehicle.
+</p>
 
 <img
   src="/static/images/graphics/otMap.png"
@@ -391,6 +462,31 @@ The data could for example be displayed as in the excpert of the map below, wher
 />
 
 
-## What happens when I’m done with the data collection?
+<h2 id="what-happens-later">What happens when I’m done with the data collection?</h2>
 
-Also after returning the logger, you’ll be able to log in, see and download your data as long as the server is running and we have the possibility to maintain it. We cannot give any guarantees about the timeframe, however.# Getting started - v2
+<p>
+  Also after returning the logger, you’ll be able to log in, see and download your data as long as the server is running and we have the possibility to maintain it. We cannot give any guarantees about the timeframe, however.
+</p>
+
+<h1 id="quick-guide-logging">Quick Guide - Logging</h1>
+
+<ol>
+  <li>Make sure event button is attached</li>
+  <li>Activate hotspot</li>
+  <li>Turn radar on</li>
+  <li>Turn logger on (plug in cable from power bank)</li>
+  <li>Wait for radar and GPS LED to turn on</li>
+  <li>Optional: Deactivate hotspot</li>
+</ol>
+<p>
+  Ride and mark passing events
+</p>
+<ol>
+  <li>Activate hotspot</li>
+  <li>Press upload button until all LEDs flash</li>
+  <li>Turn off radar</li>
+  <li>When LEDs are off, detach power bank cable from logger</li>
+  <li>Charge equipment if necessary</li>
+</ol>
+
+
