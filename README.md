@@ -15,6 +15,10 @@ Quick start (development)
    python3 -m venv .env
    .env/bin/pip install -r requirements.txt
 
+   Depending on your system setup, the following might be needed
+   sudo apt install python3-dev 
+   sudo apt install build-essential 
+
 2. Run the app locally:
 
    .env/bin/python wsgi.py
