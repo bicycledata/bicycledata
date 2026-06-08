@@ -231,7 +231,7 @@ def api_v2_session_upload_chunk():
                 file.write(data)
 
         # Update the session list in user data
-        config = read_v2_config_file(ident, file_path=os.path.join(file_path, 'config.json'))
+        config = read_v2_config_file(ident, file_path=os.path.join(file_path, 'bicycleinit.json'))
         if config:
             participants = json.loads(config).get("participants", [])
             for participant in participants:
