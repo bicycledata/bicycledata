@@ -211,8 +211,6 @@ def api_v2_session_upload_chunk():
         file_path = os.path.join("data", "v2", "devices", ident, "sessions", session)
         os.makedirs(file_path, exist_ok=True)
 
-
-
         # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
         log_path = os.path.join(file_path, filename)
         # Support optional encoding/mimetype in payload (e.g., base64-encoded PNG)
