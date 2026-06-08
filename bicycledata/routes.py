@@ -211,15 +211,7 @@ def api_v2_session_upload_chunk():
         file_path = os.path.join("data", "v2", "devices", ident, "sessions", session)
         os.makedirs(file_path, exist_ok=True)
 
-        # Update the session list in user data
-        config = read_v2_config_file(ident)
-        participants = json.loads(config).get("participants", [])
-        for participant in participants:
-            udata = load_user_by_id(participant)
-            session_entry = f"{ident}/{session}"
-            if session_entry not in udata["sessions"]:
-                udata["sessions"].append(session_entry)
-                save_user(udata)
+
 
         # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
         log_path = os.path.join(file_path, filename)
@@ -240,6 +232,17 @@ def api_v2_session_upload_chunk():
             with open(log_path, "a", encoding="utf-8") as file:
                 file.write(data)
 
+        # Update the session list in user data
+        config = read_v2_config_file(ident, file_path=os.path.join(file_path, 'config.json'))
+        if config:
+            participants = json.loads(config).get("participants", [])
+            for participant in participants:
+                udata = load_user_by_id(participant)
+                session_entry = f"{ident}/{session}"
+                if session_entry not in udata["sessions"]:
+                    udata["sessions"].append(session_entry)
+                    save_user(udata)
+        
         ping_v2(ident, "/api/v2/session/upload")
         return jsonify({"status": "ok"}), 200
     except Exception as e:
