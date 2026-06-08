@@ -183,14 +183,7 @@ def api_v2_session_upload_chunk():
             or "filename" not in payload
             or "data" not in payload
         ):
-            return (
-                jsonify(
-                    {
-                        "error": "Invalid data format, expected a JSON object with 'ident', 'session', 'filename' and 'data' fields"
-                    }
-                ),
-                400,
-            )
+            return jsonify({"error": "Invalid data format, expected a JSON object with 'ident', 'session', 'filename' and 'data' fields"}), 400
 
         ident = payload["ident"]
         session = payload["session"]
@@ -223,6 +216,7 @@ def api_v2_session_upload_chunk():
 
         # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
         log_path = os.path.join(file_path, filename)
+
         # Support optional encoding/mimetype in payload (e.g., base64-encoded PNG)
         encoding = payload.get("encoding")
         mimetype = payload.get("mimetype")
