@@ -4,3 +4,4 @@
 * [Marking of overtaking events](/docs/mark-overtaking-events)
 * [Build instructions](/docs/build)
 * [Installation Guide](/docs/installation)
+* [FAQ](/docs/faq)

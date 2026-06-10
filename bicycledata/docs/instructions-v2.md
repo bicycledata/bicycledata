@@ -271,9 +271,14 @@ rails with an Allen key.
 
     <td style="vertical-align: top; max-width: 420px;">
       <b>Android:</b> On your phone, configure your hotspot such that it is called <code>bicycledata</code><br>
-      <b>iPhone:</b> Rename your phone to <code>bicycledata</code> via Settings > General > About > Name; tap <code>x</code> then enter a new name.<br><br>
       Also the password should be set to <code>bicycledata</code><br>
-      Use 2.4&nbsp;GHz.
+      Use 2.4&nbsp;GHz.<br><br>
+
+      <b>iPhone:</b> Rename your phone to <code>bicycledata</code> via Settings > General > About > Name; tap <code>x</code> then enter the new name.<br>
+      In Swedish: Inställningar > Allmänt > Om > Namn<br><br>
+      Under "hotspot"/"internetdelning" set the password to <code>bicycledata</code><br>
+      Under "hotspot"/"internetdelning" set "allow others to connect" to yes.<br>
+      For more detailed instructions for iPhone check <a href="/docs/iphone-hotspot">here</a>.<br>
     </td>
   </tr>
 </table>
@@ -401,6 +406,10 @@ After uploading the logged data as described above, you can annotate and downloa
   </li>
 
   <li>
+    Indicate whether you marked overtakes or also oncoming traffic by checking the appropriate boxes.
+  </li>
+
+  <li>
     Comment on certain events or other things we should know 
     (traffic situations, weather, logger issues, or
     anything else you find relevant).
@@ -424,7 +433,7 @@ After uploading the logged data as described above, you can annotate and downloa
 />
 
 <p>
-  Here you can see some meta-information about your ride and have the possibility to make annotations.
+  Here you can see some meta-information about your ride and have the possibility to make annotations (image slightly outdated).
 </p>
 
 <img
@@ -439,7 +448,7 @@ After uploading the logged data as described above, you can annotate and downloa
   You can download raw data files. In the future, you will be able to also download processed events.
 </p>
 
-<!-->
+<!--
 <p>
   Each sensor generates a file that contains data from your entire ride (raw data). This information forms the basis of our analyses. In addition, there is a data file containing the overtake events found in the material. For each event it contains the location, the lateral distance, the vehicle speed when overtaking and other information. If you also marked oncoming vehicles, you will find an additional file for those passes, but they do not contain vehicle speed.
 </p>
