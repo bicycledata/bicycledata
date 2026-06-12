@@ -208,7 +208,7 @@ def api_v2_session_upload_chunk():
         session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
         os.makedirs(session_dir, exist_ok=True)
 
-        # Append log to data/v2/devices/<ident>/sessions/<session>/<filename>
+        # Append uploaded data to data/v2/devices/<ident>/sessions/<session>/<filename>
         file_path = os.path.join(session_dir, filename)
 
         # Support optional encoding/mimetype in payload (e.g., base64-encoded PNG)
