@@ -200,7 +200,7 @@ def api_v2_session_upload_chunk():
         except ValueError:
             return jsonify({"error": "Invalid session format"}), 400
 
-        # Create data/devices/<ident>/sessions/<session> directory if it does not exist
+        # Create data/v2/devices/<ident>/sessions/<session> directory if it does not exist
         session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
         os.makedirs(session_dir, exist_ok=True)
 
@@ -216,11 +216,11 @@ def api_v2_session_upload_chunk():
             except Exception as e:
                 return jsonify({"error": f"Invalid base64 data: {e}"}), 400
             # write binary data
-            with open(output_path, "ab") as file:
+            with open(file_path, "ab") as file:
                 file.write(raw)
         else:
             # default: treat as UTF-8 text
-            with open(output_path, "a", encoding="utf-8") as file:
+            with open(file_path, "a", encoding="utf-8") as file:
                 file.write(data)
 
         # Update the session list in user data
