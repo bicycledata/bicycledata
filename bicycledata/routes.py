@@ -200,11 +200,15 @@ def api_v2_session_upload_chunk():
         except ValueError:
             return jsonify({"error": "Invalid session format"}), 400
 
-        # Create data/v2/devices/<ident>/sessions/<session> directory if it does not exist
         session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
-        os.makedirs(session_dir, exist_ok=True)
 
-        file_path = os.path.join(session_dir, filename)
+        # Resolve and validate filename (allow subdirectories, prevent traversal)
+        file_path = os.path.normpath(os.path.join(session_dir, filename))
+        if not file_path.startswith(os.path.normpath(session_dir) + os.sep):
+            return jsonify({"error": "Invalid filename"}), 400
+
+        # Create data/v2/devices/<ident>/sessions/<session> directory if it does not exist
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
         # Support optional encoding/mimetype in payload (e.g., base64-encoded PNG)
         encoding = payload.get("encoding")
