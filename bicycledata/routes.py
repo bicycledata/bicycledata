@@ -200,7 +200,7 @@ def api_v2_session_upload_chunk():
         except ValueError:
             return jsonify({"error": "Invalid session format"}), 400
 
-        # Check filename
+        # Check filename and prevent path traversal
         if filename.startswith('..') or os.sep in filename:
             return jsonify({"error": "Invalid filename"}), 400
 
