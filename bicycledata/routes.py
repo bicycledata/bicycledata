@@ -200,6 +200,10 @@ def api_v2_session_upload_chunk():
         except ValueError:
             return jsonify({"error": "Invalid session format"}), 400
 
+        # Check filename
+        if filename.startswith(os.sep) or '..' in filename:
+            return jsonify({"error": "Invalid filename"}), 400
+
         # Create data/devices/<ident>/sessions/<session> directory if it does not exist
         file_path = os.path.join("data", "v2", "devices", ident, "sessions", session)
         os.makedirs(file_path, exist_ok=True)
@@ -259,6 +263,10 @@ def v2_devices_ident(ident):
         flash("Access denied")
         return redirect(url_for("index"))
 
+    # Check ident
+    if check_v2_device_path(ident) is False:
+        return jsonify({"error": "Device not found"}), 404
+
     if request.method == "GET":
         all_sessions = request.args.get("all", "0") == "1"
         show_hidden = request.args.get("hidden", "0") == "1"
@@ -289,6 +297,16 @@ def v2_devices_ident(ident):
 @app.route("/v2/devices/<ident>/sessions/<session>", methods=["GET", "POST"])
 @flask_login.login_required
 def v2_devices_ident_session(ident, session):
+    # Check ident
+    if check_v2_device_path(ident) is False:
+        return jsonify({"error": "Device not found"}), 400
+
+    # Check session format
+    try:
+        datetime.strptime(session, "%Y%m%d-%H%M%S")
+    except ValueError:
+        return jsonify({"error": "Invalid session format"}), 400
+
     try:
         session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
         device = read_v2_device_info(ident, file_path=os.path.join(session_dir, "bicycleinit.json"))
@@ -487,8 +505,15 @@ def v2_devices_ident_session(ident, session):
 @app.route("/v2/devices/<ident>/sessions/<session>/sensors/<sensor>")
 @flask_login.login_required
 def v2_devices_ident_sessions_session_sensors_sensor(ident, session, sensor):
-    if not check_v2_device_path(ident):
+    # Check ident
+    if check_v2_device_path(ident) is False:
         return jsonify({"error": "Device not found"}), 404
+
+    # Check session format
+    try:
+        datetime.strptime(session, "%Y%m%d-%H%M%S")
+    except ValueError:
+        return jsonify({"error": "Invalid session format"}), 400
 
     try:
         directory = os.path.join(app.root_path, "..", "data", "v2", "devices", ident, "sessions", session)
@@ -500,6 +525,16 @@ def v2_devices_ident_sessions_session_sensors_sensor(ident, session, sensor):
 @app.route("/v2/devices/<ident>/sessions/<session>/download")
 @flask_login.login_required
 def v2_devices_ident_session_download(ident, session):
+    # Check ident
+    if check_v2_device_path(ident) is False:
+        return jsonify({"error": "Device not found"}), 404
+
+    # Check session format
+    try:
+        datetime.strptime(session, "%Y%m%d-%H%M%S")
+    except ValueError:
+        return jsonify({"error": "Invalid session format"}), 400
+
     try:
         session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
         if not os.path.isdir(session_dir):
