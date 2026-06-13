@@ -259,13 +259,13 @@ def v2_devices():
 @app.route("/v2/devices/<ident>", methods=["GET", "POST"])
 @flask_login.login_required
 def v2_devices_ident(ident):
-    # Check ident
-    if check_v2_device_path(ident) is False:
-        return jsonify({"error": "Device not found"}), 404
-
     if not flask_login.current_user.is_private:
         flash("Access denied")
         return redirect(url_for("index"))
+
+    # Check ident
+    if check_v2_device_path(ident) is False:
+        return jsonify({"error": "Device not found"}), 404
 
     if request.method == "GET":
         all_sessions = request.args.get("all", "0") == "1"
