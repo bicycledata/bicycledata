@@ -58,7 +58,7 @@ def read_v2_config_file(ident, file_path=None):
     with open(file_path) as f:
       config = f.read()
       return config
-  except (FileNotFoundError, json.JSONDecodeError) as e:
+  except (FileNotFoundError, json.JSONDecodeError):
     return None
 
 def read_v2_device_info(ident, file_path=None):
@@ -75,7 +75,7 @@ def read_v2_device_info(ident, file_path=None):
 
     return info
 
-  except (FileNotFoundError, json.JSONDecodeError) as e:
+  except (FileNotFoundError, json.JSONDecodeError):
     return None
 
 def read_v2_sessions(ident, all=False, show_hidden=False):
@@ -97,7 +97,7 @@ def ping_v2(ident, call):
     ping_path = os.path.join('data', 'v2', 'devices', ident, 'ping.log')
     with open(ping_path, 'a') as f:
       f.write(datetime.now(UTC).isoformat() + f", {call}\n")
-  except Exception as e:
+  except Exception:
     pass
 
 def read_device_info(ident):
@@ -111,7 +111,7 @@ def read_device_info(ident):
 
     info['hash'] = ident
 
-    if not 'model' in info:
+    if 'model' not in info:
       info['model'] = 'unknown'
       info['image'] = '/static/images/devices/default.jpg'
     else:
@@ -123,14 +123,14 @@ def read_device_info(ident):
         case _:
           info['image'] = '/static/images/devices/default.jpg'
 
-    if not 'project' in info:
+    if 'project' not in info:
       info['project'] = 'none'
 
     info['ping'], info['online'] = read_last_ping(ident)
 
     return info
 
-  except (FileNotFoundError, json.JSONDecodeError) as e:
+  except (FileNotFoundError, json.JSONDecodeError):
     return None
 
 def read_config_file(ident):
@@ -142,7 +142,7 @@ def read_config_file(ident):
     with open(file_path) as f:
       config = f.read()
       return config
-  except (FileNotFoundError, json.JSONDecodeError) as e:
+  except (FileNotFoundError, json.JSONDecodeError):
     return None
 
 def write_config_file(ident, config):
@@ -216,7 +216,7 @@ def read_last_ping(ident, buffer_size=1024):
 
       return '0', False
 
-  except Exception as e:
+  except Exception:
     return '0', False
 
 def read_last_ping_v2(ident, buffer_size=1024):
@@ -269,5 +269,5 @@ def read_last_ping_v2(ident, buffer_size=1024):
 
       return '0', False
 
-  except Exception as e:
+  except Exception:
     return '0', False
