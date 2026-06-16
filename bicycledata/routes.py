@@ -24,15 +24,11 @@ from flask import (
 from bicycledata import app, config, dir
 from bicycledata.devices import (
     check_v2_device_path,
-    load_devices,
     load_v2_devices,
     ping_v2,
-    read_config_file,
-    read_device_info,
     read_v2_config_file,
     read_v2_device_info,
     read_v2_sessions,
-    write_config_file,
     write_v2_config_file,
 )
 from bicycledata.email import send_email
@@ -278,7 +274,7 @@ def v2_devices_ident(ident):
         config = json.loads(config)
         write_v2_config_file(ident, config)
         SendMessage(f"[v2] *config updated* {ident}")
-    except (FileNotFoundError, json.JSONDecodeError) as e:
+    except (FileNotFoundError, json.JSONDecodeError):
         flash("Failed to update config.json. Please verify that the file has correct JSON syntax and try again.")
     except ValueError as e:
         flash(f"Failed to update config.json: {e}")

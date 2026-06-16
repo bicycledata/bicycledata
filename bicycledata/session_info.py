@@ -58,7 +58,7 @@ class SessionInfo:
 
         try:
           metadata = json.loads(front)
-        except Exception as e:
+        except Exception:
           raise ValueError('Invalid JSON in fenced code block frontmatter')
         return metadata, body
       except ValueError:
