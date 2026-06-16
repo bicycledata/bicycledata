@@ -1,9 +1,18 @@
 import os
 import shutil
 import subprocess
-import dir
 from datetime import datetime
 import time
+
+
+def createDirIfNeeded(dir):
+  if not os.path.exists(dir):
+    os.makedirs(dir)
+
+
+def createFileIfNeeded(dir, filename):
+  createDirIfNeeded(dir)
+  open(os.path.join(dir, filename), 'a').close() # make sure it exists
 
 
 def file_sanity_check(filename):
@@ -25,7 +34,7 @@ def post_process():
   try:
     log_path = os.path.join('..', 'data', 'log', 'postprocess')
     log_file = os.path.join(log_path, datetime.now().strftime("%Y%m%d-%H%M%S") + '.log')
-    dir.createDirIfNeeded(log_path)
+    createDirIfNeeded(log_path)
     log(log_file, datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " | postprocess start")
 
     devices_dir = os.path.join('..', 'data', 'v2', 'devices')
@@ -54,7 +63,7 @@ def post_process():
           log(log_file, datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " | Device ID " + str(device) + " | Session ID " + str(session) + " | Action " + log_session_action + " | Execution time[s]: " + str(time.time()-log_session_start))
           continue
         
-        dir.createDirIfNeeded(postprocess_dir)
+        createDirIfNeeded(postprocess_dir)
         result = subprocess.run(['.venv/bin/python3', 'bicycledigest.py', '-b', bicyclebutton_file, '-g', bicyclegps_file, '-l', bicyclelidar_file, '-o', postprocess_dir], cwd='../bicycledigest', capture_output=True, text=True)
         
         if result.returncode != 0:
@@ -65,7 +74,7 @@ def post_process():
           log(log_file, datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " | Device ID " + str(device) + " | Session ID " + str(session) + " | Action " + log_session_action + " | Execution time[s]: " + str(time.time()-log_session_start))
           continue
         
-        dir.createFileIfNeeded(postprocess_dir, 'postprocess.txt')
+        createFileIfNeeded(postprocess_dir, 'postprocess.txt')
         with open(os.path.join(sessions_dir, session, 'postprocess', 'postprocess.txt'), "w") as f:
           f.write(result.stdout)
           log_sessions_processed_ctr += 1
