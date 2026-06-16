@@ -1,0 +1,3 @@
+[submodule "bicycledigest"]
+	path = bicycledigest
+	url = https://github.com/bicycledata/bicycledigest.git
