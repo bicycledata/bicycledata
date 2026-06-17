@@ -53,7 +53,12 @@ def after_request(response):
     with open(os.path.join(DIR, filename), "a") as file:
         file.write(
             "{} | {} | {} | {} | {} | {}\n".format(
-                timestamp, request.remote_addr, request.scheme, request.method, request.full_path, response.status
+                timestamp,
+                request.remote_addr,
+                request.scheme,
+                request.method,
+                request.full_path,
+                response.status,
             )
         )
 
@@ -94,7 +99,9 @@ def api_v2_register():
         data = request.get_json()
 
         if not isinstance(data, dict):
-            return jsonify({"error": "Invalid data format, expected a JSON object"}), 400
+            return jsonify(
+                {"error": "Invalid data format, expected a JSON object"}
+            ), 400
 
         # Add the registration timestamp
         data["registration"] = datetime.now(UTC).isoformat()
@@ -121,7 +128,7 @@ def api_v2_register():
         with open(file_path, "w") as file:
             json.dump(data, file, indent=2)
 
-        SendMessage(f'[v2] *register* {data["username"]}@{data["hostname"]} ({ident})')
+        SendMessage(f"[v2] *register* {data['username']}@{data['hostname']} ({ident})")
         ping_v2(ident, "/api/v2/register")
 
         return jsonify(data), 201  # 201 Created status
@@ -139,7 +146,9 @@ def api_v2_config():
 
     # Make sure that payload is dictionary and contains required fields: ident
     if not isinstance(payload, dict) or "ident" not in payload:
-        return jsonify({"error": "Invalid data format, expected a JSON object with valid 'ident'"}), 400
+        return jsonify(
+            {"error": "Invalid data format, expected a JSON object with valid 'ident'"}
+        ), 400
 
     ident = payload["ident"]
     device_path = os.path.join("data", "v2", "devices", ident)
@@ -154,7 +163,7 @@ def api_v2_config():
         with open(file_path, "r") as file:
             data = json.load(file)
 
-        SendMessage(f'[v2] *config* {data["username"]}@{data["hostname"]} ({ident})')
+        SendMessage(f"[v2] *config* {data['username']}@{data['hostname']} ({ident})")
         ping_v2(ident, "/api/v2/config")
 
         return jsonify(data)
@@ -179,7 +188,11 @@ def api_v2_session_upload_chunk():
             or "filename" not in payload
             or "data" not in payload
         ):
-            return jsonify({"error": "Invalid data format, expected a JSON object with 'ident', 'session', 'filename' and 'data' fields"}), 400
+            return jsonify(
+                {
+                    "error": "Invalid data format, expected a JSON object with 'ident', 'session', 'filename' and 'data' fields"
+                }
+            ), 400
 
         ident = payload["ident"]
         session = payload["session"]
@@ -221,7 +234,9 @@ def api_v2_session_upload_chunk():
                 file.write(data)
 
         # Update the session list in user data
-        config = read_v2_config_file(ident, file_path=os.path.join(file_path, 'bicycleinit.json'))
+        config = read_v2_config_file(
+            ident, file_path=os.path.join(file_path, "bicycleinit.json")
+        )
         if config:
             participants = json.loads(config).get("participants", [])
             for participant in participants:
@@ -230,7 +245,7 @@ def api_v2_session_upload_chunk():
                 if session_entry not in udata["sessions"]:
                     udata["sessions"].append(session_entry)
                     save_user(udata)
-        
+
         ping_v2(ident, "/api/v2/session/upload")
         return jsonify({"status": "ok"}), 200
     except Exception as e:
@@ -264,7 +279,11 @@ def v2_devices_ident(ident):
         sessions = read_v2_sessions(ident, all_sessions, show_hidden)
         if device:
             return render_template(
-                "devices_v2_ident.html", device=device, config=config, participants=participants, sessions=sessions
+                "devices_v2_ident.html",
+                device=device,
+                config=config,
+                participants=participants,
+                sessions=sessions,
             )
         return render_template("404.html"), 404
 
@@ -275,7 +294,9 @@ def v2_devices_ident(ident):
         write_v2_config_file(ident, config)
         SendMessage(f"[v2] *config updated* {ident}")
     except (FileNotFoundError, json.JSONDecodeError):
-        flash("Failed to update config.json. Please verify that the file has correct JSON syntax and try again.")
+        flash(
+            "Failed to update config.json. Please verify that the file has correct JSON syntax and try again."
+        )
     except ValueError as e:
         flash(f"Failed to update config.json: {e}")
 
@@ -287,8 +308,12 @@ def v2_devices_ident(ident):
 def v2_devices_ident_session(ident, session):
     try:
         session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
-        device = read_v2_device_info(ident, file_path=os.path.join(session_dir, "bicycleinit.json"))
-        config = read_v2_config_file(ident, file_path=os.path.join(session_dir, "bicycleinit.json"))
+        device = read_v2_device_info(
+            ident, file_path=os.path.join(session_dir, "bicycleinit.json")
+        )
+        config = read_v2_config_file(
+            ident, file_path=os.path.join(session_dir, "bicycleinit.json")
+        )
         try:
             log = open(os.path.join(session_dir, "bicycleinit.log")).read()
         except Exception:
@@ -303,7 +328,9 @@ def v2_devices_ident_session(ident, session):
 
         # Read session.info frontmatter and body
         try:
-            session_front, session_body = SessionInfo.read_from(os.path.join(session_dir, "session.info"))
+            session_front, session_body = SessionInfo.read_from(
+                os.path.join(session_dir, "session.info")
+            )
         except Exception:
             session_front, session_body = {}, ""
 
@@ -352,13 +379,24 @@ def v2_devices_ident_session(ident, session):
                 session_front["hidden"] = hidden == "on"
 
                 # Write back to session.info
-                SessionInfo.write_to(os.path.join(session_dir, "session.info"), session_front, session_body)
+                SessionInfo.write_to(
+                    os.path.join(session_dir, "session.info"),
+                    session_front,
+                    session_body,
+                )
                 flash("Session updated successfully.")
             except Exception as e:
                 flash(f"Failed to update session: {e}")
-            return redirect(url_for("v2_devices_ident_session", ident=ident, session=session))
+            return redirect(
+                url_for("v2_devices_ident_session", ident=ident, session=session)
+            )
 
-        session_info = {"name": session, "start": "---", "end": "---", "duration": "---"}
+        session_info = {
+            "name": session,
+            "start": "---",
+            "end": "---",
+            "duration": "---",
+        }
 
         # GPS track extraction and update interval histogram
         gps_track = []  # list of dicts: {lat, lon, pdop}
@@ -390,7 +428,9 @@ def v2_devices_ident_session(ident, session):
                         gps_times.append(t)
 
                         if session_info["start"] == "---":
-                            session_info["start"] = t.astimezone().strftime("%Y-%m-%d %H:%M")
+                            session_info["start"] = t.astimezone().strftime(
+                                "%Y-%m-%d %H:%M"
+                            )
                             start_time = t
                         session_info["end"] = t.astimezone().strftime("%Y-%m-%d %H:%M")
                         duration = t - start_time
@@ -417,7 +457,10 @@ def v2_devices_ident_session(ident, session):
                     R = 6371.0  # Earth radius in km
                     dlat = radians(lat2 - lat1)
                     dlon = radians(lon2 - lon1)
-                    a = sin(dlat / 2) ** 2 + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+                    a = (
+                        sin(dlat / 2) ** 2
+                        + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+                    )
                     c = 2 * atan2(sqrt(a), sqrt(1 - a))
                     return R * c
 
@@ -487,8 +530,12 @@ def v2_devices_ident_sessions_session_sensors_sensor(ident, session, sensor):
         return jsonify({"error": "Device not found"}), 404
 
     try:
-        directory = os.path.join(app.root_path, "..", "data", "v2", "devices", ident, "sessions", session)
-        return send_from_directory(directory, sensor, mimetype="text/plain", as_attachment=True)
+        directory = os.path.join(
+            app.root_path, "..", "data", "v2", "devices", ident, "sessions", session
+        )
+        return send_from_directory(
+            directory, sensor, mimetype="text/plain", as_attachment=True
+        )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -516,7 +563,12 @@ def v2_devices_ident_session_download(ident, session):
         buf.seek(0)
 
         # Stream the in-memory ZIP to the client
-        return send_file(buf, as_attachment=True, download_name=f"{session}.zip", mimetype="application/zip")
+        return send_file(
+            buf,
+            as_attachment=True,
+            download_name=f"{session}.zip",
+            mimetype="application/zip",
+        )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -542,26 +594,37 @@ def contact():
 
     dir.createDirIfNeeded(DIR)
 
-    num_comments = len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
+    num_comments = len(
+        [name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]
+    )
     if num_comments >= 100:
         flash(
             "There is unusually high traffic at the moment, which forced us to stop receiving messages. Please try to send your message later again."
         )
         filename = "last.md"
     else:
-        filename = f"{num_comments+1}.md"
+        filename = f"{num_comments + 1}.md"
 
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     name = request.form["name"]
     email = request.form["email"]
     message = request.form["message"]
 
-    message = "---\n" + f'"date":  "{date}"\n' + f'"name":  "{name}"\n' + f'"email": "{email}"\n' + "---\n\n" + message
+    message = (
+        "---\n"
+        + f'"date":  "{date}"\n'
+        + f'"name":  "{name}"\n'
+        + f'"email": "{email}"\n'
+        + "---\n\n"
+        + message
+    )
 
     with open(os.path.join(DIR, filename), "w") as file:
         file.write(message)
 
-    status = send_email("bicycledata@vti.se", "Message from bicycledata.vti.se/contact", message, config)
+    status = send_email(
+        "bicycledata@vti.se", "Message from bicycledata.vti.se/contact", message, config
+    )
 
     if not status["success"]:
         flash("Failed to send email. Please try again later.")
@@ -571,17 +634,23 @@ def contact():
 
 @app.route("/favicon.ico")
 def favicon():
-    return send_from_directory(app.static_folder, "favicon/favicon.ico", mimetype="image/vnd.microsoft.icon")
+    return send_from_directory(
+        app.static_folder, "favicon/favicon.ico", mimetype="image/vnd.microsoft.icon"
+    )
 
 
 @app.route("/apple-touch-icon.png")
 def apple_touch_icon():
-    return send_from_directory(app.static_folder, "favicon/apple-touch-icon.png", mimetype="image/png")
+    return send_from_directory(
+        app.static_folder, "favicon/apple-touch-icon.png", mimetype="image/png"
+    )
 
 
 @app.route("/apple-touch-icon-precomposed.png")
 def apple_touch_icon_precomposed():
-    return send_from_directory(app.static_folder, "favicon/apple-touch-icon.png", mimetype="image/png")
+    return send_from_directory(
+        app.static_folder, "favicon/apple-touch-icon.png", mimetype="image/png"
+    )
 
 
 @app.route("/robots.txt")
