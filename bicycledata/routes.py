@@ -209,16 +209,16 @@ def api_v2_session_upload_chunk():
         except ValueError:
             return jsonify({"error": "Invalid session format"}), 400
 
-        # Check filename
-        if filename.startswith(os.sep) or '..' in filename:
+        # Check filename and prevent path traversal
+        if filename.startswith('..') or os.sep in filename:
             return jsonify({"error": "Invalid filename"}), 400
 
-        # Create data/devices/<ident>/sessions/<session> directory if it does not exist
-        file_path = os.path.join("data", "v2", "devices", ident, "sessions", session)
-        os.makedirs(file_path, exist_ok=True)
+        # Create data/v2/devices/<ident>/sessions/<session> directory if it does not exist
+        session_dir = os.path.join("data", "v2", "devices", ident, "sessions", session)
+        os.makedirs(session_dir, exist_ok=True)
 
-        # Append log to data/devices/<ident>/sessions/<session>/bicycleinit.log
-        log_path = os.path.join(file_path, filename)
+        # Append uploaded data to data/v2/devices/<ident>/sessions/<session>/<filename>
+        file_path = os.path.join(session_dir, filename)
 
         # Support optional encoding/mimetype in payload (e.g., base64-encoded PNG)
         encoding = payload.get("encoding")
@@ -230,17 +230,15 @@ def api_v2_session_upload_chunk():
             except Exception as e:
                 return jsonify({"error": f"Invalid base64 data: {e}"}), 400
             # write binary data
-            with open(log_path, "ab") as file:
+            with open(file_path, "ab") as file:
                 file.write(raw)
         else:
             # default: treat as UTF-8 text
-            with open(log_path, "a", encoding="utf-8") as file:
+            with open(file_path, "a", encoding="utf-8") as file:
                 file.write(data)
 
         # Update the session list in user data
-        config = read_v2_config_file(
-            ident, file_path=os.path.join(file_path, "bicycleinit.json")
-        )
+        config = read_v2_config_file(ident, file_path=os.path.join(session_dir, 'bicycleinit.json'))
         if config:
             participants = json.loads(config).get("participants", [])
             for participant in participants:
