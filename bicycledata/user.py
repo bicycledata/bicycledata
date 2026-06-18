@@ -92,8 +92,6 @@ def load_user_by_id(user_id):
 
 
 def add_new_user(name, email):
-    DIR = os.path.join("data", "login")
-
     users = load_users()
 
     # check if any user already has this email
