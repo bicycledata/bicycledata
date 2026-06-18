@@ -1,6 +1,8 @@
 /.env/
+/venv/
 __pycache__/
 /wsgi.log
 /wsgi.sock
 /data/
 /bicycledata/static/files/*.img
+/pyrightconfig.json
