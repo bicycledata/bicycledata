@@ -41,9 +41,13 @@ sudo apt update
 sudo apt full-upgrade -y
 sudo apt install -y git jq curl btop
 ```
+Change some configs:
 
+```zsh
 sudo raspi-config
--> Interface Options
+```
+In rapsi-config window, go to: 
+Interface Options
 -> Serial Port
 -> select no (login shell)
 -> select yes (enable serial port)
@@ -57,6 +61,7 @@ add these two lines under [all]
 ```
 enable_uart=1
 dtparam=uart0=on
+dtparam=rtc_bbat_vchg=3000000
 ```
 
 ## 3. Setup bicycleinit
