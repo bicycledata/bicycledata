@@ -59,7 +59,9 @@
 
   </div>
   {% if gps_track and gps_track|length > 1 %}
-  <div id="map" style="height: 400px; width: 100%; margin-bottom: 1em;"></div>
+  <span class="image object">
+    <div id="map" style="height: 400px; width: 100%;"></div>
+  </span>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
