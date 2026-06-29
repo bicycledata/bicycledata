@@ -7,6 +7,9 @@ def send_email(to, subject, body, config):
     smtp_port = config.get("smtp-port")
     smtp_from = config.get("smtp-from")
 
+    if smtp_host is None or smtp_port is None or smtp_from is None:
+        return {"success": False, "error": "Email not configured"}
+
     # Build message
     msg = EmailMessage()
     msg["Subject"] = subject
