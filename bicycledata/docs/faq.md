@@ -9,6 +9,7 @@
         <li><a href="#gps">GPS problems</a></li>
         <li><a href="#own-varia">I have an own Garmin Varia</a></li>
         <li><a href="#upload">Upload problems</a></li>
+        <li><a href="#charging">Charging related issues</a></li>
       </ul>
     </td>
   </tr>
@@ -76,4 +77,10 @@
 </p>
 <p>
     If everything fails, please get in touch, we'll try to help. The log data will be stored on the logger if you followed the other steps (turning on the radar before turning on the logger, GPS found satellites).
+</p>
+
+<h2 id="charging">Charging related issues</h2>
+
+<p>
+    If the LEDs do not illuminate, either when you want to start the logger or during/after a ride, the powerbank might be flat. The banks we use are stable and keep their charge well, but it has happened that they have discharged. If you want to be certain, you can extract the powerbank. Either, you remove the pin and carefully push the battery out, or you unscrew the six screws holding the logger together and take off the battery holder. If you press the little button on top of the bank, a display will show the charging level. It takes several hours for a full charge from zero. As we waterproofed the powerbank, sealing the USB-C port, the only way to charge it is to plug the cable into a USB-C-socket.
 </p>

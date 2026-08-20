@@ -1,3 +1,23 @@
+# Quick guide
+
+Always mark passing events when the vehicle is in front of you - overtakes after you got passed, oncoming vehicles before they pass you. If you mark both event types, use a long press (ca. 1 s) for overtakes and a short press (0.1-0.2 s) for oncoming passes. 
+
+<html>
+<body>
+    <p>Check out the video for an example of how to mark an oncoming and an overtaking pass.</p>
+    <video controls width="600">
+        <source
+            src="/static/videos/button_press_examples.mp4"
+            type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</body>
+</html>
+
+<p>
+
+</p>
+
 # Marking of events
 To ensure that the data material is as good as possible, we ask that you familiarise yourself with the procedure. We will regularly review the data material that you upload and provide feedback. You are welcome to contact us at any time at <bicycledata@vti.se>
 
@@ -105,7 +125,7 @@ Make the button presses for oncoming traffic short, just a “click” (0.1-0.2 
 
 The button press should ideally be completed before the vehicle passes you. Note on your dashboard whether you pressed the button for overtaking only or also for oncoming vehicles.
 
-To remember: The vehicle is always in front of you when you press the button. Overtaking vehicles take longer to pass you --> long button press; oncoming vehicles pass in a shorter time --> short button press.
+To remember: The vehicle is always in front of you when you press the button. Overtaking vehicles take longer to pass you --> long button press; oncoming vehicles pass in a shorter time --> short button press. 
 
 <table>
   <tr>
