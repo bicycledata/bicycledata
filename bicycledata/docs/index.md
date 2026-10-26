@@ -5,3 +5,4 @@
 * [Build instructions](/docs/build)
 * [Installation Guide](/docs/installation)
 * [FAQ](/docs/faq)
+* [Logger Specifications](/docs/loggerspecs)
